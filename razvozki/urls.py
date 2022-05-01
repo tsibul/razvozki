@@ -11,7 +11,7 @@ urlpatterns = [
     path('delete_rzv/<int:id>', views.delete_rzv, name='delete_rzv'),
     path('update_rzv/<int:id>', views.update_rzv, name='update_rzv'),
     path('update_rzv/updaterecord_rzv/<int:id>', views.updaterecord_rzv, name='updaterecord_rzv'),
-    path('<str:razvozka_date>/', views.date_detail, name='date_detail'),
+#    path('<str:razvozka_date>/', views.date_detail, name='date_detail'),
     path('<int:razvozki>/results/', views.results, name='results'),
     path('main', views.main_rzv, name='main_rzv'),
 

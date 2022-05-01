@@ -28,12 +28,12 @@ def detail(request, razvozka_id):
     return render(request, 'razvozki/detail.html', {'razvozka': razvozka})
 
 
-def date_detail(request, razvozka_date):
-    try:
-        razvozka_d = Razvozka.objects.filter(date=razvozka_date)
-    except Razvozka.DoesNotExist:
-        raise Http404("Razvozka does not exist")
-    return render(request, 'razvozki/date_detail.html', {'razvozka_date': razvozka_d})
+#def date_detail(request, razvozka_date):
+#    try:
+#        razvozka_d = Razvozka.objects.filter(date=razvozka_date)
+#    except Razvozka.DoesNotExist:
+#        raise Http404("Razvozka does not exist")
+#    return render(request, 'razvozki/date_detail.html', {'razvozka_date': razvozka_d})
 
 
 def results(request, razvozka_date):
