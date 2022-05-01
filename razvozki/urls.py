@@ -1,0 +1,18 @@
+from django.urls import path
+
+from . import views
+
+app_name = 'razvozki'
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('specifics/<int:razvozki_id>/', views.detail, name='detail'),
+    path('add_razv/<int:id>/', views.add_razv, name='add_razv'),
+    path('add_razv/<int:id>/addrecord_razv/', views.addrecord_razv, name='addrecord_razv'),
+    path('delete_rzv/<int:id>', views.delete_rzv, name='delete_rzv'),
+    path('update_rzv/<int:id>', views.update_rzv, name='update_rzv'),
+    path('update_rzv/updaterecord_rzv/<int:id>', views.updaterecord_rzv, name='updaterecord_rzv'),
+    path('<str:razvozka_date>/', views.date_detail, name='date_detail'),
+    path('<int:razvozki>/results/', views.results, name='results'),
+    path('main', views.main_rzv, name='main_rzv'),
+
+]
