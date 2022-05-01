@@ -1,0 +1,50 @@
+table {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+table, th, td {
+  font-weight: normal;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 1px;
+  border: 1px solid black;
+  border-collapse: collapse;
+  text-decoration-line: none;
+}
+
+th {
+  color: black;
+}
+
+tr:hover {background-color: #D6EEEE;}
+
+thead {
+    padding-top: 30px;
+    padding-bottom: 10px;
+    font-weight: bold;
+    font-size: large;
+    color: blue;
+    outline-color: gray;
+}
+
+thead a {
+    padding-top: 30px;
+    padding-bottom: 10px;
+    text-decoration-line: none;
+    font-weight: bold;
+    outline-color: gray
+}
+
+tbody a {
+    color: blue;
+    font-weight: normal;
+    text-decoration-line: none;
+
+}
+
+/* Show it is fixed to the top */
+body {
+  min-height: 75rem;
+  padding-top: 4.5rem;
+}
+
