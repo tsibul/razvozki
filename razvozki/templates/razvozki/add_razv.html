@@ -16,14 +16,13 @@
 {% include 'razvozki/main.html' %}
 
 <body>
-    <br><br>
-    <h1>Добавить развозку</h1>
-<br>
+<br><br>
+<br><br><br>
 {% if f_rzv %}
     <table class="table">
     {% for date_r, razv in f_rzv.items %}
         <thead>
-        <tr class="table-primary">
+        <tr class="table-success">
             <th scope="col"> </th>
             <th colspan="3" style="text-align:right"> Развозка на </th>
             <th colspan="3">{{ date_r|date:"d.m.Y" }} </th>

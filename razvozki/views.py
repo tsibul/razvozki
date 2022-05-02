@@ -10,6 +10,7 @@ from django.urls import reverse
 
 
 def index(request):
+    navi = 'razvozka'
     datenew = datetime.date.today() + datetime.timedelta(days=1)
 #    date = datetime.date.today()
     razv = Razvozka.objects.order_by('-date', 'date_id')
@@ -18,7 +19,7 @@ def index(request):
         if r.date not in f_rzv:
             f_rzv[r.date] = []
         f_rzv[r.date].append(r)
-    context = {'f_rzv': f_rzv, 'datenew': datenew}
+    context = {'f_rzv': f_rzv, 'datenew': datenew, 'navi': navi}
     return render(request, 'razvozki/index.html', context)
 
 
@@ -44,6 +45,7 @@ def index(request):
 
 
 def add_razv(request, id):
+    navi = 'razvozka'
     rzv = Razvozka.objects.get(id=id)
     date_out = rzv.date
     razv = Razvozka.objects.order_by('-date', 'date_id')
@@ -52,7 +54,7 @@ def add_razv(request, id):
         if r.date not in f_rzv:
             f_rzv[r.date] = []
         f_rzv[r.date].append(r)
-    context = {'f_rzv': f_rzv, 'date_out': date_out}
+    context = {'f_rzv': f_rzv, 'date_out': date_out, 'navi': navi}
     return render(request, 'razvozki/add_razv.html', context)
 
 
@@ -76,6 +78,7 @@ def delete_rzv(request, id):
     return HttpResponseRedirect(reverse('razvozki:index'))
 
 def update_rzv(request, id):
+    navi = 'razvozka'
     rzv = Razvozka.objects.get(id=id)
     template = loader.get_template('razvozki/update_rzv.html')
     razv = Razvozka.objects.order_by('-date', 'date_id')
@@ -84,7 +87,7 @@ def update_rzv(request, id):
         if r.date not in f_rzv:
             f_rzv[r.date] = []
         f_rzv[r.date].append(r)
-    context = {'f_rzv': f_rzv, 'rzv': rzv, 'id': id}
+    context = {'f_rzv': f_rzv, 'rzv': rzv, 'id': id, 'navi': navi}
     return HttpResponse(template.render(context, request))
 
 def updaterecord_rzv(request, id):
@@ -121,6 +124,7 @@ def newdate_rzv(request):
     return HttpResponseRedirect(reverse('razvozki:index'))
 
 def customers(request):
+    navi = 'customers'
     cust = Customer.objects.order_by('name')
-    context = {'cust': cust}
+    context = {'cust': cust, 'navi': navi}
     return render(request, 'razvozki/customers.html', context)
