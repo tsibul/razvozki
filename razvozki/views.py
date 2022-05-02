@@ -10,13 +10,15 @@ from django.urls import reverse
 
 
 def index(request):
+    datenew = datetime.date.today() + datetime.timedelta(days=1)
+#    date = datetime.date.today()
     razv = Razvozka.objects.order_by('-date', 'date_id')
     f_rzv = {}
     for r in razv:
         if r.date not in f_rzv:
             f_rzv[r.date] = []
         f_rzv[r.date].append(r)
-    context = {'f_rzv': f_rzv}
+    context = {'f_rzv': f_rzv, 'datenew': datenew}
     return render(request, 'razvozki/index.html', context)
 
 
@@ -55,7 +57,7 @@ def add_razv(request, id):
     return render(request, 'razvozki/add_razv.html', context)
 
 
-def addrecord_razv(request, id):
+def addrecord_razv(request):
     date = request.POST['date']
     date = datetime.datetime.strptime(date, '%B %d, %Y').strftime('%Y-%m-%d')
     date_id = request.POST['date_id']
@@ -111,3 +113,10 @@ def main_rzv(request):
     template = loader.get_template('razvozki/main.html')
     return HttpResponse(template.render({}, request))
 
+def newdate_rzv(request):
+    datenew = request.POST['date']
+    datenew = datetime.datetime.strptime(datenew, '%d.%m.%Y').strftime('%Y-%m-%d')
+    razvozka = Razvozka(date=datenew, date_id=1, customer_name='', customer=None, address='', contact='',
+                        to_do_take='', to_do_deliver='')
+    razvozka.save()
+    return HttpResponseRedirect(reverse('razvozki:index'))
