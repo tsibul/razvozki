@@ -15,5 +15,6 @@ urlpatterns = [
 #    path('<int:razvozki>/results/', views.results, name='results'),
     path('main', views.main_rzv, name='main_rzv'),
     path('newdate_rzv', views.newdate_rzv, name='newdate_rzv'),
+    path('customers', views.customers, name='customers'),
 
 ]

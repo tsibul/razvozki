@@ -2,7 +2,7 @@
 
 import datetime
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Razvozka
+from .models import Razvozka, Customer
 from django.template import loader
 from django.shortcuts import render
 from django.http import Http404
@@ -119,3 +119,8 @@ def newdate_rzv(request):
                         to_do_take='', to_do_deliver='')
     razvozka.save()
     return HttpResponseRedirect(reverse('razvozki:index'))
+
+def customers(request):
+    cust = Customer.objects.order_by('name')
+    context = {'cust': cust}
+    return render(request, 'razvozki/customers.html', context)
