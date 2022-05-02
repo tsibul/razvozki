@@ -128,3 +128,35 @@ def customers(request):
     cust = Customer.objects.order_by('name')
     context = {'cust': cust, 'navi': navi}
     return render(request, 'razvozki/customers.html', context)
+
+def delete_cst(request, id):
+    customer = Customer.objects.get(id=id)
+    customer.delete()
+    return HttpResponseRedirect(reverse('razvozki:customers'))
+
+def add_cst(request):
+    navi = 'customers'
+    cust = Customer.objects.order_by('name')
+    context = {'cust': cust, 'navi': navi}
+    return render(request, 'razvozki/add_cst.html', context)
+
+def updaterecord_cst(request, id):
+    name = request.POST['name']
+    address = request.POST['address']
+    contact = request.POST['contact']
+    customer = Customer.objects.get(id=id)
+    customer.name = name
+    customer.address = address
+    customer.contact = contact
+    customer.save()
+    return HttpResponseRedirect(reverse('razvozki/customers.html'))
+
+
+def addrecord_cst(request):
+    name = request.POST['name']
+    address = request.POST['address']
+    contact = request.POST['contact']
+    customer = Customer(name=name, address=address, contact=contact)
+    customer.save()
+    return HttpResponseRedirect(reverse('razvozki:customers'))
+

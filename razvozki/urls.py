@@ -16,5 +16,8 @@ urlpatterns = [
     path('main', views.main_rzv, name='main_rzv'),
     path('newdate_rzv', views.newdate_rzv, name='newdate_rzv'),
     path('customers', views.customers, name='customers'),
+    path('add_cst', views.add_cst, name='add_cst'),
+    path('addrecord_cst/', views.addrecord_cst, name='addrecord_cst'),
+    path('delete_cst/<int:id>', views.delete_cst, name='delete_cst'),
 
 ]

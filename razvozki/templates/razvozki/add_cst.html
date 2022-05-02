@@ -19,18 +19,31 @@
     <div class="col text-center fw-bold">Клиент</div>
     <div class="col text-center fw-bold" >Адрес</div>
     <div class="col text-center fw-bold">Контакт</div>
-    <div class="col text-center fw-bold">Удалить/Объединить</div>
+    <div class="col text-center fw-bold">Добавить</div>
   </div>
 </div>
+
+<form action="addrecord_cst/" method="post">
+{% csrf_token %}
+<div class="container px-1" >
+  <div class="row row-cols-5">
+    <div class="col-1 text-center"><a href="{% url 'razvozki:customers' %}"><i class="bi bi-x-circle-fill" style="color:red"></i></a></div>
+    <div class="col text-center"><input type="text" class="form-control" id="customer_name" placeholder="Клиент" name="name"></div>
+    <div class="col text-center"><input type="text" class="form-control" id="address" placeholder="Адрес" name="address"></div>
+    <div class="col text-center"><input type="text" class="form-control" id="contact" placeholder="Контакт" name="contact"></div>
+    <div class="col text-center"><button type="submit" class="bi bi-check-circle-fill" style="color:green; background-color:white; border-style:none"></button></div>
+  </div>
+</div>
+</form>
 {% for cst in cust %}
 <div class="container px-1">
   <div class="row row-cols-5">
-    <div class="col-1 text-center"><a href="add_cst"><i class="bi bi-plus-circle-fill" style="color:green"></i></a></div>
+    <div class="col-1 text-center"><i class="bi bi-plus-circle-fill" style="color:gray"></i></div>
     <div class="col border border-1">{{cst.name}}</div>
     <div class="col border border-1">{{cst.address}}</div>
     <div class="col border border-1">{{cst.contact}}</div>
-    <div class="col border border-1 text-center"><a href="delete_cst/{{ cst.id }}"><i class="bi bi-x-circle-fill" style="color:red"></i></a>
-        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+    <div class="col border border-1 text-center"><i class="bi bi-x-circle-fill" style="color:ray"></i>
+        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" disabled>
         <label class="form-check-label" for="flexCheckDefault">
            объединить
         </label>
