@@ -22,12 +22,12 @@ def index(request):
     return render(request, 'razvozki/index.html', context)
 
 
-def detail(request, razvozka_id):
-    try:
-        razvozka = Razvozka.objects.get(pk=razvozka_id)
-    except Razvozka.DoesNotExist:
-        raise Http404("Razvozka does not exist")
-    return render(request, 'razvozki/detail.html', {'razvozka': razvozka})
+#def detail(request, razvozka_id):
+#    try:
+#        razvozka = Razvozka.objects.get(pk=razvozka_id)
+#   except Razvozka.DoesNotExist:
+#        raise Http404("Razvozka does not exist")
+#    return render(request, 'razvozki/detail.html', {'razvozka': razvozka})
 
 
 #def date_detail(request, razvozka_date):
@@ -38,9 +38,9 @@ def detail(request, razvozka_id):
 #    return render(request, 'razvozki/date_detail.html', {'razvozka_date': razvozka_d})
 
 
-def results(request, razvozka_date):
-    response = "Развозка на %s."
-    return HttpResponse(response % razvozka_date)
+#def results(request, razvozka_date):
+#    response = "Развозка на %s."
+#    return HttpResponse(response % razvozka_date)
 
 
 def add_razv(request, id):
@@ -53,7 +53,6 @@ def add_razv(request, id):
             f_rzv[r.date] = []
         f_rzv[r.date].append(r)
     context = {'f_rzv': f_rzv, 'date_out': date_out}
-#    template = loader.get_template('razvozki/add_razv.html')
     return render(request, 'razvozki/add_razv.html', context)
 
 
