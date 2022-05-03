@@ -13,33 +13,37 @@
 
 <body>
 <div class="container px-1">
-  <div class="row row-cols-5 bg-success" style="--bs-bg-opacity: .3;" >
+  <div class="row row-cols-6 bg-success" style="--bs-bg-opacity: .3;" >
     <div class="col-1 text-center fw-bold" >Добавить</div>
     <div class="col text-center fw-bold">Клиент</div>
     <div class="col text-center fw-bold" >Адрес</div>
     <div class="col text-center fw-bold">Контакт</div>
+    <div class="col text-center fw-bold">Координата</div>
+
     <div class="col text-center fw-bold" style="display:none">Удалить</div>
   </div>
 </div>
 <form action="addrecord_cst/" method="post">
 {% csrf_token %}
 <div class="container px-1" id="new_ln" style="display:none">
-  <div class="row row-cols-5">
+  <div class="row row-cols-6">
     <div class="col-1 text-center"><a href="javascript:add_ln_reverse('new_ln')"><i class="bi bi-x-circle-fill" style="color:red"></i></a></div>
     <div class="col text-center"><input type="text" class="form-control" id="customer_name" placeholder="Клиент" name="name"></div>
     <div class="col text-center"><input type="text" class="form-control" id="address" placeholder="Адрес" name="address"></div>
     <div class="col text-center"><input type="text" class="form-control" id="contact" placeholder="Контакт" name="contact"></div>
+    <div class="col text-center"><input type="text" class="form-control" id="mappoint" placeholder="Координата" name="mappoint"></div>
     <div class="col text-center"><button type="submit" class="bi bi-check-circle-fill" style="color:green; background-color:white; border-style:none"></button></div>
   </div>
 </div>
 </form>
 {% for cst in cust %}
 <div class="container px-1" id="cst_id{{cst.id}}">
-  <div class="row row-cols-5">
+  <div class="row row-cols-6">
     <div class="col-1 text-center"><a href="javascript:add_ln('new_ln')"><i class="bi bi-plus-circle-fill" style="color:green"></i></a></div>
     <div class="col border border-1"><a class=" {{cst.clr}}" href="javascript:upd_ln({{cst.id}});">{{cst.name}}</a> </div>
     <div class="col border border-1"><a class=" {{cst.clr}}" href="javascript:upd_ln({{cst.id}});">{{cst.address}}</a></div>
     <div class="col border border-1"><a class=" {{cst.clr}}" href="javascript:upd_ln({{cst.id}});">{{cst.contact}}</a></div>
+    <div class="col border border-1"><a class=" {{cst.clr}}" href="javascript:upd_ln({{cst.id}});">{{cst.mappoint}}</a></div>
     <div class="col border border-1 text-center"><a href="delete_cst/{{ cst.id }}"><i class="bi bi-x-circle-fill" style="color:red"></i></a>
         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" style="display:none">
         <label class="form-check-label" for="flexCheckDefault" style="display:none">
@@ -51,11 +55,12 @@
 <form action="updaterecord_cst/{{ cst.id }}" method="post">
 {% csrf_token %}
 <div class="container px-1"  id="cst_id2{{cst.id}}" style="display:none">
-  <div class="row row-cols-5">
+  <div class="row row-cols-6">
     <div class="col-1 text-center"><a href="javascript:upd_ln_reverse({{cst.id}});"><i class="bi bi-x-circle-fill" style="color:red"></i></a></div>
     <div class="col border border-1" ><input type="text" class="form-control {{cst.clr}}" placeholder="Клиент" name="cst_name" value="{{ cst.name }}"></div>
     <div class="col border border-1"><input type="text" class="form-control {{cst.clr}}"  placeholder="Адрес" name="address" value="{{cst.address}}"></div>
     <div class="col border border-1"><input type="text" class="form-control {{cst.clr}}"  placeholder="Клиент" name="contact" value="{{cst.contact}}"></div>
+    <div class="col border border-1"><input type="text" class="form-control {{cst.clr}}"  placeholder="Координата" name="mappoint" value="{{cst.mappoint}}"></div>
       <div class="col border border-1 text-center"><button type="submit" class="bi bi-check-circle-fill" style="color:green; background-color:white; border-style:none"></button></a>
         <input class="form-check-input" type="checkbox" value="" id="flexCheckDefaul" style="display:none">
         <label class="form-check-label" for="flexCheckDefaul" style="display:none">

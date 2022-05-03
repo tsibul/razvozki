@@ -127,17 +127,18 @@ def customers(request):
     navi = 'customers'
     cust = Customer.objects.order_by('name')
     class Customer_clr:
-        def __init__(self, id, name, address, contact, clr):
+        def __init__(self, id, name, address, contact, mappoint, clr):
             self.id = id
             self.name = name
             self.address = address
             self.contact = contact
+            self.mappoint = mappoint
             self.clr = clr
 
     i = 0
     cust_clr = []
     for cst1 in cust:
-        cust_clr.append(Customer_clr(cst1.id, cst1.name, cst1.address, cst1.contact, 'text-dark'))
+        cust_clr.append(Customer_clr(cst1.id, cst1.name, cst1.address, cst1.contact, cst1.mappoint, 'text-dark'))
         for cst2 in cust:
             if (cst1.name == cst2.name or cst1.address == cst2.address) and cst1.id != cst2.id:
                 cust_clr[i].clr = 'text-danger'
@@ -160,10 +161,12 @@ def updaterecord_cst(request, id):
     name = request.POST['cst_name']
     address = request.POST['address']
     contact = request.POST['contact']
+    mappoint = request.POST['mappoint']
     customer = Customer.objects.get(id=id)
     customer.name = name
     customer.address = address
     customer.contact = contact
+    customer.mappoint = mappoint
     customer.save()
     return HttpResponseRedirect(reverse('razvozki:customers'))
 
@@ -172,7 +175,8 @@ def addrecord_cst(request):
     name = request.POST['name']
     address = request.POST['address']
     contact = request.POST['contact']
-    customer = Customer(name=name, address=address, contact=contact)
+    mappoint = request.POST['mappoint']
+    customer = Customer(name=name, address=address, contact=contact, mappoint=mappoint)
     customer.save()
     return HttpResponseRedirect(reverse('razvozki:customers'))
 

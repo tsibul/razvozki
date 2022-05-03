@@ -7,6 +7,8 @@ class Customer(models.Model):
     name = models.CharField(max_length=100)
     address = models.CharField(max_length=255)
     contact = models.CharField(max_length=120)
+    mappoint = models.CharField(max_length=255, default='')
+
 
     def __repr__(self):
         return f"Customer(name={self.name!r}, contact={self.contact!r})"
