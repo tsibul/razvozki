@@ -126,7 +126,23 @@ def newdate_rzv(request):
 def customers(request):
     navi = 'customers'
     cust = Customer.objects.order_by('name')
-    context = {'cust': cust, 'navi': navi}
+    class Customer_clr:
+        def __init__(self, id, name, address, contact, clr):
+            self.id = id
+            self.name = name
+            self.address = address
+            self.contact = contact
+            self.clr = clr
+
+    i = 0
+    cust_clr = []
+    for cst1 in cust:
+        cust_clr.append(Customer_clr(cst1.id, cst1.name, cst1.address, cst1.contact, 'text-dark'))
+        for cst2 in cust:
+            if (cst1.name == cst2.name or cst1.address == cst2.address) and cst1.id != cst2.id:
+                cust_clr[i].clr = 'text-danger'
+        i = i + 1
+    context = {'cust': cust_clr, 'navi': navi }
     return render(request, 'razvozki/customers.html', context)
 
 def delete_cst(request, id):
@@ -141,7 +157,7 @@ def add_cst(request):
     return render(request, 'razvozki/add_cst.html', context)
 
 def updaterecord_cst(request, id):
-    name = request.POST['name']
+    name = request.POST['cst_name']
     address = request.POST['address']
     contact = request.POST['contact']
     customer = Customer.objects.get(id=id)
@@ -149,7 +165,7 @@ def updaterecord_cst(request, id):
     customer.address = address
     customer.contact = contact
     customer.save()
-    return HttpResponseRedirect(reverse('razvozki/customers.html'))
+    return HttpResponseRedirect(reverse('razvozki:customers'))
 
 
 def addrecord_cst(request):
