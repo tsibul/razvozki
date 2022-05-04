@@ -84,10 +84,10 @@
             <tr id="cst_id_{{rzv.id}}">
                 <th scope="row"><a href="add_razv/{{ rzv.id }}"><i class="bi bi-plus-circle-fill" style="color:green"></i></a></th>
                 <td><input type="number" class="form-control" disabled value="{{ rzv.date_id }}"></a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control">{{ rzv.customer_name }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control">{{ rzv.address }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control">{{ rzv.contact }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control">{{ rzv.get_all_todo }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.customer_name }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.address }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.contact }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.get_all_todo_clr }}</a></td>
                 <td ><a href="delete_rzv/{{ rzv.id }}"><i class="bi bi-x-circle-fill" style="color:red"></i></a></td>
             </tr>
 
