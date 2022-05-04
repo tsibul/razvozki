@@ -1,5 +1,5 @@
 <!doctype html>
-
+{% load static %}
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <!-- Required meta tags -->
@@ -60,39 +60,96 @@
     <button type="submit" class="btn btn-success mb-3">Создать</button>
   </div>
 </form>
-    {% if f_rzv %}
-    <table class="table table-hover">
-    {% for date_r, razv in f_rzv.items %}
-        <thead>
-        <tr class="table-success">
-            <th scope="col"> </th>
-            <th colspan="3" style="text-align:right"> Развозка на </th>
-            <th colspan="3">{{ date_r|date:"d.m.Y" }}</th>
+
+{% if f_rzv %}
+<table class="table table-hover">
+{% for date_r, razv in f_rzv.items %}
+    <thead>
+    <tr class="table-success">
+        <th scope="col"> </th>
+        <th colspan="3" style="text-align:right"> Развозка на </th>
+        <th colspan="3">{{ date_r|date:"d.m.Y" }}</th>
+    </tr>
+    <tr class="table-secondary">
+        <th scope="col">   </th>
+        <th scope="col"> # </th>
+        <th scope="col" style="min-width:180px"> Клиент </th>
+        <th scope="col"> Адрес </th>
+        <th scope="col"> Контакт </th>
+        <th colspan="2"> Описание </th>
+    </tr>
+    </thead>
+    {% for rzv in razv %}
+        <tbody>
+            <tr id="cst_id{{rzv.id}}">
+                <th scope="row"><a href="add_razv/{{ rzv.id }}"><i class="bi bi-plus-circle-fill" style="color:green"></i></a></th>
+                <td><input type="number" class="form-control" disabled value="{{ rzv.date_id }}"></a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control">{{ rzv.customer_name }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control">{{ rzv.address }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control">{{ rzv.contact }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control">{{ rzv.get_all_todo }}</a></td>
+                <td ><a href="delete_rzv/{{ rzv.id }}"><i class="bi bi-x-circle-fill" style="color:red"></i></a></td>
+            </tr>
+
+        <form action="updaterecord_rzv/{{ rzv.id }}" method="post">
+        <tr id="cst_id2{{rzv.id}}" style="display:none">
+        {% csrf_token %}
+            <input type="hidden" name="date" value="{{date_out}}">
+            <th scope="rowgroup"><a href="{% url 'razvozki:index' %}"><i class="bi bi-x-circle-fill" style="color:red"></i></a></th>
+                <th colspan="2">
+                <div class="col">
+                    <div
+                     class='input-group'
+                     id='datetimepicker5'
+                     data-td-target-input='nearest'
+                     data-td-target-toggle='nearest'
+                 >
+                   <input
+                     id='datetimepicker5Input'
+                     type='text'
+                     class='form-control'
+                     data-td-target='#datetimepicker5'
+                     name='date'
+                     value="{{ date_r|date:'d.m.Y' }}"
+                   />
+                   <span
+                     class='input-group-text'
+                     data-td-target='#datetimepicker4'
+                     data-td-toggle='datetimepicker'
+                   >
+                     <span class='bi bi-calendar-date-fill'></span>
+                   </span>
+                </div>
+                </div>
+            </th>
+            <td></td>
+            <td></td>
+            <td> <input type="text" class="form-control" id="to_do_take" placeholder="Забрать" name="to_do_take" value="{{ rzv.to_do_take }}"> </td>
+            </tr>
+            <tr id="cst_id3{{rzv.id}}" style="display:none">
+            <td></td>
+            <td> <input type="number" class="form-control" id="date_id" placeholder="#" name="date_id" value="{{ rzv.date_id }}"> </td>
+            <td> <input type="text" class="form-control" id="customer_name" placeholder="Клиент" name="customer_name" value="{{ rzv.customer_name }}"> </td>
+            <td> <input type="text" class="form-control" id="address" placeholder="Адрес" name="address" value="{{ rzv.address }}"> </td>
+            <td> <input type="text" class="form-control" id="contact" placeholder="Контакт" name="contact" value="{{ rzv.contact }}"> </td>
+            <td> <input type="text" class="form-control" id="to_do_deliver" placeholder="Сдать" name="to_do_deliver" value="{{ rzv.to_do_deliver }}"></td>
+            <td> <button type="submit" class="bi bi-check-circle-fill" style="color:green; background-color:white; border-style:none"></button></td>
+            </tr>
+        </form>
         </tr>
-        <tr class="table-secondary">
-            <th scope="col">   </th>
-            <th scope="col"> # </th>
-            <th scope="col" style="min-width:180px"> Клиент </th>
-            <th scope="col"> Адрес </th>
-            <th scope="col"> Контакт </th>
-            <th colspan="2"> Описание </th>
-        </tr>
-        </thead>
-        {% for razvozka in razv %}
-            <tbody>
-                <tr>
-                    <th scope="row"><a href="add_razv/{{ razvozka.id }}"><i class="bi bi-plus-circle-fill" style="color:green"></i></a></th>
-                    <td><input type="number" class="form-control" id="date_id"   disabled value="{{ razvozka.date_id }}"></a></td>
-                    <td><a href="update_rzv/{{ razvozka.id }}" class="form-control">{{ razvozka.customer_name }}</a></td>
-                    <td><a href="update_rzv/{{ razvozka.id }}" class="form-control">{{ razvozka.address }}</a></td>
-                    <td><a href="update_rzv/{{ razvozka.id }}" class="form-control">{{ razvozka.contact }}</a></td>
-                    <td><a href="update_rzv/{{ razvozka.id }}" class="form-control">{{ razvozka.get_all_todo }}</a></td>
-                    <td ><a href="delete_rzv/{{ razvozka.id }}"><i class="bi bi-x-circle-fill" style="color:red"></i></a></td>
-                </tr>
-            </tbody>
-        {% endfor %}
+
+
+
+
+
+
+
+
+
+        </tbody>
     {% endfor %}
-    </table>
+{% endfor %}
+</table>
 {% else %}
     <p>No razvozkis are available.</p>
 {% endif %}
@@ -119,5 +176,6 @@
    }
  });</script>
 
+<script src="{% static 'razvozki/rzv.js' %}"></script>
 </body>
 </html>
