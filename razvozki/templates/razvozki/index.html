@@ -81,7 +81,7 @@
     </thead>
     {% for rzv in razv %}
         <tbody>
-            <tr id="cst_id{{rzv.id}}">
+            <tr id="cst_id_{{rzv.id}}">
                 <th scope="row"><a href="add_razv/{{ rzv.id }}"><i class="bi bi-plus-circle-fill" style="color:green"></i></a></th>
                 <td><input type="number" class="form-control" disabled value="{{ rzv.date_id }}"></a></td>
                 <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control">{{ rzv.customer_name }}</a></td>
@@ -92,7 +92,7 @@
             </tr>
 
         <form action="updaterecord_rzv/{{ rzv.id }}" method="post">
-        <tr id="cst_id2{{rzv.id}}" style="display:none">
+        <tr id="cst_id2_{{rzv.id}}" style="display:none">
         {% csrf_token %}
             <input type="hidden" name="date" value="{{date_out}}">
             <th scope="rowgroup"><a href="{% url 'razvozki:index' %}"><i class="bi bi-x-circle-fill" style="color:red"></i></a></th>
@@ -100,33 +100,40 @@
                 <div class="col">
                     <div
                      class='input-group'
-                     id='datetimepicker5'
+                     id='datetimepicker4{{rzv.id}}'
                      data-td-target-input='nearest'
                      data-td-target-toggle='nearest'
                  >
                    <input
-                     id='datetimepicker5Input'
+                     id='datetimepicker4Input{{rzv.id}}'
                      type='text'
                      class='form-control'
-                     data-td-target='#datetimepicker5'
+                     data-td-target='#datetimepicker4{{rzv.id}}'
                      name='date'
                      value="{{ date_r|date:'d.m.Y' }}"
                    />
                    <span
                      class='input-group-text'
-                     data-td-target='#datetimepicker4'
+                     data-td-target='#datetimepicker4{{rzv.id}}'
                      data-td-toggle='datetimepicker'
                    >
                      <span class='bi bi-calendar-date-fill'></span>
                    </span>
                 </div>
                 </div>
+                <script> new tempusDominus.TempusDominus(document.getElementById('datetimepicker4{{rzv.id}}'), {
+                 display: {icons:
+                    {date:'bi bi-calendar-date-fill', next:'bi bi-chevron-compact-right', previous:'bi bi-chevron-compact-left',},
+                 components: {decades: true, year: true, month: true, date: true, hours: false, minutes: false, seconds: false,}}
+                 });
+                </script>
+
             </th>
             <td></td>
             <td></td>
             <td> <input type="text" class="form-control" id="to_do_take" placeholder="Забрать" name="to_do_take" value="{{ rzv.to_do_take }}"> </td>
             </tr>
-            <tr id="cst_id3{{rzv.id}}" style="display:none">
+            <tr id="cst_id3_{{rzv.id}}" style="display:none">
             <td></td>
             <td> <input type="number" class="form-control" id="date_id" placeholder="#" name="date_id" value="{{ rzv.date_id }}"> </td>
             <td> <input type="text" class="form-control" id="customer_name" placeholder="Клиент" name="customer_name" value="{{ rzv.customer_name }}"> </td>
@@ -175,6 +182,7 @@
 
    }
  });</script>
+
 
 <script src="{% static 'razvozki/rzv.js' %}"></script>
 </body>
