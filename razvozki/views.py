@@ -37,6 +37,8 @@ def index(request):
     datenew = datetime.date.today() + datetime.timedelta(days=1)
     #    date = datetime.date.today()
     rzv = Razvozka.objects.order_by('-date', 'date_id')
+    cust = Customer.objects.order_by('name')
+
     rzv_clr = []
     for rzv1 in rzv:
         if rzv1.customer is None:
@@ -52,7 +54,7 @@ def index(request):
         if r.date not in f_rzv:
             f_rzv[r.date] = []
         f_rzv[r.date].append(r)
-    context = {'f_rzv': f_rzv, 'datenew': datenew, 'navi': navi}
+    context = {'f_rzv': f_rzv, 'datenew': datenew, 'navi': navi, 'cust': cust}
     return render(request, 'razvozki/index.html', context)
 
 
@@ -95,12 +97,17 @@ def addrecord_razv(request):
     date = request.POST['date']
     date = datetime.datetime.strptime(date, '%B %d, %Y').strftime('%Y-%m-%d')
     date_id = request.POST['date_id']
+    customer = request.POST['customer']
+    if customer == 'None':
+        customer = None
+    else:
+        customer = Customer.objects.get(id=customer)
     customer_name = request.POST['customer_name']
     address = request.POST['address']
     contact = request.POST['contact']
     to_do_take = request.POST['to_do_take']
     to_do_deliver = request.POST['to_do_deliver']
-    razvozka = Razvozka(date=date, date_id=date_id, customer_name=customer_name, customer=None, address=address,
+    razvozka = Razvozka(date=date, date_id=date_id, customer_name=customer_name, customer=customer, address=address,
                         contact=contact,
                         to_do_take=to_do_take, to_do_deliver=to_do_deliver)
     razvozka.save()
@@ -129,7 +136,7 @@ def update_rzv(request, id):
 
 def updaterecord_rzv(request, id):
     date = request.POST['date']
-    date = datetime.datetime.strptime(date, '%d.%m.%Y').strftime('%Y-%m-%d')
+    date = datetime.datetime.strptime(date, '%m.%d.%Y').strftime('%Y-%m-%d')
     date_id = request.POST['date_id']
     customer_name = request.POST['customer_name']
     address = request.POST['address']

@@ -18,6 +18,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
+    <link rel="stylesheet" href="{% static 'razvozki/style.css' %}">
     <title>Развозки</title>
 </head>
 
@@ -94,7 +95,7 @@
         <form action="updaterecord_rzv/{{ rzv.id }}" method="post">
         <tr id="cst_id2_{{rzv.id}}" style="display:none">
         {% csrf_token %}
-            <input type="hidden" name="date" value="{{date_out}}">
+            <input type="hidden" name="date" value="{{date_r}}">
             <th scope="rowgroup"><a href="javascript:upd_ln2_reverse({{rzv.id}});"><i class="bi bi-x-circle-fill" style="color:red"></i></a></th>
                 <th colspan="2">
                 <div class="col">
@@ -110,7 +111,7 @@
                      class='form-control'
                      data-td-target='#datetimepicker4{{rzv.id}}'
                      name='date'
-                     value="{{ date_r|date:'d.m.Y' }}"
+                     value="{{ date_r}}"
                    />
                    <span
                      class='input-group-text'
@@ -151,16 +152,26 @@
         <tr id="cst_id4_{{rzv.id}}" style="display:none">
             <input type="hidden" name="date" value="{{rzv.date}}">
             <th scope="rowgroup"><a href="javascript:add_ln2_reverse({{rzv.id}});"><i class="bi bi-x-circle-fill" style="color:red"></i></a></th>
-            <td> <input type="number" class="form-control" placeholder="#" name="date_id"> </td>
-            <td> <input type="text" class="form-control" placeholder="Клиент" name="customer_name"> </td>
-            <td> <input type="text" class="form-control" placeholder="Адрес" name="address"> </td>
-            <td> <input type="text" class="form-control" placeholder="Контакт" name="contact"> </td>
+             <input id="updcust_id_{{rzv.id}}"  type="hidden" name="customer" value=None>
+           <td> <input type="number" class="form-control" placeholder="#" name="date_id" value="0"> </td>
+            <td ><input type="text" id="updcust_name_{{rzv.id}}" class="form-control" placeholder="Клиент"  name="customer_name"></td>
+            <td> <input type="text" id="updcust_address_{{rzv.id}}" class="form-control" placeholder="Адрес" name="address"> </td>
+            <td> <input type="text" id="updcust_contact_{{rzv.id}}" class="form-control" placeholder="Контакт" name="contact"> </td>
             <td> <input type="text" class="form-control" placeholder="Забрать" name="to_do_take"> </td>
         </tr>
-        <tr id="cst_id5_{{rzv.id}}" style="display:none">
+        <tr class="dropdown" id="cst_id5_{{rzv.id}}" style="display:none">
             <td></td>
             <td></td>
-            <td></td>
+            <td>
+              <button class="btn btn-success dropdown-toggle" type="button" id="ChooseClientAdd{{rzv.id}}"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+                Выбрать клиента
+              </button>
+              <ul class="dropdown-menu" aria-labelledby="ChooseClientAdd{{rzv.id}}">
+                {% for cst in cust %}
+                 <li id="Cust{{rzv.id}}_{{cst.id}}"><a class="dropdown-item" href="javascript:slc_cst('{{cst.name}}', '{{rzv.id}}', '{{cst.id}}', '{{cst.address}}', '{{cst.contact}}')">{{cst.name}}</a></li>
+                {% endfor %}
+              </ul>
+            </td>
             <td></td>
             <td></td>
             <td> <input type="text" class="form-control" placeholder="Сдать" name="to_do_deliver"></td>

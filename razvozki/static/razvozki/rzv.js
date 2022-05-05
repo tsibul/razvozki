@@ -43,3 +43,19 @@ function add_ln2_reverse(cst_){
     cst5 = 'cst_id5_' + cst_;
     document.getElementById(cst4).style.display='none';
     document.getElementById(cst5).style.display='none';}
+
+function slc_cst(cst_name, rzv_id, cst_id, cst_address, cst_contact){
+    updcust_name = 'updcust_name_' + rzv_id;
+    updcust_id = 'updcust_id_' + rzv_id;
+    updcust_address = 'updcust_address_' + rzv_id;
+    updcust_contact = 'updcust_contact_' + rzv_id;
+    cust_name = cst_name;
+    cust_id = cst_id;
+    cust_address = cst_address;
+    cust_contact = cst_contact;
+    document.getElementById(updcust_name).value = cust_name;
+    document.getElementById(updcust_id).value = cust_id;
+    document.getElementById(updcust_address).value = cust_address;
+    document.getElementById(updcust_contact).value = cust_contact;
+
+}
