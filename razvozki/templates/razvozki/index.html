@@ -137,7 +137,11 @@
             <tr id="cst_id3_{{rzv.id}}" style="display:none">
             <td></td>
             <td> <input type="number" class="form-control" id="date_id" placeholder="#" name="date_id" value="{{ rzv.date_id }}"> </td>
-            <td> <input type="text" class="form-control  {{rzv.clr}}" id="customer_name" placeholder="Клиент" name="customer_name" value="{{ rzv.customer_name }}"> </td>
+            {% if rzv.customer is None %}
+                <td> <input type="text" class="form-control  {{rzv.clr}}" id="customer_name" placeholder="Клиент" name="customer_name" value="{{ rzv.customer_name }}"> </td>
+            {% else %}
+                <td> <li type="text" class="form-control  {{rzv.clr}} bg-light">{{ rzv.customer_name }}</li> </td>
+            {% endif %}
             <td> <input type="text" class="form-control  {{rzv.clr}}" id="address" placeholder="Адрес" name="address" value="{{ rzv.address }}"> </td>
             <td> <input type="text" class="form-control  {{rzv.clr}}" id="contact" placeholder="Контакт" name="contact" value="{{ rzv.contact }}"> </td>
             <td> <input type="text" class="form-control  {{rzv.clr}}" id="to_do_deliver" placeholder="Сдать" name="to_do_deliver" value="{{ rzv.to_do_deliver }}"></td>
