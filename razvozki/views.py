@@ -2,43 +2,54 @@
 
 import datetime
 from django.http import HttpResponse, HttpResponseRedirect
+from django.core.paginator import Paginator
 from .models import Razvozka, Customer
 from django.template import loader
 from django.shortcuts import render
 from django.http import Http404
 from django.urls import reverse
+from django.views.generic import ListView
+
+class Razvozka_clr:
+    def __init__(self, id, date, date_id, customer, customer_name, address, contact, to_do_take, to_do_deliver,
+                 clr):
+        self.id = id
+        self.date = date
+        self.date_id = date_id
+        self.customer = customer
+        self.customer_name = customer_name
+        self.address = address
+        self.contact = contact
+        self.to_do_take = to_do_take
+        self.to_do_deliver = to_do_deliver
+        self.clr = clr
+
+    def get_all_todo_clr(self):
+        to_do_take = ''
+        to_do_deliver = ''
+        if self.to_do_take is not '':
+            to_do_take = ' ЗАБРАТЬ: ' + str(self.to_do_take)
+        if self.to_do_deliver is not '':
+            to_do_deliver = ' СДАТЬ: ' + str(self.to_do_deliver)
+        return f"{to_do_take} {to_do_deliver}"
+
+
+class Customer_clr:
+    def __init__(self, id, name, address, contact, mappoint, clr):
+        self.id = id
+        self.name = name
+        self.address = address
+        self.contact = contact
+        self.mappoint = mappoint
+        self.clr = clr
 
 
 def index(request):
-    class Razvozka_clr:
-        def __init__(self, id, date, date_id, customer, customer_name, address, contact, to_do_take, to_do_deliver,
-                     clr):
-            self.id = id
-            self.date = date
-            self.date_id = date_id
-            self.customer = customer
-            self.customer_name = customer_name
-            self.address = address
-            self.contact = contact
-            self.to_do_take = to_do_take
-            self.to_do_deliver = to_do_deliver
-            self.clr = clr
-
-        def get_all_todo_clr(self):
-            to_do_take = ''
-            to_do_deliver = ''
-            if self.to_do_take is not '':
-                to_do_take = ' ЗАБРАТЬ: ' + str(self.to_do_take)
-            if self.to_do_deliver is not '':
-                to_do_deliver = ' СДАТЬ: ' + str(self.to_do_deliver)
-            return f"{to_do_take} {to_do_deliver}"
-
     navi = 'razvozka'
     datenew = datetime.date.today() + datetime.timedelta(days=1)
     #    date = datetime.date.today()
     rzv = Razvozka.objects.order_by('-date', 'date_id')
     cust = Customer.objects.order_by('name')
-
     rzv_clr = []
     for rzv1 in rzv:
         if rzv1.customer is None:
@@ -49,34 +60,19 @@ def index(request):
             rzv_clr.append(
                 Razvozka_clr(rzv1.id, rzv1.date, rzv1.date_id, rzv1.customer, rzv1.customer_name, rzv1.address,
                              rzv1.contact, rzv1.to_do_take, rzv1.to_do_deliver, 'text-success'))
+    paginator = Paginator(rzv_clr, 20)  # Show 20.
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     f_rzv = {}
-    for r in rzv_clr:
+    for r in page_obj:
         if r.date not in f_rzv:
             f_rzv[r.date] = []
         f_rzv[r.date].append(r)
-    context = {'f_rzv': f_rzv, 'datenew': datenew, 'navi': navi, 'cust': cust}
+
+    context = {'f_rzv': f_rzv, 'datenew': datenew, 'navi': navi, 'cust': cust, 'page_obj': page_obj}
     return render(request, 'razvozki/index.html', context)
-
-
-# def detail(request, razvozka_id):
-#    try:
-#        razvozka = Razvozka.objects.get(pk=razvozka_id)
-#   except Razvozka.DoesNotExist:
-#        raise Http404("Razvozka does not exist")
-#    return render(request, 'razvozki/detail.html', {'razvozka': razvozka})
-
-
-# def date_detail(request, razvozka_date):
-#    try:
-#        razvozka_d = Razvozka.objects.filter(date=razvozka_date)
-#    except Razvozka.DoesNotExist:
-#        raise Http404("Razvozka does not exist")
-#    return render(request, 'razvozki/date_detail.html', {'razvozka_date': razvozka_d})
-
-
-# def results(request, razvozka_date):
-#    response = "Развозка на %s."
-#    return HttpResponse(response % razvozka_date)
 
 
 def add_razv(request, id):
@@ -135,18 +131,19 @@ def update_rzv(request, id):
 
 
 def updaterecord_rzv(request, id):
+    razvozka = Razvozka.objects.get(id=id)
     date = request.POST['date']
-    date = datetime.datetime.strptime(date, '%m.%d.%Y').strftime('%Y-%m-%d')
+    date = datetime.datetime.strptime(date, '%d.%m.%Y').strftime('%Y-%m-%d')
     date_id = request.POST['date_id']
-    customer_name = request.POST['customer_name']
     address = request.POST['address']
     contact = request.POST['contact']
     to_do_take = request.POST['to_do_take']
     to_do_deliver = request.POST['to_do_deliver']
-    razvozka = Razvozka.objects.get(id=id)
     razvozka.date = date
     razvozka.date_id = date_id
-    razvozka.customer_name = customer_name
+    if razvozka.customer is None:
+        customer_name = request.POST['customer_name']
+        razvozka.customer_name = customer_name
     razvozka.address = address
     razvozka.contact = contact
     razvozka.to_do_take = to_do_take
@@ -172,16 +169,6 @@ def newdate_rzv(request):
 def customers(request):
     navi = 'customers'
     cust = Customer.objects.order_by('name')
-
-    class Customer_clr:
-        def __init__(self, id, name, address, contact, mappoint, clr):
-            self.id = id
-            self.name = name
-            self.address = address
-            self.contact = contact
-            self.mappoint = mappoint
-            self.clr = clr
-
     i = 0
     cust_clr = []
     for cst1 in cust:
@@ -190,7 +177,12 @@ def customers(request):
             if (cst1.name == cst2.name or cst1.address == cst2.address) and cst1.id != cst2.id:
                 cust_clr[i].clr = 'text-danger'
         i = i + 1
-    context = {'cust': cust_clr, 'navi': navi}
+
+    paginator = Paginator(cust_clr, 20)  # Show 20.
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {'navi': navi, 'page_obj': page_obj}
     return render(request, 'razvozki/customers.html', context)
 
 

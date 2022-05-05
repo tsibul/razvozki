@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.db import models
 
 
+
 class Customer(models.Model):
     name = models.CharField(max_length=100)
     address = models.CharField(max_length=255)

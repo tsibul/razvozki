@@ -12,6 +12,25 @@
 {% include 'razvozki/main.html' %}
 
 <body>
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="btn btn-outline-success">&laquo; первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-success">предыдущая</a>
+        {% endif %}
+
+        <span class="current btn btn-outline-secondary">
+            страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-success">следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-success">последняя &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+<br>
+
 <div class="container px-1">
   <div class="row row-cols-6 bg-success" style="--bs-bg-opacity: .3;" >
     <div class="col-1 text-center fw-bold" >Добавить</div>
@@ -36,7 +55,7 @@
   </div>
 </div>
 </form>
-{% for cst in cust %}
+{% for cst in page_obj %}
 <div class="container px-1" id="cst_id_{{cst.id}}">
   <div class="row row-cols-6">
     <div class="col-1 text-center"><a href="javascript:add_ln('new_ln')"><i class="bi bi-plus-circle-fill" style="color:green"></i></a></div>
@@ -70,9 +89,25 @@
   </div>
 </div>
 </form>
-
 {% endfor %}
+<br>
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1" class="btn btn-outline-success">&laquo; первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-success">предыдущая</a>
+        {% endif %}
 
+        <span class="current btn btn-outline-secondary">
+            страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-success">следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-success">последняя &raquo;</a>
+        {% endif %}
+    </span>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script src="{% static 'razvozki/rzv.js' %}"></script>
