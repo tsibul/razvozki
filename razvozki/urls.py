@@ -20,5 +20,6 @@ urlpatterns = [
     path('addrecord_cst/', views.addrecord_cst, name='addrecord_cst'),
     path('delete_cst/<int:id>', views.delete_cst, name='delete_cst'),
     path('updaterecord_cst/<int:id>', views.updaterecord_cst, name='updaterecord_cst'),
+    path('print/<str:date_r>', views.print, name='print'),
 
 ]
