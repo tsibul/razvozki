@@ -59,3 +59,11 @@ function slc_cst(cst_name, rzv_id, cst_id, cst_address, cst_contact){
     document.getElementById(updcust_contact).value = cust_contact;
 
 }
+
+ function printDiv(divName) {
+        var printContents = document.getElementById(divName).innerHTML;
+        w=window.open();
+        w.document.write(printContents);
+        w.print();
+        w.close();
+    }
