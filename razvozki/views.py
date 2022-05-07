@@ -182,7 +182,27 @@ def customers(request):
     for cst1 in cust:
         cust_clr.append(Customer_clr(cst1.id, cst1.name, cst1.address, cst1.contact, cst1.mappoint, 'text-dark'))
         for cst2 in cust:
-            if (cst1.name == cst2.name or cst1.address == cst2.address) and cst1.id != cst2.id:
+            cst1_name = cst1.name.replace(' ', '')
+            cst1_name = cst1_name.replace('-', '')
+            cst1_name = cst1_name.replace('.', '')
+            cst1_name = cst1_name.replace(',', '')
+
+            cst2_name = cst2.name.replace(' ', '')
+            cst2_name = cst2_name.replace('-', '')
+            cst2_name = cst2_name.replace('.', '')
+            cst2_name = cst2_name.replace(',', '')
+
+            cst1_address = cst1.address.replace(' ', '')
+            cst1_address = cst1_address.replace('-', '')
+            cst1_address = cst1_address.replace('.', '')
+            cst1_address = cst1_address.replace(',', '')
+
+            cst2_address = cst2.address.replace(' ', '')
+            cst2_address = cst2_address.replace('-', '')
+            cst2_address = cst2_address.replace('.', '')
+            cst2_address = cst2_address.replace(',', '')
+
+            if (cst1_name == cst2_name or cst1_address == cst2_address) and cst1.id != cst2.id:
                 cust_clr[i].clr = 'text-danger'
         i = i + 1
 
@@ -229,3 +249,12 @@ def addrecord_cst(request):
     customer = Customer(name=name, address=address, contact=contact, mappoint=mappoint)
     customer.save()
     return HttpResponseRedirect(reverse('razvozki:customers'))
+
+
+def print(request, date_r):
+    razvozka = []
+    for rzv in Razvozka.objects.filter(date=date_r):
+        razvozka.append(rzv)
+    date_r = datetime.datetime.strptime(date_r, '%Y-%m-%d').strftime('%d.%m.%Y')
+    context = {'date_r': date_r, 'razv': razvozka}
+    return render(request, 'razvozki/print.html', context)
