@@ -32,15 +32,22 @@
             <a href="?page=1" class="btn btn-outline-success">&laquo; первая</a>
             <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-success">предыдущая</a>
         {% endif %}
-
         <span class="current btn btn-outline-secondary">
-            страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+           {{ page_obj.object_list.4.0|date:"d.m.y" }} - {{ page_obj.object_list.0.0|date:"d.m.y" }} (страница {{ page_obj.number }}  из {{ page_obj.paginator.num_pages }})
         </span>
-
         {% if page_obj.has_next %}
             <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-success">следующая</a>
             <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-success">последняя &raquo;</a>
         {% endif %}
+        &nbsp
+             <button class="btn btn-outline-success dropdown-toggle" type="button" id="_ChooseClientAdd{{rzv.id}}"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+                Выбрать даты
+            </button>
+              <ul class="dropdown-menu" aria-labelledby="ChooseClientAdd{{rzv.id}}">
+                {% for dt_range in date_range %}
+              <li><a class="dropdown-item" href="?page={{ dt_range.0 }}"> {{ dt_range.1 }}</a></li>
+                {% endfor %}
+              </ul>
     </span>
 </div>
 <br>
@@ -160,8 +167,8 @@
             {% else %}
                 <td> <li type="text" class="form-control  {{rzv.clr}} bg-light">{{ rzv.customer_name }}</li> </td>
             {% endif %}
-            <td> <input type="text" class="form-control  {{rzv.clr}}" id="address" placeholder="Адрес" name="address" value="{{ rzv.address }}"> </td>
-            <td> <input type="text" class="form-control  {{rzv.clr}}" id="contact" placeholder="Контакт" name="contact" value="{{ rzv.contact }}"> </td>
+            <td><textarea class="form-control  {{rzv.clr}}" id="address" placeholder="Адрес" name="address"> {{ rzv.address }} </textarea></td>
+            <td><textarea class="form-control  {{rzv.clr}}" id="contact" placeholder="Контакт" name="contact"> {{ rzv.contact }}</textarea></td>
             <td> <input type="text" class="form-control  {{rzv.clr}}" id="to_do_deliver" placeholder="Сдать" name="to_do_deliver" value="{{ rzv.to_do_deliver }}"></td>
             <td> <button type="submit" class="bi bi-check-circle-fill" style="color:green; background-color:white; border-style:none" data-toggle="tooltip" data-placement="top" title="записать"></button></td>
             </tr>
@@ -174,11 +181,11 @@
         <tr id="cst_id4_{{rzv.id}}" style="display:none">
             <input type="hidden" name="date" value="{{rzv.date}}">
             <th scope="rowgroup"><a href="javascript:add_ln2_reverse({{rzv.id}});"><i class="bi bi-x-circle-fill" style="color:red" data-toggle="tooltip" data-placement="top" title="отменить"></i></a></th>
-             <input id="updcust_id_{{rzv.id}}"  type="hidden" name="customer" value=None>
-           <td> <input type="number" class="form-control" placeholder="#" name="date_id" value="0"> </td>
+            <input id="updcust_id_{{rzv.id}}"  type="hidden" name="customer" value=None>
+            <td> <input type="number" class="form-control" placeholder="#" name="date_id" value="0"> </td>
             <td ><input type="text" id="updcust_name_{{rzv.id}}" class="form-control" placeholder="Клиент"  name="customer_name"></td>
-            <td> <input type="text" id="updcust_address_{{rzv.id}}" class="form-control" placeholder="Адрес" name="address"> </td>
-            <td> <input type="text" id="updcust_contact_{{rzv.id}}" class="form-control" placeholder="Контакт" name="contact"> </td>
+            <td> <textarea id="updcust_address_{{rzv.id}}" class="form-control" placeholder="Адрес" name="address"></textarea> </td>
+            <td> <textarea id="updcust_contact_{{rzv.id}}" class="form-control" placeholder="Контакт" name="contact"></textarea> </td>
             <td> <input type="text" class="form-control" placeholder="Забрать" name="to_do_take"> </td>
         </tr>
         <tr class="dropdown" id="cst_id5_{{rzv.id}}" style="display:none">
@@ -219,13 +226,22 @@
         {% endif %}
 
         <span class="current btn btn-outline-secondary">
-            страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+           {{ page_obj.object_list.4.0|date:"d.m.y" }} - {{ page_obj.object_list.0.0|date:"d.m.y" }} (страница {{ page_obj.number }}  из {{ page_obj.paginator.num_pages }})
         </span>
 
         {% if page_obj.has_next %}
             <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-success">следующая</a>
             <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-success">последняя &raquo;</a>
         {% endif %}
+        &nbsp
+             <button class="btn btn-outline-success dropdown-toggle" type="button"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+                Выбрать даты
+            </button>
+              <ul class="dropdown-menu" aria-labelledby="ChooseClientAdd{{rzv.id}}">
+                {% for dt_range in date_range %}
+              <li><a class="dropdown-item" href="?page={{ dt_range.0 }}"> {{ dt_range.1 }}</a></li>
+                {% endfor %}
+              </ul>
     </span>
 </div>
 

@@ -60,18 +60,26 @@ def index(request):
             rzv_clr.append(
                 Razvozka_clr(rzv1.id, rzv1.date, rzv1.date_id, rzv1.customer, rzv1.customer_name, rzv1.address,
                              rzv1.contact, rzv1.to_do_take, rzv1.to_do_deliver, 'text-success'))
-    paginator = Paginator(rzv_clr, 20)  # Show 20.
 
+    f_rzv0 = {}
+    for r in rzv_clr:
+        if r.date not in f_rzv0:
+            f_rzv0[r.date] = []
+        f_rzv0[r.date].append(r)
+
+    f_rzv2 = list(f_rzv0.items())
+    paginator = Paginator(f_rzv2, 5)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    f_rzv = dict(page_obj.object_list)
 
-    f_rzv = {}
-    for r in page_obj:
-        if r.date not in f_rzv:
-            f_rzv[r.date] = []
-        f_rzv[r.date].append(r)
+    date_range = []
+    for i in range(page_obj.paginator.num_pages):
+        page_obj2 = paginator.get_page(i + 1)
+        date_tmp = datetime.datetime.strptime(str(page_obj2.object_list[0][0]),'%Y-%m-%d').strftime('%d.%m.%Y')
+        date_range.append([i + 1, 'до ' + date_tmp])
 
-    context = {'f_rzv': f_rzv, 'datenew': datenew, 'navi': navi, 'cust': cust, 'page_obj': page_obj}
+    context = {'f_rzv': f_rzv, 'datenew': datenew, 'navi': navi, 'cust': cust, 'page_obj': page_obj, 'date_range': date_range}
     return render(request, 'razvozki/index.html', context)
 
 
