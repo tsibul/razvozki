@@ -90,26 +90,30 @@
 {% if f_rzv %}
 <table class="table table-hover">
 {% for date_r, razv in f_rzv.items %}
-    <thead>
     <tr class="table-success">
         <th scope="col"> </th>
-        <th colspan="3" style="text-align:right"> Развозка на </th>
-        <th colspan="3">{{ date_r|date:"d.m.Y" }}</th>
+        <th colspan="2" style="text-align:right"> Развозка на </th>
+        <th colspan="1">{{ date_r|date:"d.m.Y" }}</th>
+    <form action="print/{{ date_r|date:'Y-m-d'}}" method="post">
+        {% csrf_token %}
+        <th colspan="2"> <button type="submit" class="btn btn-outline-success"><i class="bi bi-printer-fill" style="currentColor"></i> Печать</button></th>
+    </form>
+        <td></td>
     </tr>
     <tr class="table-secondary">
         <th scope="col">   </th>
-        <th scope="col"> # </th>
-        <th scope="col" style="min-width:180px"> Клиент </th>
+        <th scope="col" style="min-width:70px"> # </th>
+        <th scope="col" style="min-width:220px"> Клиент </th>
         <th scope="col"> Адрес </th>
-        <th scope="col"> Контакт </th>
-        <th colspan="2"> Описание </th>
+        <th scope="col" style="min-width:280px"> Контакт </th>
+        <th colspan="2" style="min-width:450px"> Описание </th>
     </tr>
     </thead>
     {% for rzv in razv %}
         <tbody>
             <tr id="cst_id_{{rzv.id}}">
                 <th scope="row"><a href="javascript:add_ln2({{rzv.id}});"><i class="bi bi-plus-circle-fill" style="color:green" data-toggle="tooltip" data-placement="top" title="добавить развозку"></i></a></th>
-                <td><input type="number" class="form-control" disabled value="{{ rzv.date_id }}"></a></td>
+                <td  style="width:30px"><input type="number" class="form-control" disabled value="{{ rzv.date_id }}"></a></td>
                 <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.customer_name }}</a></td>
                 <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.address }}</a></td>
                 <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.contact }}</a></td>
@@ -161,7 +165,7 @@
             </tr>
             <tr id="cst_id3_{{rzv.id}}" style="display:none">
             <td></td>
-            <td> <input type="number" class="form-control" id="date_id" placeholder="#" name="date_id" value="{{ rzv.date_id }}"> </td>
+            <td> <input type="number" style="min-width:30px" class="form-control" id="date_id" placeholder="#" name="date_id" value="{{ rzv.date_id }}"> </td>
             {% if rzv.customer is None %}
                 <td> <input type="text" class="form-control  {{rzv.clr}}" id="customer_name" placeholder="Клиент" name="customer_name" value="{{ rzv.customer_name }}"> </td>
             {% else %}
@@ -174,7 +178,6 @@
             </tr>
         </form>
         </tr>
-
     <form action="addrecord_razv/" method="post">
     {% csrf_token %}
     <tr>
@@ -182,7 +185,7 @@
             <input type="hidden" name="date" value="{{rzv.date}}">
             <th scope="rowgroup"><a href="javascript:add_ln2_reverse({{rzv.id}});"><i class="bi bi-x-circle-fill" style="color:red" data-toggle="tooltip" data-placement="top" title="отменить"></i></a></th>
             <input id="updcust_id_{{rzv.id}}"  type="hidden" name="customer" value=None>
-            <td> <input type="number" class="form-control" placeholder="#" name="date_id" value="0"> </td>
+            <td> <input type="number" style="min-width:30px" class="form-control" placeholder="#" name="date_id" value="0"> </td>
             <td ><input type="text" id="updcust_name_{{rzv.id}}" class="form-control" placeholder="Клиент"  name="customer_name"></td>
             <td> <textarea id="updcust_address_{{rzv.id}}" class="form-control" placeholder="Адрес" name="address"></textarea> </td>
             <td> <textarea id="updcust_contact_{{rzv.id}}" class="form-control" placeholder="Контакт" name="contact"></textarea> </td>
@@ -211,6 +214,7 @@
 
 
     </tbody>
+
     {% endfor %}
 {% endfor %}
 </table>
