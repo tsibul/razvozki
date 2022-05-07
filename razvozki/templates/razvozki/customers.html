@@ -53,8 +53,8 @@
   <div class="row ">
     <div class="col-auto text-center"><a href="javascript:add_ln_reverse('new_ln')"><i class="bi bi-x-circle-fill" style="color:red" data-toggle="tooltip" data-placement="top" title="отменить"></i></a></div>
     <div class="col-2 text-center"><input type="text" class="form-control" id="customer_name" placeholder="Клиент" name="name"></div>
-    <div class="col text-center"><textarea type="text" class="form-control" id="address" placeholder="Адрес" name="address"></textarea></div>
-    <div class="col text-center"><textarea type="text" class="form-control" id="contact" placeholder="Контакт" name="contact"></textarea></div>
+    <div class="col text-center"><textarea class="form-control" id="address" placeholder="Адрес" name="address"></textarea></div>
+    <div class="col text-center"><textarea class="form-control" id="contact" placeholder="Контакт" name="contact"></textarea></div>
     <div class="col-auto text-center"><input type="text" class="form-control" id="mappoint" placeholder="Координата" name="mappoint"></div>
     <div class="col-auto text-center"><button type="submit" class="bi bi-check-circle-fill" style="color:green; background-color:white; border-style:none " data-toggle="tooltip" data-placement="top" title="записать"></button></div>
   </div>
@@ -69,7 +69,7 @@
     <div class="col-2 border border-1"><a class=" {{cst.clr}}" href="javascript:upd_ln({{cst.id}});">{{cst.name}}</a> </div>
     <div class="col border border-1"><a class=" {{cst.clr}}" href="javascript:upd_ln({{cst.id}});">{{cst.address}}</a></div>
     <div class="col border border-1"><a class=" {{cst.clr}}" href="javascript:upd_ln({{cst.id}});">{{cst.contact}}</a></div>
-    <div class="col-auto border border-1 text-center""><a class=" {{cst.clr}}" href="javascript:upd_ln({{cst.id}});">{{cst.mappoint}}</a></div>
+    <div class="col-auto border border-1 text-center"><a class=" {{cst.clr}}" href="javascript:upd_ln({{cst.id}});">{{cst.mappoint}}</a></div>
     <div class="col-auto border border-1 text-center"><button onclick="delete_cst/{{ cst.id }}" class="bi bi-x-circle-fill" style="color:red; background-color:white; border-style:none" data-toggle="tooltip" data-placement="top" title="удалить клиента"></button></div>
   </div>
 </div>
@@ -81,8 +81,8 @@
   <div class="row">
     <div class="col-md-auto text-center"><a href="javascript:upd_ln_reverse({{cst.id}});"><i class="bi bi-x-circle-fill" style="color:red" data-toggle="tooltip" data-placement="top" title="отменить"></i></a></div>
     <div class="col-2 border border-1" ><input type="text" class="form-control {{cst.clr}}" placeholder="Клиент" name="cst_name" value="{{ cst.name }}"></div>
-      <div class="col border border-1"><textarea type="text" class="form-control {{cst.clr}}"  placeholder="Адрес" name="address" value="{{cst.address}}"></textarea></div>
-    <div class="col border border-1"><textarea type="text" class="form-control {{cst.clr}}"  placeholder="Контакт" name="contact" value="{{cst.contact}}"></textarea></div>
+    <div class="col border border-1"><textarea class="form-control {{cst.clr}}"  placeholder="Адрес" name="address">{{cst.address}}</textarea></div>
+    <div class="col border border-1"><textarea class="form-control {{cst.clr}}"  placeholder="Контакт" name="contact">{{cst.contact}}</textarea></div>
     <div class="col-auto border border-1"><input type="text" class="form-control {{cst.clr}}"  placeholder="Координата" name="mappoint" value="{{cst.mappoint}}"></div>
     <div class="col-auto border border-1 text-center"><button type="submit" class="bi bi-check-circle-fill" style="color:green; background-color:white; border-style:none" data-toggle="tooltip" data-placement="top" title="записать"></button></a></div>
   </div>
