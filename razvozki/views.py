@@ -3,7 +3,7 @@
 import datetime
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator
-from .models import Razvozka, Customer
+from .models import Razvozka, Customer, Customer_clr
 from django.template import loader
 from django.shortcuts import render
 from django.http import Http404
@@ -34,14 +34,14 @@ class Razvozka_clr:
         return f"{to_do_take} {to_do_deliver}"
 
 
-class Customer_clr:
-    def __init__(self, id, name, address, contact, mappoint, clr):
-        self.id = id
-        self.name = name
-        self.address = address
-        self.contact = contact
-        self.mappoint = mappoint
-        self.clr = clr
+#class Customer_clr:
+#    def __init__(self, id, name, address, contact, mappoint, clr):
+#        self.id = id
+#        self.name = name
+#        self.address = address
+#        self.contact = contact
+#        self.mappoint = mappoint
+#        self.clr = clr
 
 
 def index(request):
@@ -81,20 +81,6 @@ def index(request):
 
     context = {'f_rzv': f_rzv, 'datenew': datenew, 'navi': navi, 'cust': cust, 'page_obj': page_obj, 'date_range': date_range}
     return render(request, 'razvozki/index.html', context)
-
-
-def add_razv(request, id):
-    navi = 'razvozka'
-    rzv = Razvozka.objects.get(id=id)
-    date_out = rzv.date
-    razv = Razvozka.objects.order_by('-date', 'date_id')
-    f_rzv = {}
-    for r in razv:
-        if r.date not in f_rzv:
-            f_rzv[r.date] = []
-        f_rzv[r.date].append(r)
-    context = {'f_rzv': f_rzv, 'date_out': date_out, 'navi': navi}
-    return render(request, 'razvozki/add_razv.html', context)
 
 
 def addrecord_razv(request):
@@ -176,11 +162,13 @@ def newdate_rzv(request):
 
 def customers(request):
     navi = 'customers'
-    cust = Customer.objects.order_by('name')
-    i = 0
-    cust_clr = []
+    cust = Customer_clr.objects.order_by('name')
+
+#    cust_clr = []
     for cst1 in cust:
-        cust_clr.append(Customer_clr(cst1.id, cst1.name, cst1.address, cst1.contact, cst1.mappoint, 'text-dark'))
+#        cst01 = Customer_clr(name=cst1.name, address=cst1.address, contact=cst1.contact,
+#                             mappoint=cst1.mappoint, clr='text-secondary')
+        cst1.clr = 'text-secondary'
         for cst2 in cust:
             cst1_name = cst1.name.replace(' ', '')
             cst1_name = cst1_name.replace('-', '')
@@ -203,10 +191,11 @@ def customers(request):
             cst2_address = cst2_address.replace(',', '')
 
             if (cst1_name == cst2_name or cst1_address == cst2_address) and cst1.id != cst2.id:
-                cust_clr[i].clr = 'text-danger'
-        i = i + 1
+                cst1.clr = 'text-danger'
+        cst1.save()
+#        cust_clr.append(cst01)
 
-    paginator = Paginator(cust_clr, 20)  # Show 20.
+    paginator = Paginator(cust, 20)  # Show 20.
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -246,8 +235,8 @@ def addrecord_cst(request):
     address = request.POST['address']
     contact = request.POST['contact']
     mappoint = request.POST['mappoint']
-    customer = Customer(name=name, address=address, contact=contact, mappoint=mappoint)
-    customer.save()
+    customer_clr = Customer_clr(name=name, address=address, contact=contact, mappoint=mappoint, clr='text-secondary')
+    customer_clr.save()
     return HttpResponseRedirect(reverse('razvozki:customers'))
 
 
