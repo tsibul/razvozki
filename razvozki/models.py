@@ -10,9 +10,18 @@ class Customer(models.Model):
     contact = models.CharField(max_length=120)
     mappoint = models.CharField(max_length=255, default='')
 
-
     def __repr__(self):
         return f"Customer(name={self.name!r}, contact={self.contact!r})"
+
+    def __str__(self):
+        return self.name
+
+
+class Customer_clr(Customer):
+    clr = models.CharField(max_length=30, default='text-dark')
+
+    def __repr__(self):
+        return f"Customer_clr(name={self.name!r}, contact={self.contact!r})"
 
     def __str__(self):
         return self.name
