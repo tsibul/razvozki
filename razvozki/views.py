@@ -10,6 +10,7 @@ from django.http import Http404
 from django.urls import reverse
 from django.views.generic import ListView
 
+
 class Razvozka_clr:
     def __init__(self, id, date, date_id, customer, customer_name, address, contact, to_do_take, to_do_deliver,
                  clr):
@@ -34,7 +35,7 @@ class Razvozka_clr:
         return f"{to_do_take} {to_do_deliver}"
 
 
-#class Customer_clr:
+# class Customer_clr:
 #    def __init__(self, id, name, address, contact, mappoint, clr):
 #        self.id = id
 #        self.name = name
@@ -76,10 +77,11 @@ def index(request):
     date_range = []
     for i in range(page_obj.paginator.num_pages):
         page_obj2 = paginator.get_page(i + 1)
-        date_tmp = datetime.datetime.strptime(str(page_obj2.object_list[0][0]),'%Y-%m-%d').strftime('%d.%m.%Y')
+        date_tmp = datetime.datetime.strptime(str(page_obj2.object_list[0][0]), '%Y-%m-%d').strftime('%d.%m.%Y')
         date_range.append([i + 1, 'до ' + date_tmp])
 
-    context = {'f_rzv': f_rzv, 'datenew': datenew, 'navi': navi, 'cust': cust, 'page_obj': page_obj, 'date_range': date_range}
+    context = {'f_rzv': f_rzv, 'datenew': datenew, 'navi': navi, 'cust': cust, 'page_obj': page_obj,
+               'date_range': date_range}
     return render(request, 'razvozki/index.html', context)
 
 
@@ -164,36 +166,12 @@ def customers(request):
     navi = 'customers'
     cust = Customer_clr.objects.order_by('name')
 
-#    cust_clr = []
+    #    cust_clr = []
     for cst1 in cust:
-#        cst01 = Customer_clr(name=cst1.name, address=cst1.address, contact=cst1.contact,
-#                             mappoint=cst1.mappoint, clr='text-secondary')
         cst1.clr = 'text-secondary'
-        for cst2 in cust:
-            cst1_name = cst1.name.replace(' ', '')
-            cst1_name = cst1_name.replace('-', '')
-            cst1_name = cst1_name.replace('.', '')
-            cst1_name = cst1_name.replace(',', '')
-
-            cst2_name = cst2.name.replace(' ', '')
-            cst2_name = cst2_name.replace('-', '')
-            cst2_name = cst2_name.replace('.', '')
-            cst2_name = cst2_name.replace(',', '')
-
-            cst1_address = cst1.address.replace(' ', '')
-            cst1_address = cst1_address.replace('-', '')
-            cst1_address = cst1_address.replace('.', '')
-            cst1_address = cst1_address.replace(',', '')
-
-            cst2_address = cst2.address.replace(' ', '')
-            cst2_address = cst2_address.replace('-', '')
-            cst2_address = cst2_address.replace('.', '')
-            cst2_address = cst2_address.replace(',', '')
-
-            if (cst1_name == cst2_name or cst1_address == cst2_address) and cst1.id != cst2.id:
-                cst1.clr = 'text-danger'
+        if find_dubl_cst(cst1, cust):
+            cst1.clr = 'text-danger'
         cst1.save()
-#        cust_clr.append(cst01)
 
     paginator = Paginator(cust, 20)  # Show 20.
     page_number = request.GET.get('page')
@@ -201,6 +179,72 @@ def customers(request):
 
     context = {'navi': navi, 'page_obj': page_obj}
     return render(request, 'razvozki/customers.html', context)
+
+
+def customers_clr(request):
+    cust = Customer.objects.order_by('name')
+    razv = Razvozka.objects.order_by('-date')
+    # add customers to Customer_clr if not exist
+    for cst in cust:
+        try:
+            tmp = Customer_clr.objects.get(id=cst.id)
+        except Customer_clr.DoesNotExist:
+            tmp = None
+        if tmp is None:
+            cst_clr = cst.Customer_clr(id=cst.id, name=cst.name, address=cst.address, contact=cst.contact,
+                               mappoint=cst.mappoint, clr='text-secondary')
+            cst_clr.save()
+    ## end of adding Customer_clr
+
+    # return Customer names if dissapeared
+    for cst in cust:
+        if cst.name is '':
+            rr2 = Razvozka.objects.filter(customer_id=cst.id).first()
+            if rr2 is not None:
+                cst.name = rr2.customer_name
+                cst.address = rr2.address
+                cst.contact = rr2.contact
+#                cst.mappoint = rr2.mappoint
+                cst.save()
+    ## end of returning customers
+    # collect customers from razvozki
+    for rzv in razv:
+        if rzv.customer is None and find_dubl_cst(rzv.customer, cust):
+            new_customer = Customer_clr(name=rzv.customer_name, address=rzv.address,
+                                        contact=rzv.contact, clr='text-secondary')
+            new_customer.save()
+            rzv.customer = new_customer
+            rzv.save()
+    return HttpResponseRedirect(reverse('razvozki:customers'))
+
+
+def find_dubl_cst(cst1, cust):
+    result = False
+    for cst2 in cust:
+        cst1_name = cst1.name.replace(' ', '')
+        cst1_name = cst1_name.replace('-', '')
+        cst1_name = cst1_name.replace('.', '')
+        cst1_name = cst1_name.replace(',', '')
+
+        cst2_name = cst2.name.replace(' ', '')
+        cst2_name = cst2_name.replace('-', '')
+        cst2_name = cst2_name.replace('.', '')
+        cst2_name = cst2_name.replace(',', '')
+
+        cst1_address = cst1.address.replace(' ', '')
+        cst1_address = cst1_address.replace('-', '')
+        cst1_address = cst1_address.replace('.', '')
+        cst1_address = cst1_address.replace(',', '')
+
+        cst2_address = cst2.address.replace(' ', '')
+        cst2_address = cst2_address.replace('-', '')
+        cst2_address = cst2_address.replace('.', '')
+        cst2_address = cst2_address.replace(',', '')
+
+        if ((cst1_name == cst2_name or cst1_address == cst2_address or cst1.mappoint == cst2.mappoint
+             and cst1.mappoint != '') and cst1.id != cst2.id):
+            result = True
+    return result
 
 
 def delete_cst(request, id):
@@ -216,18 +260,20 @@ def add_cst(request):
     return render(request, 'razvozki/add_cst.html', context)
 
 
-def updaterecord_cst(request, id):
+def updaterecord_cst(request, from_where):
     name = request.POST['cst_name']
     address = request.POST['address']
     contact = request.POST['contact']
     mappoint = request.POST['mappoint']
+    id = request.POST['cst_id']
     customer = Customer.objects.get(id=id)
     customer.name = name
     customer.address = address
     customer.contact = contact
     customer.mappoint = mappoint
     customer.save()
-    return HttpResponseRedirect(reverse('razvozki:customers'))
+    out = 'razvozki:' + from_where
+    return HttpResponseRedirect(reverse(out))
 
 
 def addrecord_cst(request):
@@ -247,3 +293,26 @@ def print(request, date_r):
     date_r = datetime.datetime.strptime(date_r, '%Y-%m-%d').strftime('%d.%m.%Y')
     context = {'date_r': date_r, 'razv': razvozka}
     return render(request, 'razvozki/print.html', context)
+
+
+def double(request):
+    navi = 'double'
+    cust = []
+    #    sust = Customer_clr.objects.filter(clr='text-danger')
+    for cst in Customer_clr.objects.filter(clr='text-danger').order_by('name', 'id'):
+        cust.append(cst)
+    context = {'navi': navi, 'cust': cust}
+    return render(request, 'razvozki/double.html', context)
+
+
+def unite_cst(request):
+    if 'options_outlined_leave' in request.POST and 'options_outlined_delete' in request.POST:
+        lv = int(request.POST['options_outlined_leave'][2:])
+        dlt = int(request.POST['options_outlined_delete'][2:])
+        customer_lv = Customer.objects.get(id=lv)
+        customer_dlt = Customer.objects.get(id=dlt)
+        for rzv in Razvozka.objects.filter(customer=customer_dlt):
+            rzv.customer = customer_lv
+            rzv.save()
+        customer_dlt.delete()
+    return HttpResponseRedirect(reverse('razvozki:double'))
