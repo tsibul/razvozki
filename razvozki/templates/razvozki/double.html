@@ -16,14 +16,25 @@
 <body>
 <br>
 <div class="container-fluid">
-<form action="{% url 'razvozki:unite_cst' %}" method="post">
-{% csrf_token %}
  <div class="row bg-success" style="--bs-bg-opacity: .3;" >
-    <div class="col-2 border border-1">
-        <button type="submit" class="btn btn-outline-success btn-sm">Слить</button>
+    <div class="col-auto border border-1">
+     <div id="initial_un">
+        <a href="javascript:unite_double();">
+            <button type="button" class="btn btn-outline-success btn-sm">Слить</button>
+        </a>
         <a href="javascript:upd_ln_double();">
          <button type="button" class="btn btn-outline-danger btn-sm">Изменить</button>
         </a>
+     </div>
+    <form id="unite_cst" action="{% url 'razvozki:unite_cst' %}" method="post">
+    {% csrf_token %}
+    <div id="final_un" style="display:none">
+         <input type="hidden" id="cst_lv" name="cst_lv">
+         <input type="hidden" id="cst_dt" name="cst_dt">
+         <button type="submit" class="btn btn-success btn-sm">Подтвердить слияние</button>
+        </a>
+    </div>
+    </form>
     </div>
     <div class="col-2 text-center fw-bold">Клиент</div>
     <div class="col text-center fw-bold" >Адрес</div>
@@ -32,7 +43,7 @@
   </div>
   {% for cst in cust %}
   <div class="row " id="show_{{cst.id}}">
-    <div class="col-2 border border-1">
+    <div class="col-auto border border-1">
         <input type="radio" class="btn-check" name="options_outlined_leave" id="success_outlined_{{cst.id}}" autocomplete="off" value="l_{{cst.id}}">
         <label class="btn btn-sm btn-outline-success" for="success_outlined_{{cst.id}}">Оставить</label>
 
@@ -44,13 +55,13 @@
     <div class="col border border-1">{{cst.contact}}</div>
     <div class="col-2 border border-1 text-center text-danger">{{cst.mappoint}}</div>
   </div>
-    <form action="{% url 'razvozki:updaterecord_cst' 'double' %}" method="post">
+    <form id="update_cst" action="{% url 'razvozki:updaterecord_cst' 'double' %}" method="post">
     {% csrf_token %}
       <div id="hide_{{cst.id}}" style="display:none">
       <div class="row " >
-        <div class="col-2 border border-1">
-            <button type="submit" class="btn btn-outline-success btn-sm">Записать</button>
-            <button onclick="javascript:upd_ln_double_reverse;" class="btn btn-outline-danger btn-sm">Отмена</button>
+        <div class="col-auto border border-1">
+            <button  form="update_cst" type="submit" class="btn btn-success btn-sm">Записать</button>
+            <button onclick="javascript:upd_ln_double_reverse;" class="btn btn-danger btn-sm">Отмена</button>
 
         </div>
         <div class="col-2 border border-1">
@@ -67,7 +78,7 @@
     </form>
   {% endfor %}
 
-</form>
+<!-- </form> -->
 </div>
 
 
