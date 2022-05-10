@@ -59,12 +59,12 @@
 {% csrf_token %}
 <div class="container-fluid" id="new_ln" style="display:none">
   <div class="row ">
-    <div class="col-auto text-center"><a href="javascript:add_ln_reverse('new_ln')"><button type="button" class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></div>
+    <div class="col-auto text-center"><a href="javascript:add_ln_reverse('new_ln')"><button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></div>
     <div class="col-2 text-center"><input type="text" class="form-control" id="customer_name" placeholder="Клиент" name="name"></div>
     <div class="col text-center"><textarea class="form-control" id="address" placeholder="Адрес" name="address"></textarea></div>
     <div class="col text-center"><textarea class="form-control" id="contact" placeholder="Контакт" name="contact"></textarea></div>
     <div class="col-2 text-center"><input type="text" class="form-control" id="mappoint" placeholder="Координата" name="mappoint"></div>
-    <div class="col-auto text-center"><button type="submit" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="записать">Записать</button></div>
+    <div class="col-auto text-center"><button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="записать">Записать</button></div>
   </div>
 </div>
 
@@ -92,7 +92,7 @@
 {% csrf_token %}
 <div class="container-fluid"  id="cst_id2_{{cst.id}}" style="display:none">
   <div class="row">
-    <div class="col-md-auto text-center"><a href="javascript:upd_ln_reverse({{cst.id}});"><button class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></div>
+    <div class="col-md-auto text-center"><a href="javascript:upd_ln_reverse({{cst.id}});"><button class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></div>
     <div class="col-2 border border-1" >
         <input type="text" class="form-control {{cst.clr}}" placeholder="Клиент" name="cst_name" value="{{ cst.name }}">
         <input type="hidden" class="form-control {{cst.clr}}" placeholder="id" name="cst_id" value="{{ cst.id }}">
@@ -100,7 +100,7 @@
     <div class="col border border-1"><textarea class="form-control {{cst.clr}}"  placeholder="Адрес" name="address">{{cst.address}}</textarea></div>
     <div class="col border border-1"><textarea class="form-control {{cst.clr}}"  placeholder="Контакт" name="contact">{{cst.contact}}</textarea></div>
     <div class="col-2 border border-1"><input type="text" class="form-control {{cst.clr}}"  placeholder="Координата" name="mappoint" value="{{cst.mappoint}}"></div>
-    <div class="col-auto border border-1 text-center"><button type="submit" class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="записать">Записать</button></a></div>
+    <div class="col-auto border border-1 text-center"><button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="записать">Записать</button></a></div>
   </div>
 </div>
 </form>

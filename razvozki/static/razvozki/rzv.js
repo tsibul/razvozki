@@ -63,6 +63,7 @@ function slc_cst(cst_name, rzv_id, cst_id, cst_address, cst_contact){
 function upd_ln_double(){
     var chck = document.querySelector('.btn-check:checked').value;
     var cst_id = chck.slice(2)
+
     show_cust = 'show_' + cst_id;
     hide_cust = 'hide_' + cst_id;
     document.getElementById(show_cust).style.display='none';
@@ -83,13 +84,13 @@ function unite_double(){
     if (chck_length == 2) {
         cst_0 = chck[0].defaultValue;
         cst_1 = chck[1].defaultValue;
-        if (cst_0.slice(0,1) == 'l'){
-            cst_lv = cst_0.charAt(0);
-            cst_dt = cst_1.charAt(0);
+        if (cst_0.charAt(0) == 'l'){
+            cst_lv = cst_0.slice(2);
+            cst_dt = cst_1.slice(2);
         }
         else {
-            cst_dt = cst_0.charAt(0);
-            cst_lv = cst_1.charAt(0);
+            cst_dt = cst_0.slice(2);
+            cst_lv = cst_1.slice(2);
         }
     document.getElementById('cst_lv').value = cst_lv;
     document.getElementById('cst_dt').value = cst_dt;
