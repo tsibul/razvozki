@@ -53,7 +53,7 @@
             <a class="nav-link" aria-current="page"  href="{% url 'razvozki:customers' %}">Клиенты</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"  aria-current="page">Дубликаты</a>
+            <a class="nav-link" href="{% url 'razvozki:double' %}"  aria-current="page">Дубликаты</a>
           </li>
       {% elif navi == 'customers' %}
            <li class="nav-item">
@@ -63,8 +63,19 @@
             <a class="nav-link active" aria-current="page"  href="{% url 'razvozki:customers' %}">Клиенты</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#"  aria-current="page">Дубликаты</a>
+            <a class="nav-link" href="{% url 'razvozki:double' %}"  aria-current="page">Дубликаты</a>
           </li>
+      {% elif navi == 'double' %}
+           <li class="nav-item">
+            <a class="nav-link" aria-current="page"  href="{% url 'razvozki:index' %}">Развозки</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page"  href="{% url 'razvozki:customers' %}">Клиенты</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="{% url 'razvozki:double' %}"  aria-current="page">Дубликаты</a>
+          </li>
+
       {% endif %}
       </ul>
       <form class="d-flex">
