@@ -60,6 +60,29 @@ function slc_cst(cst_name, rzv_id, cst_id, cst_address, cst_contact){
 
 }
 
+function upd_ln_double(){
+    chck = document.querySelector('.btn-check:checked').value;
+    cst_id = chck.slice(2)
+
+
+    show_cust = 'show_' + cst_id;
+    hide_cust = 'hide_' + cst_id;
+    document.getElementById(show_cust).style.display='none';
+    document.getElementById(hide_cust).style.display='block';
+}
+function upd_ln_double_reverse(){
+    chck = document.querySelector('.btn-check:checked').value;
+    cst_id = chck.slice(2)
+
+
+    show_cust = 'show_' + cst_id;
+    hide_cust = 'hide_' + cst_id;
+    document.getElementById(show_cust).style.display='block';
+    document.getElementById(hide_cust).style.display='none';
+}
+
+
+
  function printDiv(divName) {
         var printContents = document.getElementById(divName).innerHTML;
         w=window.open();
