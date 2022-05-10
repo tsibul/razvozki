@@ -306,13 +306,12 @@ def double(request):
 
 
 def unite_cst(request):
-    if 'options_outlined_leave' in request.POST and 'options_outlined_delete' in request.POST:
-        lv = int(request.POST['options_outlined_leave'][2:])
-        dlt = int(request.POST['options_outlined_delete'][2:])
-        customer_lv = Customer.objects.get(id=lv)
-        customer_dlt = Customer.objects.get(id=dlt)
-        for rzv in Razvozka.objects.filter(customer=customer_dlt):
-            rzv.customer = customer_lv
-            rzv.save()
-        customer_dlt.delete()
+    cst_lv = request.POST['cst_lv']
+    cst_dt = request.POST['cst_dt']
+    customer_lv = Customer.objects.get(id=cst_lv)
+    customer_dlt = Customer.objects.get(id=cst_dt)
+    for rzv in Razvozka.objects.filter(customer=customer_dlt):
+        rzv.customer = customer_lv
+        rzv.save()
+    customer_dlt.delete()
     return HttpResponseRedirect(reverse('razvozki:double'))
