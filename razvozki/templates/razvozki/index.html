@@ -112,20 +112,20 @@
     {% for rzv in razv %}
         <tbody>
             <tr id="cst_id_{{rzv.id}}">
-                <th scope="row"><a href="javascript:add_ln2({{rzv.id}});"><i class="bi bi-plus-circle-fill" style="color:green" data-toggle="tooltip" data-placement="top" title="добавить развозку"></i></a></th>
+                <th scope="row"><a href="javascript:add_ln2({{rzv.id}});"><button class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="добавить развозку">Добавить</button></a></th>
                 <td  style="width:30px"><input type="number" class="form-control" disabled value="{{ rzv.date_id }}"></a></td>
                 <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.customer_name }}</a></td>
                 <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.address }}</a></td>
                 <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.contact }}</a></td>
                 <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.get_all_todo_clr }}</a></td>
-                <td ><a href="delete_rzv/{{ rzv.id }}"><i class="bi bi-x-circle-fill" style="color:red" data-toggle="tooltip" data-placement="top" title="удалить развозку"></i></a></td>
+                <td ><a href="delete_rzv/{{ rzv.id }}"><button class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="удалить развозку">Удалить</button></a></td>
             </tr>
 
         <form action="updaterecord_rzv/{{ rzv.id }}" method="post">
         <tr id="cst_id2_{{rzv.id}}" style="display:none">
         {% csrf_token %}
             <input type="hidden" name="date" value="{{date_r}}">
-            <th scope="rowgroup"><a href="javascript:upd_ln2_reverse({{rzv.id}});"><i class="bi bi-x-circle-fill" style="color:red" data-toggle="tooltip" data-placement="top" title="отменить"></i></a></th>
+            <th scope="rowgroup"><a href="javascript:upd_ln2_reverse({{rzv.id}});"><button class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></th>
                 <th colspan="2">
                 <div class="col">
                     <div
@@ -174,7 +174,7 @@
             <td><textarea class="form-control  {{rzv.clr}}" id="address" placeholder="Адрес" name="address"> {{ rzv.address }} </textarea></td>
             <td><textarea class="form-control  {{rzv.clr}}" id="contact" placeholder="Контакт" name="contact"> {{ rzv.contact }}</textarea></td>
             <td> <input type="text" class="form-control  {{rzv.clr}}" id="to_do_deliver" placeholder="Сдать" name="to_do_deliver" value="{{ rzv.to_do_deliver }}"></td>
-            <td> <button type="submit" class="bi bi-check-circle-fill" style="color:green; background-color:white; border-style:none" data-toggle="tooltip" data-placement="top" title="записать"></button></td>
+            <td> <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="записать">Записать</button></td>
             </tr>
         </form>
         </tr>
@@ -183,7 +183,7 @@
     <tr>
         <tr id="cst_id4_{{rzv.id}}" style="display:none">
             <input type="hidden" name="date" value="{{rzv.date}}">
-            <th scope="rowgroup"><a href="javascript:add_ln2_reverse({{rzv.id}});"><i class="bi bi-x-circle-fill" style="color:red" data-toggle="tooltip" data-placement="top" title="отменить"></i></a></th>
+            <th scope="rowgroup"><a href="javascript:add_ln2_reverse({{rzv.id}});"><button class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></th>
             <input id="updcust_id_{{rzv.id}}"  type="hidden" name="customer" value=None>
             <td> <input type="number" style="min-width:30px" class="form-control" placeholder="#" name="date_id" value="0"> </td>
             <td ><input type="text" id="updcust_name_{{rzv.id}}" class="form-control" placeholder="Клиент"  name="customer_name"></td>
@@ -207,7 +207,7 @@
             <td></td>
             <td></td>
             <td> <input type="text" class="form-control" placeholder="Сдать" name="to_do_deliver"></td>
-            <td> <button type="submit" class="bi bi-check-circle-fill" style="color:green; background-color:white; border-style:none" data-toggle="tooltip" data-placement="top" title="записать"></button></td>
+            <td> <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="записать">Записать</button></td>
         </tr>
         </form>
     </tr>
