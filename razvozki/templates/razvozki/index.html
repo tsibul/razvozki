@@ -54,7 +54,7 @@
 {% csrf_token %}
 <form class="row g-1" action="newdate_rzv" method="post">
 {% csrf_token %}
-  <div class="col-auto">
+  <div class="col-1">
     <label for="newdate" class="visually-hidden">Новая дата</label>
     <input type="text" readonly class="form-control-plaintext" id="newdate" value="Новая дата">
   </div>
@@ -83,7 +83,7 @@
     </div>
   </div>
   <div class="col-auto">
-    <button type="submit" class="btn btn-success mb-3">Создать</button>
+    <button type="submit" class="btn btn-success mb-1">Создать</button>
   </div>
 </form>
 
@@ -96,7 +96,7 @@
         <th colspan="1">{{ date_r|date:"d.m.Y" }}</th>
     <form action="print/{{ date_r|date:'Y-m-d'}}" method="post">
         {% csrf_token %}
-        <th colspan="2"> <button type="submit" class="btn btn-outline-success"><i class="bi bi-printer-fill" style="currentColor"></i> Печать</button></th>
+        <th colspan="2"> <button type="submit" class="btn btn-outline-success btn-sm"><i class="bi bi-printer-fill" style="currentColor"></i> Печать</button></th>
     </form>
         <td></td>
     </tr>
