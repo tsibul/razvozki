@@ -38,19 +38,26 @@
 </div>
 </div>
 <br>
-
-
-<button onclick="javascript:add_ln('new_ln')" class="btn btn-success mb-3" data-toggle="tooltip" data-placement="top" title="добавить клиента">
-Добавить Клиента</button>
-
 <div class="container-fluid">
   <div class="row bg-success" style="--bs-bg-opacity: .3;" >
-    <div class="col-auto text-center fw-bold" ></div>
-    <div class="col-2 text-center fw-bold">Клиент</div>
-    <div class="col text-center fw-bold" >Адрес</div>
-    <div class="col text-center fw-bold">Контакт</div>
-    <div class="col-2 text-center fw-bold">Yandex-Координата</div>
-    <div class="col-auto text-center fw-bold"></div>
+    <div class="col-auto text-center text-success" style="hidden">
+        <button onclick="javascript:add_ln('new_ln')" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="добавить клиента">
+        Новый
+        </button>
+    </div>
+    <div class="col-2 right">
+        <button type="button" class="btn btn-outline-success" name="button_customer"> Клиент <i class="bi bi-caret-down-fill"></i></button>
+    </div>
+    <div class="col text-center fw-bold" >
+        <button type="button" class="btn btn-outline-success" name="button_address"> Адрес <i class="bi bi-caret-down-fill"></i></button>
+    </div>
+    <div class="col text-center text-success">
+        <button type="button" class="btn btn-outline-success" name="button_contact"> Контакт </button>
+    </div>
+    <div class="col-2 text-center text-success">
+        <button type="button" class="btn btn-outline-success" name="button_mappoint"> Yandex-Координата </button>
+    </div>
+    <div class="col-auto text-center text-success"></div>
   </div>
 </div>
     <div class="w-100"></div>

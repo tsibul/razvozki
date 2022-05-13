@@ -168,7 +168,7 @@ def customers(request):
             cst1.clr = 'text-danger'
         cst1.save()
 
-    paginator = Paginator(cust, 20)  # Show 20.
+    paginator = Paginator(cust, 30)  # Show 30.
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
