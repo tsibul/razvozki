@@ -94,7 +94,7 @@
         <th scope="col"> </th>
         <th colspan="2" style="text-align:right"> Развозка на </th>
         <th colspan="1">{{ date_r|date:"d.m.Y" }}</th>
-    <form action="print/{{ date_r|date:'Y-m-d'}}" method="post">
+    <form action="print_rzv/{{ date_r|date:'Y-m-d'}}" method="post">
         {% csrf_token %}
         <th colspan="2"> <button type="submit" class="btn btn-outline-success btn-sm"><i class="bi bi-printer-fill" style="currentColor"></i> Печать</button></th>
     </form>
@@ -219,7 +219,7 @@
 {% endfor %}
 </table>
 {% else %}
-    <p>No razvozkis are available.</p>
+    <p class="text-danger">Куда дели развозки, демоны?</p>
 {% endif %}
 
 <div class="pagination">
