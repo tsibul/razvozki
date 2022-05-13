@@ -1,0 +1,85 @@
+<!doctype html>
+{% load static %}
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Popper js -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js"
+      crossorigin="anonymous"></script>
+    <!-- Tempus Dominus JavaScript -->
+    <script src="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/tempus-dominus.js"
+      crossorigin="anonymous"></script>
+    <!-- Tempus Dominus Styles -->
+    <link href="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/css/tempus-dominus.css"
+      rel="stylesheet" crossorigin="anonymous">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'razvozki/style.css' %}">
+
+    <title>Админ</title>
+</head>
+{% include 'razvozki/main.html' %}
+<body>
+
+<div class="row-auto">
+    <div class="col-auto text-success">
+        Основная база: Развозки: {{razv_count}} Клиенты: {{customer_count}}
+    </div>
+</div>
+<div class="row-auto">
+    <div class="col-auto text-danger">
+        Временная база: Развозки: {{razv_count_imp}}
+    </div>
+</div>
+<br>
+
+<form id="import_csv" action="{% url 'razvozki:import_csv' %}" method="post">
+{% csrf_token %}
+<div class = "col-auto">
+<div class="input-group justify-content col-auto">
+  <div class="custom-file text-success">
+    Импорт из .csv (в отдельную базу)
+    <label class="custom-file-label" for="ChoseCSV"></label>
+    <input type="file" accept=".csv" class="custom-file-input col-auto border" id="ChoseCSV" name="Chosen">
+  </div>
+  <div class="input-group-append" >
+    <label for="date_begin">С:</label>
+    <input type="date" id="date_begin" name="date_begin">
+    <label for="date_end">По:</label>
+    <input type="date" id="date_end" name="date_end">
+    <button class="btn btn-outline-danger" type="submit">Выбрать</button>
+  </div>
+</div>
+</div>
+</form>
+<br>
+    <div class="row align-left">
+            <div class="col-auto text-success">
+            <form id="import_cust" action="{% url 'razvozki:import_cst' %}" method="post">
+            {% csrf_token %}
+                Сбор клиентов по временной базе
+                <button class="btn btn-outline-success btn" type="submit">Получить клиентов из базы</button>
+            </form>
+            </div>
+            <div class="col-auto text-danger">
+            <form id="delete_all_cst" action="{% url 'razvozki:delete_all_cst' %}" method="post">
+            {% csrf_token %}
+                Стереть всех клиентов
+                <button class="btn btn-outline-danger btn" type="submit">Стереть всех клиентов</button>
+            </form>
+            </div>
+    </div>
+
+
+
+<script> new tempusDominus.TempusDominus(document.getElementById('datetimepicker4'), {
+    display: {icons: {date:'bi bi-calendar-date-fill', next:'bi bi-chevron-compact-right', previous:'bi bi-chevron-compact-left',     },
+    components: {decades: true, year: true, month: true, date: true, hours: false, minutes: false, seconds: false,}}});
+</script>
+<script src="{% static 'razvozki/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script>
+<script src="{% static 'razvozki/rzv.js' %}"></script>
+</body>
+</html>

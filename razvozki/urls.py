@@ -16,9 +16,14 @@ urlpatterns = [
     path('addrecord_cst/', views.addrecord_cst, name='addrecord_cst'),
     path('delete_cst/<int:id>', views.delete_cst, name='delete_cst'),
     path('updaterecord_cst/<from_where>', views.updaterecord_cst, name='updaterecord_cst'),
-    path('print/<str:date_r>', views.print, name='print'),
+    path('print_rzv/<str:date_r>', views.print_rzv, name='print_rzv'),
     path('double/', views.double, name='double'),
     path('double/unite_cst/', views.unite_cst, name='unite_cst'),
+    path('admin', views.admin, name='admin'),
+    path('import_csv', views.import_csv, name='import_csv'),
+    path('import_cst', views.import_cst, name='import_cst'),
+    path('delete_all_cst', views.delete_all_cst, name='delete_all_cst'),
+
 ]
 
 

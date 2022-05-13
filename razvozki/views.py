@@ -3,12 +3,14 @@
 import datetime
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator
-from .models import Razvozka, Customer, Customer_clr
+from .models import Razvozka, Customer, Customer_clr, Razvozka_import
 from django.template import loader
 from django.shortcuts import render
 from django.http import Http404
 from django.urls import reverse
+from django.core.files import File
 from django.views.generic import ListView
+import csv
 
 
 class Razvozka_clr:
@@ -28,21 +30,11 @@ class Razvozka_clr:
     def get_all_todo_clr(self):
         to_do_take = ''
         to_do_deliver = ''
-        if self.to_do_take is not '':
+        if self.to_do_take != '':
             to_do_take = ' ЗАБРАТЬ: ' + str(self.to_do_take)
-        if self.to_do_deliver is not '':
+        if self.to_do_deliver != '':
             to_do_deliver = ' СДАТЬ: ' + str(self.to_do_deliver)
         return f"{to_do_take} {to_do_deliver}"
-
-
-# class Customer_clr:
-#    def __init__(self, id, name, address, contact, mappoint, clr):
-#        self.id = id
-#        self.name = name
-#        self.address = address
-#        self.contact = contact
-#        self.mappoint = mappoint
-#        self.clr = clr
 
 
 def index(request):
@@ -77,8 +69,11 @@ def index(request):
     date_range = []
     for i in range(page_obj.paginator.num_pages):
         page_obj2 = paginator.get_page(i + 1)
-        date_tmp = datetime.datetime.strptime(str(page_obj2.object_list[0][0]), '%Y-%m-%d').strftime('%d.%m.%Y')
-        date_range.append([i + 1, 'до ' + date_tmp])
+        try:
+            date_tmp = datetime.datetime.strptime(str(page_obj2.object_list[0][0]), '%Y-%m-%d').strftime('%d.%m.%Y')
+            date_range.append([i + 1, 'до ' + date_tmp])
+        except:
+            date_range.append(['нет данных'])
 
     context = {'f_rzv': f_rzv, 'datenew': datenew, 'navi': navi, 'cust': cust, 'page_obj': page_obj,
                'date_range': date_range}
@@ -192,19 +187,19 @@ def customers_clr(request):
             tmp = None
         if tmp is None:
             cst_clr = cst.Customer_clr(id=cst.id, name=cst.name, address=cst.address, contact=cst.contact,
-                               mappoint=cst.mappoint, clr='text-secondary')
+                                       mappoint=cst.mappoint, clr='text-secondary')
             cst_clr.save()
     ## end of adding Customer_clr
 
     # return Customer names if dissapeared
     for cst in cust:
-        if cst.name is '':
+        if cst.name == '':
             rr2 = Razvozka.objects.filter(customer_id=cst.id).first()
             if rr2 is not None:
                 cst.name = rr2.customer_name
                 cst.address = rr2.address
                 cst.contact = rr2.contact
-#                cst.mappoint = rr2.mappoint
+                #                cst.mappoint = rr2.mappoint
                 cst.save()
     ## end of returning customers
     # collect customers from razvozki
@@ -244,6 +239,34 @@ def find_dubl_cst(cst1, cust):
         if ((cst1_name == cst2_name or cst1_address == cst2_address or cst1.mappoint == cst2.mappoint
              and cst1.mappoint != '') and cst1.id != cst2.id):
             result = True
+    return result
+
+def find_dubl_cst_id(cst1, cust):
+    result = ''
+    for cst2 in cust:
+        cst1_name = cst1.name.replace(' ', '')
+        cst1_name = cst1_name.replace('-', '')
+        cst1_name = cst1_name.replace('.', '')
+        cst1_name = cst1_name.replace(',', '')
+
+        cst2_name = cst2.name.replace(' ', '')
+        cst2_name = cst2_name.replace('-', '')
+        cst2_name = cst2_name.replace('.', '')
+        cst2_name = cst2_name.replace(',', '')
+
+        cst1_address = cst1.address.replace(' ', '')
+        cst1_address = cst1_address.replace('-', '')
+        cst1_address = cst1_address.replace('.', '')
+        cst1_address = cst1_address.replace(',', '')
+
+        cst2_address = cst2.address.replace(' ', '')
+        cst2_address = cst2_address.replace('-', '')
+        cst2_address = cst2_address.replace('.', '')
+        cst2_address = cst2_address.replace(',', '')
+
+        if ((cst1_name == cst2_name or cst1_address == cst2_address or cst1.mappoint == cst2.mappoint
+             and cst1.mappoint != '') and cst1.id != cst2.id):
+            result = cst2.id
     return result
 
 
@@ -286,7 +309,7 @@ def addrecord_cst(request):
     return HttpResponseRedirect(reverse('razvozki:customers'))
 
 
-def print(request, date_r):
+def print_rzv(request, date_r):
     razvozka = []
     for rzv in Razvozka.objects.filter(date=date_r):
         razvozka.append(rzv)
@@ -315,3 +338,132 @@ def unite_cst(request):
         rzv.save()
     customer_dlt.delete()
     return HttpResponseRedirect(reverse('razvozki:double'))
+
+
+def admin(request):
+    navi = 'admin'
+    cust = Customer_clr.objects.order_by('name')
+    razv = Razvozka_import.objects.order_by('-date', '-date_id')
+    razv_count_imp = Razvozka_import.objects.all().count()
+    customer_count = Customer_clr.objects.all().count()
+    razv_count = Razvozka.objects.all().count()
+    context = {'cust': cust, 'razv': razv, 'navi': navi, 'razv_count_imp': razv_count_imp,
+               'customer_count': customer_count, 'razv_count': razv_count}
+    return render(request, 'razvozki/admin.html', context)
+
+
+def import_csv(request):
+    file_name = request.POST['Chosen']
+    date_begin = request.POST['date_begin']
+    date_end = request.POST['date_end']
+    if date_begin == '' and date_end == '':
+        Razvozka_import.objects.all().delete()
+    elif date_begin != '' and date_end == '':
+        for rzv in Razvozka_import.objects.all():
+            if str(rzv.date) >= date_begin:
+                rzv.delete()
+    elif date_begin == '' and date_end != '':
+        for rzv in Razvozka_import.objects.all():
+            if str(rzv.date) <= date_end:
+                rzv.delete()
+    else:
+        for rzv in Razvozka_import.objects.all():
+            if date_begin <= str(rzv.date) <= date_end:
+                rzv.delete()
+
+    if file_name != '':
+        file_name = 'razvozki/files/' + file_name
+        with open(file_name, newline='') as csvfile:
+            exract_file = csv.reader(csvfile, delimiter=';')
+            for row in exract_file:
+                if 'Развозка' in row[0]:
+                    y_r = (row[0][-4:])
+                    m_r = (row[0][-7:-5])
+                    d_r = (row[0][-10:-8])
+                    date_r = y_r + '-' + m_r + '-' + d_r
+                elif (row[1] != '' or row[2] != '' or row[3] != '' or row[4] != '') and row[0] != '№':
+                    deliver = ['Сдать', 'сдать', 'Отдать', 'отдать', 'Доставка:', 'доставка']
+                    take = ['Забрать', 'забрать']
+                    deliver_pos = -1
+                    deliver_len = 0
+                    take_pos = -1
+                    take_len = 0
+                    to_do_len = len(row[4])
+                    for d in deliver:
+                        if (row[4].rfind(d)) != -1:
+                            deliver_pos = row[4].rfind(d)
+                            deliver_len = len(d)
+                    for t in take:
+                        if (row[4].rfind(t)) != -1:
+                            take_pos = row[4].rfind(t)
+                            take_len = len(t)
+                    if deliver_pos < take_pos and deliver_pos != -1:
+                        to_do_deliver = row[4][slice((deliver_pos + deliver_len), (take_pos))]
+                        to_do_take = row[4][slice((take_pos + take_len), to_do_len)]
+                    elif take_pos < deliver_pos and take_pos != -1:
+                        to_do_take = row[4][slice((take_pos + take_len), (deliver_pos))]
+                        to_do_deliver = row[4][slice((deliver_pos + deliver_len), to_do_len)]
+                    elif deliver_pos == -1 and take_pos != -1:
+                        to_do_take = row[4][slice((take_pos + take_len), to_do_len)]
+                        to_do_deliver = ''
+                    elif deliver_pos != -1 and take_pos == -1:
+                        to_do_deliver = row[4][slice((deliver_pos + deliver_len), to_do_len)]
+                        to_do_take = ''
+                    else:
+                        to_do_take = row[4]
+                        to_do_deliver = ''
+
+                    customer_name = row[1]
+                    address = row[2]
+                    contact = row[3]
+                    while '  ' in customer_name:
+                        customer_name = customer_name.replace('  ', ' ')
+                    while '  ' in address:
+                        address = address.replace('  ', ' ')
+                    while '  ' in contact:
+                        contact = contact.replace('  ', ' ')
+                    while '  ' in to_do_take:
+                        to_do_take = to_do_take.replace('  ', ' ')
+                    while '  ' in to_do_deliver:
+                        to_do_deliver = to_do_deliver.replace('  ', ' ')
+
+                    if date_begin <= date_r <= date_end or date_end == '' and date_r >= date_begin:
+                        razv_import = Razvozka_import(
+                            date=date_r,
+                            date_id=row[0],
+                            customer_name=customer_name,
+                            address=address,
+                            contact=contact,
+                            to_do_take=to_do_take,
+                            to_do_deliver=to_do_deliver)
+                        razv_import.save()
+    return HttpResponseRedirect(reverse('razvozki:admin'))
+
+
+def import_cst(request):
+    razv_imp = Razvozka_import.objects.order_by('-date', '-date_id')
+    cust_clr = Customer_clr.objects.order_by('name')
+    for rzv in razv_imp:
+        new_customer = Customer_clr(name=rzv.customer_name, address=rzv.address,
+                                    contact=rzv.contact, clr='text-secondary')
+        tmp = find_dubl_cst(new_customer, cust_clr)
+        if rzv.customer is None and not tmp:
+            new_customer.save()
+            rzv.customer = new_customer
+            rzv.save()
+        elif rzv.customer is None and tmp:
+            id_cst = find_dubl_cst_id(new_customer, cust_clr)
+            new_customer = Customer_clr.objects.get(id=id_cst)
+            rzv.customer = new_customer
+            rzv.save()
+        cust_clr = Customer_clr.objects.order_by('name')
+    return HttpResponseRedirect(reverse('razvozki:admin'))
+
+def delete_all_cst(request):
+    cust_clr = Customer_clr.objects.order_by('name')
+    for cst in cust_clr:
+        cst.delete()
+    return HttpResponseRedirect(reverse('razvozki:admin'))
+
+
+
