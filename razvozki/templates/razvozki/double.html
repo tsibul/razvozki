@@ -28,6 +28,7 @@
      </div>
     <form id="unite_cst" action="{% url 'razvozki:unite_cst' %}" method="post">
     {% csrf_token %}
+    <input type="hidden" id="order_un" name="order_un" value="{{order}}">
     <div id="final_un" style="display:none">
          <input type="hidden" id="cst_lv" name="cst_lv">
          <input type="hidden" id="cst_dt" name="cst_dt">
@@ -36,10 +37,16 @@
     </div>
     </form>
     </div>
-    <div class="col-2 text-center fw-bold">Клиент</div>
-    <div class="col text-center fw-bold" >Адрес</div>
-    <div class="col text-center fw-bold">Контакт</div>
-    <div class="col-2 text-center fw-bold">Yandex-Координата</div>
+    <div class="col-2 text-center fw-bold">
+        <a href="{% url 'razvozki:double' 'name' %}" class="link-success"><i class="bi bi-caret-down-fill bi-success"></i> Клиент </a>
+    </div>
+    <div class="col text-center fw-bold" >
+        <a href="{% url 'razvozki:double' 'address' %}" class="link-success"><i class="bi bi-caret-down-fill bi-success"></i> Адрес </a>
+    </div>
+    <div class="col text-center fw-bold">
+        <a href="{% url 'razvozki:double' 'contact' %}" class="link-success"><i class="bi bi-caret-down-fill bi-success"></i> Контакт </a>
+    </div>
+    <div class="col-2 text-center fw-bold text-success">Yandex-Координата</div>
   </div>
   {% for cst in cust %}
   <div class="row " id="show_{{cst.id}}">
@@ -50,13 +57,15 @@
         <input type="radio" class="btn-check" name="options_outlined_delete" id="danger_outlined_{{cst.id}}" autocomplete="off" value="d_{{cst.id}}">
         <label class="btn btn-sm btn-outline-danger" for="danger_outlined_{{cst.id}}">Убрать</label>
     </div>
-    <div class="col-2 border border-1">{{cst.name}} </div>
-    <div class="col border border-1">{{cst.address}}</div>
-    <div class="col border border-1">{{cst.contact}}</div>
-    <div class="col-2 border border-1 text-center text-danger">{{cst.mappoint}}</div>
+    <div class="col-2 border border-1 {{cst.clr}}">{{cst.name}} </div>
+    <div class="col border border-1 {{cst.clr}}" >{{cst.address}}</div>
+    <div class="col border border-1 {{cst.clr}}">{{cst.contact}}</div>
+    <div class="col-2 border border-1 text-center {{cst.clr}}">{{cst.mappoint}}</div>
   </div>
     <form id="update_cst" action="{% url 'razvozki:updaterecord_cst' 'double' %}" method="post">
     {% csrf_token %}
+      <input type="hidden" id="order_up" name="order_up" value="{{order}}">
+      <input type="hidden" id="page_number_upd" name="page_number_upd" value="">
       <div id="hide_{{cst.id}}" style="display:none">
       <div class="row " >
         <div class="col-auto border border-1">

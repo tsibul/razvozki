@@ -24,55 +24,83 @@
 {% include 'razvozki/main.html' %}
 <body>
 
-<div class="row-auto">
+<div class="row-auto p-2">
     <div class="col-auto text-success">
         Основная база: Развозки: {{razv_count}} Клиенты: {{customer_count}}
     </div>
 </div>
-<div class="row-auto">
+<div class="row-auto p-2">
     <div class="col-auto text-danger">
         Временная база: Развозки: {{razv_count_imp}}
     </div>
 </div>
-<br>
-
 <form id="import_csv" action="{% url 'razvozki:import_csv' %}" method="post">
 {% csrf_token %}
-<div class = "col-auto">
+<div class = "col-auto p-2">
 <div class="input-group justify-content col-auto">
   <div class="custom-file text-success">
-    Импорт из .csv (в отдельную базу)
+    Импорт из .csv (во временную базу)
     <label class="custom-file-label" for="ChoseCSV"></label>
     <input type="file" accept=".csv" class="custom-file-input col-auto border" id="ChoseCSV" name="Chosen">
   </div>
-  <div class="input-group-append" >
-    <label for="date_begin">С:</label>
-    <input type="date" id="date_begin" name="date_begin">
-    <label for="date_end">По:</label>
-    <input type="date" id="date_end" name="date_end">
-    <button class="btn btn-outline-danger" type="submit">Выбрать</button>
+  <div class="input-group-append text-success bg-outline-success" >
+    <label for="date_begin"> с: </label>
+    <input type="date" id="date_begin" name="date_begin" style="color: green">
+    <label for="date_end"> по: </label>
+    <input type="date" id="date_end" name="date_end" style="color: green">
+    <button class="btn btn-outline-danger" type="submit"> Выбрать </button>
   </div>
 </div>
 </div>
 </form>
-<br>
-    <div class="row align-left">
-            <div class="col-auto text-success">
-            <form id="import_cust" action="{% url 'razvozki:import_cst' %}" method="post">
-            {% csrf_token %}
-                Сбор клиентов по временной базе
-                <button class="btn btn-outline-success btn" type="submit">Получить клиентов из базы</button>
-            </form>
-            </div>
-            <div class="col-auto text-danger">
-            <form id="delete_all_cst" action="{% url 'razvozki:delete_all_cst' %}" method="post">
-            {% csrf_token %}
-                Стереть всех клиентов
-                <button class="btn btn-outline-danger btn" type="submit">Стереть всех клиентов</button>
-            </form>
-            </div>
-    </div>
+<div class="row align-left p-2">
+        <div class="col-auto text-success">
+        <form id="import_cust" action="{% url 'razvozki:import_cst' %}" method="post">
+        {% csrf_token %}
+            Сбор клиентов по временной базе
+            <button class="btn btn-outline-success btn" type="submit">Получить клиентов из базы</button>
+        </form>
+        </div>
+        <div class="col-auto text-danger">
+        <form id="delete_all_cst" action="{% url 'razvozki:delete_all_cst' %}" method="post">
+        {% csrf_token %}
+            Стереть всех клиентов
+            <button class="btn btn-outline-danger btn" type="submit">Стереть всех клиентов</button>
+        </form>
+        </div>
+</div>
+<div class="row align-left p-2">
+        <div class="col-auto text-success">
+        <form id="clean_cst" action="{% url 'razvozki:clean_cst' %}" method="post">
+        {% csrf_token %}
+            Уборка базы Клиентов (кавычки, "ИП", двойные пробелы)
+            <button class="btn btn-outline-success btn" type="submit">Чистить Клиентов</button>
+        </form>
+        </div>
+        <div class="col-auto text-success">
+        <form id="clean_кям" action="{% url 'razvozki:clean_rzv' %}" method="post">
+        {% csrf_token %}
+            Уборка базы Развозки (кавычки, "ИП", двойные пробелы)
+            <button class="btn btn-outline-success btn" type="submit">Чистить развозки</button>
+        </form>
+        </div>
+</div>
 
+<form id="export_rzv" action="{% url 'razvozki:export_rzv' %}" method="post">
+{% csrf_token %}
+<div class = "col-auto p-2">
+<div class="input-group justify-content col-auto">
+  <div class="custom-file text-danger">
+    Экспорт из временной в основную базу
+    <label for="date_begin"> с: </label>
+    <input type="date" id="date_begin_exp" name="date_begin_exp" style="color: red">
+    <label for="date_end"> по: </label>
+    <input type="date" id="date_end_exp" name="date_end_exp" style="color: red">
+    <button class="btn btn-outline-danger" type="submit"> Экспорт </button>
+  </div>
+</div>
+</div>
+</form>
 
 
 <script> new tempusDominus.TempusDominus(document.getElementById('datetimepicker4'), {

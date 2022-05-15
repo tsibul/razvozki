@@ -33,7 +33,7 @@ class Razvozka(models.Model):
     customer = models.ForeignKey(Customer, models.SET_NULL, null=True, blank=True)
     customer_name = models.CharField(max_length=100)
     address = models.CharField(max_length=255)
-    contact = models.CharField(max_length=120)
+    contact = models.CharField(max_length=255)
     to_do_deliver = models.CharField(max_length=255, default='')
     to_do_take = models.CharField(max_length=255, default='')
     map_point = models.CharField(max_length=255)

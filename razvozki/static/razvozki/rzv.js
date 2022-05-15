@@ -4,7 +4,7 @@ function upd_ln(cst_){
     document.getElementById(cst).style.display='none';
     document.getElementById(cst2).style.display='block';}
 
-function upd_ln_reverse(cst_){
+function upd_ln_reverse(cst_, order){
     var cst = 'cst_id_' + cst_;
     var cst2 = 'cst_id2_' + cst_;
     document.getElementById(cst).style.display='block';
@@ -98,6 +98,14 @@ function unite_double(){
     document.getElementById('initial_un').style.display='none';
     }
 }
+
+function order_cst (order){
+    cst_order = order
+    document.getElementById('order').innerHTML = order;
+
+    location.reload();
+}
+
 
  function printDiv(divName) {
         var printContents = document.getElementById(divName).innerHTML;

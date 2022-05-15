@@ -117,15 +117,16 @@
                 <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.customer_name }}</a></td>
                 <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.address }}</a></td>
                 <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.contact }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.get_all_todo_clr }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.get_all_todo }}</a></td>
                 <td ><a href="delete_rzv/{{ rzv.id }}"><button class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="удалить развозку">Удалить</button></a></td>
             </tr>
 
         <form action="updaterecord_rzv/{{ rzv.id }}" method="post">
         <tr id="cst_id2_{{rzv.id}}" style="display:none">
         {% csrf_token %}
+            <input type="hidden" id="page_number_upd" name="page_number_upd" value="{{ page_obj.number }}">
             <input type="hidden" name="date" value="{{date_r}}">
-            <th scope="rowgroup"><a href="javascript:upd_ln2_reverse({{rzv.id}});"><button class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></th>
+            <th scope="rowgroup"><a href="javascript:upd_ln2_reverse({{rzv.id}});"><button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></th>
                 <th colspan="2">
                 <div class="col">
                     <div
@@ -182,8 +183,9 @@
     {% csrf_token %}
     <tr>
         <tr id="cst_id4_{{rzv.id}}" style="display:none">
+            <input type="hidden" id="page_number_add" name="page_number_add" value="{{ page_obj.number }}">
             <input type="hidden" name="date" value="{{rzv.date}}">
-            <th scope="rowgroup"><a href="javascript:add_ln2_reverse({{rzv.id}});"><button class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></th>
+            <th scope="rowgroup"><a href="javascript:add_ln2_reverse({{rzv.id}});"><button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></th>
             <input id="updcust_id_{{rzv.id}}"  type="hidden" name="customer" value=None>
             <td> <input type="number" style="min-width:30px" class="form-control" placeholder="#" name="date_id" value="0"> </td>
             <td ><input type="text" id="updcust_name_{{rzv.id}}" class="form-control" placeholder="Клиент"  name="customer_name"></td>
