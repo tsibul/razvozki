@@ -20,10 +20,10 @@
 <!--        <input type="button" value="Print this page" onClick="window.print()"> -->
     </span>
 
-<div id="print-content">
+<div id="print-content" class="g-0">
     <form>
         <h2 style="text-align:center"> Развозка на {{ date_r }}</h2>
-        <div class="container">
+        <div class="container g-0">
             <div class="row" >
             <div class="col-1 text-center fw-bold border border-secondary bg-success" style="--bs-bg-opacity: .3;">#</div>
             <div class="col-2 text-center fw-bold border border-secondary bg-success" style="--bs-bg-opacity: .3;">Клиент</div>
@@ -32,8 +32,8 @@
             <div class="col-3 text-center fw-bold border border-secondary bg-success" style="--bs-bg-opacity: .3;">Что сделать</div>
             </div>
         </div>
-        <div class="w-100"></div>
-        <div class="container">
+        <div class="w-100 g-0"></div>
+        <div class="container g-0">
             {% for rzv in razv %}
             <div class="row">
             <div class="col-1 text-center border border-secondary">{{rzv.date_id}}</div>

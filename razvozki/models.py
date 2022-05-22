@@ -37,6 +37,7 @@ class Razvozka(models.Model):
     to_do_deliver = models.CharField(max_length=255, default='')
     to_do_take = models.CharField(max_length=255, default='')
     map_point = models.CharField(max_length=255)
+    clr = models.CharField(max_length=30, default='')
 
     def __str__(self):
         return str(self.date) + '| ' + str(self.customer_name) + '| ' + str(self.to_do_deliver)+ '| ' + str(self.to_do_take)
@@ -65,6 +66,7 @@ class Razvozka_import (models.Model):
     to_do_deliver = models.CharField(max_length=255, default='')
     to_do_take = models.CharField(max_length=255, default='')
     map_point = models.CharField(max_length=255)
+    clr = models.CharField(max_length=30, default='')
 
     def __str__(self):
         return str(self.date) + '| ' + str(self.customer_name) + '| ' + str(self.to_do_deliver)+ '| ' + str(self.to_do_take)

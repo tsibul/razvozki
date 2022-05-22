@@ -18,14 +18,14 @@
 <div class="container-fluid">
  <div class="row bg-success" style="--bs-bg-opacity: .3;" >
     <div class="col-auto border border-1">
-     <div id="initial_un">
-        <a href="javascript:unite_double();">
+        <div id="initial_un">
+         <a href="javascript:unite_double();">
             <button type="button" class="btn btn-outline-success btn-sm">Слить</button>
         </a>
-        <a href="javascript:upd_ln_double();">
-            <button type="button" class="btn btn-outline-danger btn-sm">Изменить</button>
-        </a>
-     </div>
+         <a href="javascript:upd_ln_double();">
+             <button type="button" class="btn btn-outline-danger btn-sm">Изменить</button>
+         </a>
+        </div>
     <form id="unite_cst" action="{% url 'razvozki:unite_cst' %}" method="post">
     {% csrf_token %}
     <input type="hidden" id="order_un" name="order_un" value="{{order}}">

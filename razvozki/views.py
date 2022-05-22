@@ -99,9 +99,10 @@ def addrecord_razv(request):
     contact = request.POST['contact']
     to_do_take = request.POST['to_do_take']
     to_do_deliver = request.POST['to_do_deliver']
+    clr = 'text-secondary'
     razvozka = Razvozka(date=date, date_id=date_id, customer_name=customer_name, customer=customer, address=address,
                         contact=contact,
-                        to_do_take=to_do_take, to_do_deliver=to_do_deliver)
+                        to_do_take=to_do_take, to_do_deliver=to_do_deliver, clr=clr)
     razvozka.save()
     if page_num != '':
         page_num = '?page=' + page_num
@@ -148,7 +149,7 @@ def newdate_rzv(request):
     datenew = request.POST['date']
     datenew = datetime.datetime.strptime(datenew, '%d.%m.%Y').strftime('%Y-%m-%d')
     razvozka = Razvozka(date=datenew, date_id=1, customer_name='', customer=None, address='', contact='',
-                        to_do_take='', to_do_deliver='')
+                        to_do_take='', to_do_deliver='', clr='text-secondary')
     razvozka.save()
     return HttpResponseRedirect(reverse('razvozki:index'))
 
@@ -444,7 +445,8 @@ def import_csv(request):
                             address=address,
                             contact=contact,
                             to_do_take=to_do_take,
-                            to_do_deliver=to_do_deliver)
+                            to_do_deliver=to_do_deliver,
+                            clr='text-secondary')
                         razv_import.save()
     return HttpResponseRedirect(reverse('razvozki:admin'))
 
@@ -563,7 +565,8 @@ def export_rzv(request):
             if str(rzv.date) >= date_begin:
                 new_rzv = Razvozka(date_id=rzv.date_id, customer=rzv.customer, customer_name =rzv.customer_name,
                                    address=rzv.address, contact=rzv.contact, to_do_take=rzv.to_do_take,
-                                   to_do_deliver=rzv.to_do_deliver, map_point=rzv.map_point, date=rzv.date)
+                                   to_do_deliver=rzv.to_do_deliver, map_point=rzv.map_point, date=rzv.date,
+                                   clr=rzv.clr)
                 new_rzv.save()
     elif date_begin == '' and date_end != '':
         for rzv in Razvozka.objects.all():
@@ -573,7 +576,8 @@ def export_rzv(request):
             if str(rzv.date) <= date_end:
                 new_rzv = Razvozka(date_id=rzv.date_id, customer=rzv.customer, customer_name=rzv.customer_name,
                                    address=rzv.address, contact=rzv.contact, to_do_take=rzv.to_do_take,
-                                   to_do_deliver=rzv.to_do_deliver, map_point=rzv.map_point, date=rzv.date)
+                                   to_do_deliver=rzv.to_do_deliver, map_point=rzv.map_point, date=rzv.date,
+                                   clr=rzv.clr)
                 new_rzv.save()
     else:
         for rzv in Razvozka.objects.all():
@@ -583,7 +587,8 @@ def export_rzv(request):
             if date_begin <= str(rzv.date) <= date_end:
                 new_rzv = Razvozka(date_id=rzv.date_id, customer=rzv.customer, customer_name=rzv.customer_name,
                                    address=rzv.address, contact=rzv.contact, to_do_take=rzv.to_do_take,
-                                   to_do_deliver=rzv.to_do_deliver, map_point=rzv.map_point, date=rzv.date)
+                                   to_do_deliver=rzv.to_do_deliver, map_point=rzv.map_point, date=rzv.date,
+                                   clr=rzv.clr)
                 new_rzv.save()
 
 #    Razvozka.objects.bulk_create(Razvozka_import.objects.All)
