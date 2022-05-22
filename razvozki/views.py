@@ -14,6 +14,7 @@ from django.urls import reverse
 from django.db import transaction
 from django.core.files import File
 from django.views.generic import ListView
+
 import csv
 
 
@@ -363,9 +364,11 @@ def admin(request):
 
 
 def import_csv(request):
+
     file_name = request.POST['Chosen']
     date_begin = request.POST['date_begin']
     date_end = request.POST['date_end']
+
     if date_begin == '' and date_end == '':
         Razvozka_import.objects.all().delete()
     elif date_begin != '' and date_end == '':
@@ -382,7 +385,7 @@ def import_csv(request):
                 rzv.delete()
 
     if file_name != '':
-        file_name = 'razvozki/files/' + file_name
+#        file_name = 'razvozki/files/' + file_name
         with open(file_name, newline='') as csvfile:
             exract_file = csv.reader(csvfile, delimiter=';')
             for row in exract_file:
