@@ -1,0 +1,18 @@
+/config.cfg
+/.gitignore
+/razv/config.cfg
+/manage.py
+/polls/
+/razvozki/static/razvozki/navbar-top-fixed.css
+/razvozki/static/razvozki/bootstrap.bundle.min.js
+/razvozki/static/razvozki/bootstrap.bundle.min.js.map
+/razvozki/static/razvozki/bootstrap.min.css
+/razvozki/static/razvozki/bootstrap-icons.css
+/razvozki/static/razvozki/popper.min.js
+/razvozki/static/razvozki/tempus-dominus.css
+/razvozki/static/razvozki/tempus-dominus.js
+/razvozki/static/razvozki/bootstrap.min.css.map
+/razvozki/files/Развозка 12052022.csv
+/razvozki/files/Развозка.ods
+/razvozki/files/.~lock.Развозка 12052022.csv#
+/razvozki/files/Развозка 15052022.csv
