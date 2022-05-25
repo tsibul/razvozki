@@ -11,7 +11,6 @@
     <title>Печать</title>
 </head>
 <body>
-<br>
     <span class="step-links">
         &nbsp;
 <!--        <button onclick="printDiv('print-content')" class="btn btn-outline-success"><i class="bi bi-printer-fill" style="currentColor"></i> Печать</button> -->
@@ -20,27 +19,27 @@
 <!--        <input type="button" value="Print this page" onClick="window.print()"> -->
     </span>
 
-<div id="print-content" class="g-0">
+<div id="print-content" class="container-fluid g-0 m-0 p-3">
     <form>
-        <h2 style="text-align:center"> Развозка на {{ date_r }}</h2>
-        <div class="container g-0">
-            <div class="row" >
-            <div class="col-1 text-center fw-bold border border-secondary bg-success" style="--bs-bg-opacity: .3;">#</div>
-            <div class="col-2 text-center fw-bold border border-secondary bg-success" style="--bs-bg-opacity: .3;">Клиент</div>
-            <div class="col-3 text-center fw-bold border border-secondary bg-success" style="--bs-bg-opacity: .3;">Адрес</div>
-            <div class="col-3 text-center fw-bold border border-secondary bg-success" style="--bs-bg-opacity: .3;">Контакт</div>
-            <div class="col-3 text-center fw-bold border border-secondary bg-success" style="--bs-bg-opacity: .3;">Что сделать</div>
+        <h3 style="text-align:center"> Развозка на {{ date_r }}</h3>
+        <div class="container-fluid g-0 p-2 m-0">
+            <div class="row auto" >
+            <div class="col-1 text-center fw-bold fs-5 border border-secondary bg-success" style="--bs-bg-opacity: .3;">#</div>
+            <div class="col-2 text-center fw-bold fs-5 border border-secondary bg-success" style="--bs-bg-opacity: .3;">Клиент</div>
+            <div class="col-3 text-center fw-bold fs-5 border border-secondary bg-success" style="--bs-bg-opacity: .3;">Адрес</div>
+            <div class="col-3 text-center fw-bold fs-5 border border-secondary bg-success" style="--bs-bg-opacity: .3;">Контакт</div>
+            <div class="col-3 text-center fw-bold fs-5 border border-secondary bg-success" style="--bs-bg-opacity: .3;">Что сделать</div>
             </div>
         </div>
-        <div class="w-100 g-0"></div>
-        <div class="container g-0">
+        <div class="w-100 g-0 p-0 m-0"></div>
+        <div class="container-fluid g-0 m-0 p-2">
             {% for rzv in razv %}
-            <div class="row">
-            <div class="col-1 text-center border border-secondary">{{rzv.date_id}}</div>
-            <div class="col-2 text-left border border-secondary">{{rzv.customer_name}}</div>
-            <div class="col-3 text-left border border-secondary" >{{rzv.address}}</div>
-            <div class="col-3 text-left border border-secondary">{{rzv.contact}}</div>
-            <div class="col-3 text-left border border-secondary">{{rzv.get_all_todo}}</div>
+            <div class="row auto">
+            <div class="col-1 text-center fs-5 border border-secondary">{{rzv.date_id}}</div>
+            <div class="col-2 text-left fs-5 border border-secondary">{{rzv.customer_name}}</div>
+            <div class="col-3 text-left fs-5 border border-secondary" >{{rzv.address}}</div>
+            <div class="col-3 text-left fs-5 border border-secondary">{{rzv.contact}}</div>
+            <div class="col-3 text-left fs-5 border border-secondary">{{rzv.get_all_todo}}</div>
             </div>
             {% endfor %}
         </div>
