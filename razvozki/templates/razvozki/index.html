@@ -112,13 +112,13 @@
     {% for rzv in razv %}
         <tbody>
             <tr id="cst_id_{{rzv.id}}">
-                <th scope="row"><a href="javascript:add_ln2({{rzv.id}});"><button class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="добавить развозку">Добавить</button></a></th>
+                <th scope="row"><a href="javascript:add_ln2({{rzv.id}});"><button class="btn btn-sm btn-outline-success fw-semibold" data-toggle="tooltip" data-placement="top" title="добавить развозку">Добавить</button></a></th>
                 <td  style="width:30px"><input type="number" class="form-control" disabled value="{{ rzv.date_id }}"></a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control">{{ rzv.customer_name }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control">{{ rzv.address }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control">{{ rzv.contact }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control">{{ rzv.get_all_todo }}</a></td>
-                <td ><a href="delete_rzv/{{ rzv.id }}"><button class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="удалить развозку">Удалить</button></a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control fw-bold">{{ rzv.customer_name }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control fw-semibold">{{ rzv.address }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control fw-semibold">{{ rzv.contact }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control fw-semibold">{{ rzv.get_all_todo }}</a></td>
+                <td ><a href="delete_rzv/{{ rzv.id }}"><button class="btn btn-sm btn-outline-danger fw-semibold" data-toggle="tooltip" data-placement="top" title="удалить развозку">Удалить</button></a></td>
             </tr>
 
         <form action="updaterecord_rzv/{{ rzv.id }}" method="post">
