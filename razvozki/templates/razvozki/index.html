@@ -114,10 +114,10 @@
             <tr id="cst_id_{{rzv.id}}">
                 <th scope="row"><a href="javascript:add_ln2({{rzv.id}});"><button class="btn btn-sm btn-outline-success" data-toggle="tooltip" data-placement="top" title="добавить развозку">Добавить</button></a></th>
                 <td  style="width:30px"><input type="number" class="form-control" disabled value="{{ rzv.date_id }}"></a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.customer_name }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.address }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.contact }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control {{rzv.clr}}">{{ rzv.get_all_todo }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control">{{ rzv.customer_name }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control">{{ rzv.address }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control">{{ rzv.contact }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control">{{ rzv.get_all_todo }}</a></td>
                 <td ><a href="delete_rzv/{{ rzv.id }}"><button class="btn btn-sm btn-outline-danger" data-toggle="tooltip" data-placement="top" title="удалить развозку">Удалить</button></a></td>
             </tr>
 
@@ -168,13 +168,13 @@
             <td></td>
             <td> <input type="number" style="min-width:30px" class="form-control" id="date_id" placeholder="#" name="date_id" value="{{ rzv.date_id }}"> </td>
             {% if rzv.customer is None %}
-                <td> <input type="text" class="form-control  {{rzv.clr}}" id="customer_name" placeholder="Клиент" name="customer_name" value="{{ rzv.customer_name }}"> </td>
+                <td> <input type="text" class="form-control " id="customer_name" placeholder="Клиент" name="customer_name" value="{{ rzv.customer_name }}"> </td>
             {% else %}
-                <td> <li type="text" class="form-control  {{rzv.clr}} bg-light">{{ rzv.customer_name }}</li> </td>
+                <td> <li type="text" class="form-control  bg-light">{{ rzv.customer_name }}</li> </td>
             {% endif %}
-            <td><textarea class="form-control  {{rzv.clr}}" id="address" placeholder="Адрес" name="address"> {{ rzv.address }} </textarea></td>
-            <td><textarea class="form-control  {{rzv.clr}}" id="contact" placeholder="Контакт" name="contact"> {{ rzv.contact }}</textarea></td>
-            <td> <input type="text" class="form-control  {{rzv.clr}}" id="to_do_deliver" placeholder="Сдать" name="to_do_deliver" value="{{ rzv.to_do_deliver }}"></td>
+            <td><textarea class="form-control  " id="address" placeholder="Адрес" name="address"> {{ rzv.address }} </textarea></td>
+            <td><textarea class="form-control  " id="contact" placeholder="Контакт" name="contact"> {{ rzv.contact }}</textarea></td>
+            <td> <input type="text" class="form-control " id="to_do_deliver" placeholder="Сдать" name="to_do_deliver" value="{{ rzv.to_do_deliver }}"></td>
             <td> <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="записать">Записать</button></td>
             </tr>
         </form>
