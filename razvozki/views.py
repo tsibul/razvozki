@@ -172,7 +172,7 @@ def cst_double_search(request):
     order = request.POST['order_doub']
     cust = Customer_clr.objects.all()
     for cst1 in cust:
-        cst1.clr = 'text-secondary'
+        cst1.clr = ''
         if find_dubl_cst(cst1, cust)[0]:
             cst1.clr = 'text-danger'
         Customer_clr.objects.filter(id=cst1.id).update(clr=cst1.clr)
@@ -546,7 +546,7 @@ def clean_rzv(request):
                                                   to_do_take=rzv_to_do_take, to_do_deliver=rzv_to_do_deliver)
     return HttpResponseRedirect(reverse('razvozki:admin'))
 
-
+@transaction.atomic()
 def export_rzv(request):
     date_begin = request.POST['date_begin_exp']
     if date_begin != '':
