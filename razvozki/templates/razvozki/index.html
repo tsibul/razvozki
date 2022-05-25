@@ -29,21 +29,21 @@
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
-            <a href="?page=1" class="btn btn-outline-success">&laquo; первая</a>
-            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-success">предыдущая</a>
+            <a href="?page=1" class="btn btn-outline-success fw-bold">&laquo; первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-success fw-bold">предыдущая</a>
         {% endif %}
-        <span class="current btn btn-outline-secondary">
+        <span class="current btn btn-outline-secondary fw-bold">
            {{ page_obj.object_list.4.0|date:"d.m.y" }} - {{ page_obj.object_list.0.0|date:"d.m.y" }} (страница {{ page_obj.number }}  из {{ page_obj.paginator.num_pages }})
         </span>
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-success">следующая</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-success">последняя &raquo;</a>
+            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-success fw-bold">следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-success fw-bold">последняя &raquo;</a>
         {% endif %}
         &nbsp
-             <button class="btn btn-outline-success dropdown-toggle" type="button" id="_ChooseClientAdd{{rzv.id}}"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+             <button class="btn btn-outline-success dropdown-toggle fw-bold" type="button" id="_ChooseClientAdd{{rzv.id}}"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
                 Выбрать даты
             </button>
-              <ul class="dropdown-menu" aria-labelledby="ChooseClientAdd{{rzv.id}}">
+              <ul class="dropdown-menu fw-bold" aria-labelledby="ChooseClientAdd{{rzv.id}}">
                 {% for dt_range in date_range %}
               <li><a class="dropdown-item" href="?page={{ dt_range.0 }}"> {{ dt_range.1 }}</a></li>
                 {% endfor %}
@@ -56,7 +56,7 @@
 {% csrf_token %}
   <div class="col-1">
     <label for="newdate" class="visually-hidden">Новая дата</label>
-    <input type="text" readonly class="form-control-plaintext" id="newdate" value="Новая дата">
+    <input type="text" readonly class="form-control-plaintext fw-bold" id="newdate" value="Новая дата">
   </div>
   <div class="col-auto">
     <div
@@ -96,7 +96,7 @@
         <th colspan="1">{{ date_r|date:"d.m.Y" }}</th>
     <form action="print_rzv/{{ date_r|date:'Y-m-d'}}" method="post">
         {% csrf_token %}
-        <th colspan="2"> <button type="submit" class="btn btn-outline-success btn-sm"><i class="bi bi-printer-fill" style="currentColor"></i> Печать</button></th>
+        <th colspan="2"> <button type="submit" class="btn btn-outline-success btn-sm fw-bold"><i class="bi bi-printer-fill" style="currentColor"></i> Печать</button></th>
     </form>
         <td></td>
     </tr>
@@ -112,13 +112,13 @@
     {% for rzv in razv %}
         <tbody>
             <tr id="cst_id_{{rzv.id}}">
-                <th scope="row"><a href="javascript:add_ln2({{rzv.id}});"><button class="btn btn-sm btn-outline-success fw-semibold" data-toggle="tooltip" data-placement="top" title="добавить развозку">Добавить</button></a></th>
+                <th scope="row"><a href="javascript:add_ln2({{rzv.id}});"><button class="btn btn-sm btn-outline-success fw-bold" data-toggle="tooltip" data-placement="top" title="добавить развозку">Добавить</button></a></th>
                 <td  style="width:30px"><input type="number" class="form-control" disabled value="{{ rzv.date_id }}"></a></td>
                 <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control fw-bold">{{ rzv.customer_name }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control fw-semibold">{{ rzv.address }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control fw-semibold">{{ rzv.contact }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control fw-semibold">{{ rzv.get_all_todo }}</a></td>
-                <td ><a href="delete_rzv/{{ rzv.id }}"><button class="btn btn-sm btn-outline-danger fw-semibold" data-toggle="tooltip" data-placement="top" title="удалить развозку">Удалить</button></a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control fw-bold">{{ rzv.address }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control fw-bold">{{ rzv.contact }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control fw-bold">{{ rzv.get_all_todo }}</a></td>
+                <td ><a href="delete_rzv/{{ rzv.id }}"><button class="btn btn-sm btn-outline-danger fw-bold" data-toggle="tooltip" data-placement="top" title="удалить развозку">Удалить</button></a></td>
             </tr>
 
         <form action="updaterecord_rzv/{{ rzv.id }}" method="post">
@@ -227,23 +227,23 @@
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
-            <a href="?page=1" class="btn btn-outline-success">&laquo; первая</a>
-            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-success">предыдущая</a>
+            <a href="?page=1" class="btn btn-outline-success fw-bold">&laquo; первая</a>
+            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-success fw-bold">предыдущая</a>
         {% endif %}
 
-        <span class="current btn btn-outline-secondary">
+        <span class="current btn btn-outline-secondary fw-bold">
            {{ page_obj.object_list.4.0|date:"d.m.y" }} - {{ page_obj.object_list.0.0|date:"d.m.y" }} (страница {{ page_obj.number }}  из {{ page_obj.paginator.num_pages }})
         </span>
 
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-success">следующая</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-success">последняя &raquo;</a>
+            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-success fw-bold">следующая</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-success fw-bold">последняя &raquo;</a>
         {% endif %}
         &nbsp
-             <button class="btn btn-outline-success dropdown-toggle" type="button"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+             <button class="btn btn-outline-success dropdown-toggle fw-bold" type="button"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
                 Выбрать даты
             </button>
-              <ul class="dropdown-menu" aria-labelledby="ChooseClientAdd{{rzv.id}}">
+              <ul class="dropdown-menu fw-bold" aria-labelledby="ChooseClientAdd{{rzv.id}}">
                 {% for dt_range in date_range %}
               <li><a class="dropdown-item" href="?page={{ dt_range.0 }}"> {{ dt_range.1 }}</a></li>
                 {% endfor %}
