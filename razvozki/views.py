@@ -320,7 +320,7 @@ def addrecord_cst(request):
 
 def print_rzv(request, date_r):
     razvozka = []
-    for rzv in Razvozka.objects.filter(date=date_r):
+    for rzv in Razvozka.objects.filter(date=date_r).order_by('date_id'):
         razvozka.append(rzv)
     date_r = datetime.datetime.strptime(date_r, '%Y-%m-%d').strftime('%d.%m.%Y')
     context = {'date_r': date_r, 'razv': razvozka}
