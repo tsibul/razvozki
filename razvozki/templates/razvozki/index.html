@@ -1,6 +1,6 @@
 <!doctype html>
 {% load static %}
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -86,7 +86,6 @@
     <button type="submit" class="btn btn-success mb-1">Создать</button>
   </div>
 </form>
-
 {% if f_rzv %}
 <table class="table table-hover">
 {% for date_r, razv in f_rzv.items %}
@@ -126,6 +125,8 @@
         {% csrf_token %}
             <input type="hidden" id="page_number_upd" name="page_number_upd" value="{{ page_obj.number }}">
             <input type="hidden" name="date" value="{{date_r}}">
+            <input id="updcust_id_{{rzv.id}}_"  type="hidden" name="customer" value=None>
+
             <th scope="rowgroup"><a href="javascript:upd_ln2_reverse({{rzv.id}});"><button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></th>
                 <th colspan="2">
                 <div class="col">
@@ -160,7 +161,17 @@
                 </script>
 
             </th>
-            <td></td>
+           <td>
+            <button class="btn btn-success dropdown-toggle" type="button" id="ChooseClientUpd{{rzv.id}}"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+                Выбрать клиента
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="ChooseClientAdd{{rzv.id}}">
+
+                  {% for cst in cust %}
+                  <li id="Cust{{rzv.id}}_{{cst.id}}_"><a class="dropdown-item" href="javascript:slc_cst_('{{cst.name}}', '{{rzv.id}}', '{{cst.id}}', '{{cst.address}}', '{{cst.contact}}')">{{cst.name}}</a></li>
+                  {% endfor %}
+              </ul>
+            </td>
             <td></td>
             <td> <input type="text" class="form-control  {{rzv.clr}}" id="to_do_take" placeholder="Забрать" name="to_do_take" value="{{ rzv.to_do_take }}"> </td>
             </tr>
@@ -197,13 +208,14 @@
             <td></td>
             <td></td>
             <td>
-              <button class="btn btn-success dropdown-toggle" type="button" id="ChooseClientAdd{{rzv.id}}"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+            <button class="btn btn-success dropdown-toggle" type="button" id="ChooseClientAdd{{rzv.id}}"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
                 Выбрать клиента
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="ChooseClientAdd{{rzv.id}}">
-                {% for cst in cust %}
-                 <li id="Cust{{rzv.id}}_{{cst.id}}"><a class="dropdown-item" href="javascript:slc_cst('{{cst.name}}', '{{rzv.id}}', '{{cst.id}}', '{{cst.address}}', '{{cst.contact}}')">{{cst.name}}</a></li>
-                {% endfor %}
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="ChooseClientAdd{{rzv.id}}">
+
+                  {% for cst in cust %}
+                  <li id="Cust{{rzv.id}}_{{cst.id}}"><a class="dropdown-item" href="javascript:slc_cst('{{cst.name}}', '{{rzv.id}}', '{{cst.id}}', '{{cst.address}}', '{{cst.contact}}')">{{cst.name}}</a></li>
+                  {% endfor %}
               </ul>
             </td>
             <td></td>

@@ -60,6 +60,23 @@ function slc_cst(cst_name, rzv_id, cst_id, cst_address, cst_contact){
 
 }
 
+function slc_cst_(cst_name, rzv_id, cst_id, cst_address, cst_contact){
+    var updcust_name = 'updcust_name_' + rzv_id;
+    var updcust_id = 'updcust_id_' + rzv_id + '_';
+    var updcust_address = 'updcust_address_' + rzv_id;
+    var updcust_contact = 'updcust_contact_' + rzv_id;
+    var cust_name = cst_name;
+    var cust_id = cst_id;
+    var cust_address = cst_address;
+    var cust_contact = cst_contact;
+    document.getElementById('customer_name').value = cust_name;
+    document.getElementById(updcust_id).value = cust_id;
+    document.getElementById('address').value = cust_address;
+    document.getElementById('contact').value = cust_contact;
+
+}
+
+
 function upd_ln_double(){
     var chck = document.querySelector('.btn-check:checked').value;
     var cst_id = chck.slice(2)
@@ -114,3 +131,20 @@ function order_cst (order){
         w.print();
         w.close();
     }
+
+function cst_filterFunction(rzv_id) {
+  var input, filter, ul, li, a, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  var myDropdown= ChooseClientAdd+rzv_id
+  div = document.getElementById("myDropdown");
+  a = div.getElementsByTagName("a");
+  for (i = 0; i < a.length; i++) {
+    txtValue = a[i].textContent || a[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      a[i].style.display = "";
+    } else {
+      a[i].style.display = "none";
+    }
+  }
+}
