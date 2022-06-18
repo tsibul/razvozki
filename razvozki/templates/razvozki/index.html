@@ -55,8 +55,8 @@
 <form class="row g-1" action="newdate_rzv" method="post">
 {% csrf_token %}
   <div class="col-1">
-    <label for="newdate" class="visually-hidden">Новая дата</label>
-    <input type="text" readonly class="form-control-plaintext fw-bold" id="newdate" value="Новая дата">
+<!--        <label for="datetimepicker4">Новая дата</label><--->
+<input type="text" readonly class="form-control-plaintext fw-bold" id="newdate" value="Новая дата">
   </div>
   <div class="col-auto">
     <div
@@ -99,24 +99,25 @@
     </form>
         <td></td>
     </tr>
-    <tr class="table-secondary">
+<!--    <tr class="table-secondary">
         <th scope="col">   </th>
         <th scope="col" style="min-width:70px"> # </th>
         <th scope="col" style="min-width:220px"> Клиент </th>
         <th scope="col"> Адрес </th>
         <th scope="col" style="min-width:280px"> Контакт </th>
         <th colspan="2" style="min-width:450px"> Описание </th>
-    </tr>
+    </tr> <--->
     </thead>
     {% for rzv in razv %}
         <tbody>
+        {% if page_number == '1' or page_number == None or page_number == '2' %}
             <tr id="cst_id_{{rzv.id}}">
                 <th scope="row"><a href="javascript:add_ln2({{rzv.id}});"><button class="btn btn-sm btn-outline-success fw-bold" data-toggle="tooltip" data-placement="top" title="добавить развозку">Добавить</button></a></th>
                 <td  style="width:30px"><input type="number" class="form-control" disabled value="{{ rzv.date_id }}"></a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control fw-bold">{{ rzv.customer_name }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control fw-bold">{{ rzv.address }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control fw-bold">{{ rzv.contact }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="form-control fw-bold">{{ rzv.get_all_todo }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="text-dark">{{ rzv.customer_name }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="text-dark">{{ rzv.address }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="text-dark">{{ rzv.contact }}</a></td>
+                <td><a href="javascript:upd_ln2({{rzv.id}});" class="text-dark">{{ rzv.get_all_todo }}</a></td>
                 <td ><a href="delete_rzv/{{ rzv.id }}"><button class="btn btn-sm btn-outline-danger fw-bold" data-toggle="tooltip" data-placement="top" title="удалить развозку">Удалить</button></a></td>
             </tr>
 
@@ -189,6 +190,18 @@
             <td> <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="записать">Записать</button></td>
             </tr>
         </form>
+        {% else %}
+            <tr>
+                <th scope="row"></th>
+                <td  style="width:30px" class="text-dark"><input type="number" class="form-control" disabled value="{{ rzv.date_id }}"></a></td>
+                <td class="text-dark">{{ rzv.customer_name }}</td>
+                <td class="text-dark">{{ rzv.address }}</td>
+                <td class="text-dark">{{ rzv.contact }}</td>
+                <td class="text-dark">{{ rzv.get_all_todo }}</td>
+                <td class="text-dark"></td>
+            </tr>
+
+        {% endif %}
         </tr>
     <form action="addrecord_razv/" method="post">
     {% csrf_token %}

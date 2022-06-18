@@ -45,19 +45,10 @@ class Razvozka_clr:
 def index(request):
     navi = 'razvozka'
     datenew = datetime.date.today() + datetime.timedelta(days=1)
+    datenew = datenew.strftime('%Y-%m-%d')
     #    date = datetime.date.today()
     rzv = Razvozka.objects.order_by('-date', 'date_id')
     cust = Customer.objects.order_by('name')
-    rzv_clr = []
-#    for rzv1 in rzv:
-#        if rzv1.customer is None:
-#            rzv_clr.append(
-#                Razvozka_clr(rzv1.id, rzv1.date, rzv1.date_id, rzv1.customer, rzv1.customer_name, rzv1.address,
-#                             rzv1.contact, rzv1.to_do_take, rzv1.to_do_deliver, 'text-dark'))
-#        else:
-#            rzv_clr.append(
-#                Razvozka_clr(rzv1.id, rzv1.date, rzv1.date_id, rzv1.customer, rzv1.customer_name, rzv1.address,
-#                             rzv1.contact, rzv1.to_do_take, rzv1.to_do_deliver, 'text-success'))
 
     f_rzv0 = {}
     for r in rzv:
@@ -81,7 +72,7 @@ def index(request):
             date_range.append(['нет данных'])
 
     context = {'f_rzv': f_rzv, 'datenew': datenew, 'navi': navi, 'cust': cust, 'page_obj': page_obj,
-               'date_range': date_range}
+               'page_number': page_number, 'date_range': date_range}
     return render(request, 'razvozki/index.html', context)
 
 
