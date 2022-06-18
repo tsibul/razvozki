@@ -526,7 +526,7 @@ def trim_rzv(cst1):
 
 @transaction.atomic()
 def clean_rzv(request):
-    razv = Razvozka_import.objects.order_by('-date', 'date_id')
+    razv = Razvozka.objects.order_by('-date', 'date_id')
     for rzv in razv:
         rzv_name = trim_rzv(rzv)[0]
         rzv_address = trim_rzv(rzv)[1]

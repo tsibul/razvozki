@@ -78,7 +78,7 @@
         </form>
         </div>
         <div class="col-auto text-success">
-        <form id="clean_кям" action="{% url 'razvozki:clean_rzv' %}" method="post">
+        <form id="clean_rzv" action="{% url 'razvozki:clean_rzv' %}" method="post">
         {% csrf_token %}
             Уборка базы Развозки (кавычки, "ИП", двойные пробелы)
             <button class="btn btn-outline-success btn" type="submit">Чистить развозки</button>
