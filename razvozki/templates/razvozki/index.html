@@ -113,7 +113,7 @@
         {% if page_number == '1' or page_number == None or page_number == '2' %}
             <tr id="cst_id_{{rzv.id}}">
                 <th scope="row"><a href="javascript:add_ln2({{rzv.id}});"><button class="btn btn-sm btn-outline-success fw-bold" data-toggle="tooltip" data-placement="top" title="добавить развозку">Добавить</button></a></th>
-                <td  style="width:30px"><input type="number" class="form-control" disabled value="{{ rzv.date_id }}"></a></td>
+                <td  style="width:70px"><input type="number" class="text-dark form-control" disabled value="{{ rzv.date_id }}"></a></td>
                 <td><a href="javascript:upd_ln2({{rzv.id}});" class="text-dark">{{ rzv.customer_name }}</a></td>
                 <td><a href="javascript:upd_ln2({{rzv.id}});" class="text-dark">{{ rzv.address }}</a></td>
                 <td><a href="javascript:upd_ln2({{rzv.id}});" class="text-dark">{{ rzv.contact }}</a></td>
