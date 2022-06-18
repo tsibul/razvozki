@@ -446,11 +446,11 @@ def import_csv(request):
 
 
 def import_cst(request):
-    razv_imp = Razvozka_import.objects.order_by('-date', '-date_id')
+    razv_imp = Razvozka.objects.order_by('-date', '-date_id')
     cust_clr = Customer_clr.objects.order_by('name')
     for rzv in razv_imp:
         new_customer = Customer_clr(name=rzv.customer_name, address=rzv.address,
-                                    contact=rzv.contact, clr='text-secondary')
+                                    contact=rzv.contact, clr='text-dark')
         new_customer.name = trim_cst(new_customer)[0]
         new_customer.address = trim_cst(new_customer)[1]
         new_customer.contact = trim_cst(new_customer)[2]
