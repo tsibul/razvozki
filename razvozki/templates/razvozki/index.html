@@ -6,10 +6,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Popper js -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js"
+<script async src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js"
       crossorigin="anonymous"></script>
     <!-- Tempus Dominus JavaScript -->
-<script src="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/tempus-dominus.js"
+<script async src="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/tempus-dominus.js"
       crossorigin="anonymous"></script>
     <!-- Tempus Dominus Styles -->
     <link href="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/css/tempus-dominus.css"
@@ -18,8 +18,9 @@
     <!-- Bootstrap CSS -->
     <link href="{% static 'razvozki/bootstrap.min.css' %}" rel="stylesheet" crossorigin="anonymous">
 
-    <link rel="stylesheet" href="{% static 'razvozki/style.css' %}">
-    <title>Развозки</title>
+<!--    <link rel="stylesheet" href="{% static 'razvozki/style.css' %}" -->
+    <title > Развозки </title>
+     <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
 </head>
 
 {% include 'razvozki/main.html' %}
@@ -33,7 +34,7 @@
             <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-success fw-bold">предыдущая</a>
         {% endif %}
         <span class="current btn btn-outline-secondary fw-bold">
-           {{ page_obj.object_list.4.0|date:"d.m.y" }} - {{ page_obj.object_list.0.0|date:"d.m.y" }} (страница {{ page_obj.number }}  из {{ page_obj.paginator.num_pages }})
+           {{ page_obj.object_list.6.0|date:"d.m.y" }} - {{ page_obj.object_list.0.0|date:"d.m.y" }} (страница {{ page_obj.number }}  из {{ page_obj.paginator.num_pages }})
         </span>
         {% if page_obj.has_next %}
             <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-success fw-bold">следующая</a>
@@ -51,12 +52,12 @@
     </span>
 </div>
 <br>
+{% if page_number == '1' or page_number == None or page_number == '2' %}
 {% csrf_token %}
 <form class="row g-1" action="newdate_rzv" method="post">
 {% csrf_token %}
   <div class="col-1">
-<!--        <label for="datetimepicker4">Новая дата</label><--->
-<input type="text" readonly class="form-control-plaintext fw-bold" id="newdate" value="Новая дата">
+      <li class="form-control-plaintext fw-bold"> Новая дата</li>
   </div>
   <div class="col-auto">
     <div
@@ -71,13 +72,11 @@
          class='form-control'
          data-td-target='#datetimepicker4'
          name='date'
-         value="{{ datenew }}"
-       />
+         value="{{ datenew }}"/>
        <span
          class='input-group-text'
          data-td-target='#datetimepicker4'
-         data-td-toggle='datetimepicker'
-       >
+         data-td-toggle='datetimepicker'>
          <span class='bi bi-calendar-date-fill'></span>
        </span>
     </div>
@@ -86,11 +85,14 @@
     <button type="submit" class="btn btn-success mb-1">Создать</button>
   </div>
 </form>
-{% if f_rzv %}
+{% endif %}
+
 <table class="table table-hover">
 {% for date_r, razv in f_rzv.items %}
     <tr class="table-success">
-        <th scope="col"> </th>
+        <th scope="col">
+        <a href="javascript:add_ln2('{{date_r}}');"><button class="btn btn-sm btn-outline-success fw-bold" data-toggle="tooltip" data-placement="top" title="добавить развозку">Добавить</button></a>
+        </th>
         <th colspan="2" style="text-align:right"> Развозка на </th>
         <th colspan="1">{{ date_r|date:"d.m.Y" }}</th>
     <form action="print_rzv/{{ date_r|date:'Y-m-d'}}" method="post">
@@ -99,25 +101,55 @@
     </form>
         <td></td>
     </tr>
-<!--    <tr class="table-secondary">
-        <th scope="col">   </th>
-        <th scope="col" style="min-width:70px"> # </th>
-        <th scope="col" style="min-width:220px"> Клиент </th>
-        <th scope="col"> Адрес </th>
-        <th scope="col" style="min-width:280px"> Контакт </th>
-        <th colspan="2" style="min-width:450px"> Описание </th>
-    </tr> <--->
+
     </thead>
+    {% if page_number == '1' or page_number == None or page_number == '2' %}
+    <form action="addrecord_razv/" method="post">
+    {% csrf_token %}
+    <tr>
+        <tr id="cst_id4_{{date_r}}" style="display:none">
+            <input type="hidden" id="page_number_add" name="page_number_add" value="{{ page_obj.number }}">
+            <input type="hidden" name="date" value="{{date_r}}">
+            <th scope="rowgroup"><a href="javascript:add_ln2_reverse('{{date_r}}');"><button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></th>
+            <input id="updcust_id_{{rzv.id}}"  type="hidden" name="customer" value=None>
+            <td> <input type="number" style="min-width:30px" class="form-control" placeholder="#" name="date_id" value="0"> </td>
+            <td ><input type="text" id="updcust_name_{{date_r}}" class="form-control" placeholder="Клиент"  name="customer_name"></td>
+            <td> <textarea id="updcust_address_{{date_r}}" class="form-control" placeholder="Адрес" name="address"></textarea> </td>
+            <td> <textarea id="updcust_contact_{{date_r}}" class="form-control" placeholder="Контакт" name="contact"></textarea> </td>
+            <td> <input type="text" class="form-control" placeholder="Забрать" name="to_do_take"> </td>
+        </tr>
+        <tr class="dropdown" id="cst_id5_{{date_r}}" style="display:none">
+            <td></td>
+            <td></td>
+            <td>
+            <button class="btn btn-success dropdown-toggle" type="button" id="ChooseClientAdd{{date_r}}"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+                Выбрать клиента
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="ChooseClientAdd{{date_r}}">
+
+                  {% for cst in cust %}
+                  <li id="Cust{{date_r}}_{{cst.id}}"><a class="dropdown-item" href="javascript:slc_cst('{{cst.name}}', '{{date_r}}', '{{cst.id}}', '{{cst.address}}', '{{cst.contact}}')">{{cst.name}}</a></li>
+                  {% endfor %}
+              </ul>
+            </td>
+            <td></td>
+            <td></td>
+            <td> <input type="text" class="form-control" placeholder="Сдать" name="to_do_deliver"></td>
+            <td> <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="записать">Записать</button></td>
+        </tr>
+        </form>
+    {% endif %}
+
     {% for rzv in razv %}
         <tbody>
         {% if page_number == '1' or page_number == None or page_number == '2' %}
             <tr id="cst_id_{{rzv.id}}">
-                <th scope="row"><a href="javascript:add_ln2({{rzv.id}});"><button class="btn btn-sm btn-outline-success fw-bold" data-toggle="tooltip" data-placement="top" title="добавить развозку">Добавить</button></a></th>
+                <th scope="row"></th>
                 <td  style="width:70px"><input type="number" class="text-dark form-control" disabled value="{{ rzv.date_id }}"></a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="text-dark">{{ rzv.customer_name }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="text-dark">{{ rzv.address }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="text-dark">{{ rzv.contact }}</a></td>
-                <td><a href="javascript:upd_ln2({{rzv.id}});" class="text-dark">{{ rzv.get_all_todo }}</a></td>
+                <td style="width:180px"><a href="javascript:upd_ln2({{rzv.id}});" class="text-dark">{{ rzv.customer_name }}</a></td>
+                <td class="text-dark">{{ rzv.address }}</td>
+                <td class="text-dark">{{ rzv.contact }}</td>
+                <td class="text-dark">{{ rzv.get_all_todo }}</td>
                 <td ><a href="delete_rzv/{{ rzv.id }}"><button class="btn btn-sm btn-outline-danger fw-bold" data-toggle="tooltip" data-placement="top" title="удалить развозку">Удалить</button></a></td>
             </tr>
 
@@ -131,25 +163,12 @@
             <th scope="rowgroup"><a href="javascript:upd_ln2_reverse({{rzv.id}});"><button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></th>
                 <th colspan="2">
                 <div class="col">
-                    <div
-                     class='input-group'
-                     id='datetimepicker4{{rzv.id}}'
-                     data-td-target-input='nearest'
-                     data-td-target-toggle='nearest'
-                 >
-                   <input
-                     id='datetimepicker4Input{{rzv.id}}'
-                     type='text'
-                     class='form-control'
-                     data-td-target='#datetimepicker4{{rzv.id}}'
-                     name='date'
-                     value="{{ date_r}}"
-                   />
-                   <span
-                     class='input-group-text'
-                     data-td-target='#datetimepicker4{{rzv.id}}'
-                     data-td-toggle='datetimepicker'
-                   >
+                    <div class='input-group' id='datetimepicker4{{rzv.id}}' data-td-target-input='nearest'
+                     data-td-target-toggle='nearest'>
+                   <input id='datetimepicker4Input{{rzv.id}}' type='text' class='form-control'
+                     data-td-target='#datetimepicker4{{rzv.id}}' name='date' value="{{ date_r}}"/>
+                   <span class='input-group-text' data-td-target='#datetimepicker4{{rzv.id}}'
+                     data-td-toggle='datetimepicker'>
                      <span class='bi bi-calendar-date-fill'></span>
                    </span>
                 </div>
@@ -203,40 +222,6 @@
 
         {% endif %}
         </tr>
-    <form action="addrecord_razv/" method="post">
-    {% csrf_token %}
-    <tr>
-        <tr id="cst_id4_{{rzv.id}}" style="display:none">
-            <input type="hidden" id="page_number_add" name="page_number_add" value="{{ page_obj.number }}">
-            <input type="hidden" name="date" value="{{rzv.date}}">
-            <th scope="rowgroup"><a href="javascript:add_ln2_reverse({{rzv.id}});"><button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></th>
-            <input id="updcust_id_{{rzv.id}}"  type="hidden" name="customer" value=None>
-            <td> <input type="number" style="min-width:30px" class="form-control" placeholder="#" name="date_id" value="0"> </td>
-            <td ><input type="text" id="updcust_name_{{rzv.id}}" class="form-control" placeholder="Клиент"  name="customer_name"></td>
-            <td> <textarea id="updcust_address_{{rzv.id}}" class="form-control" placeholder="Адрес" name="address"></textarea> </td>
-            <td> <textarea id="updcust_contact_{{rzv.id}}" class="form-control" placeholder="Контакт" name="contact"></textarea> </td>
-            <td> <input type="text" class="form-control" placeholder="Забрать" name="to_do_take"> </td>
-        </tr>
-        <tr class="dropdown" id="cst_id5_{{rzv.id}}" style="display:none">
-            <td></td>
-            <td></td>
-            <td>
-            <button class="btn btn-success dropdown-toggle" type="button" id="ChooseClientAdd{{rzv.id}}"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
-                Выбрать клиента
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="ChooseClientAdd{{rzv.id}}">
-
-                  {% for cst in cust %}
-                  <li id="Cust{{rzv.id}}_{{cst.id}}"><a class="dropdown-item" href="javascript:slc_cst('{{cst.name}}', '{{rzv.id}}', '{{cst.id}}', '{{cst.address}}', '{{cst.contact}}')">{{cst.name}}</a></li>
-                  {% endfor %}
-              </ul>
-            </td>
-            <td></td>
-            <td></td>
-            <td> <input type="text" class="form-control" placeholder="Сдать" name="to_do_deliver"></td>
-            <td> <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="записать">Записать</button></td>
-        </tr>
-        </form>
     </tr>
 
 
@@ -245,9 +230,7 @@
     {% endfor %}
 {% endfor %}
 </table>
-{% else %}
-    <p class="text-danger">Куда дели развозки, демоны?</p>
-{% endif %}
+
 
 <div class="pagination">
     <span class="step-links">
@@ -257,7 +240,7 @@
         {% endif %}
 
         <span class="current btn btn-outline-secondary fw-bold">
-           {{ page_obj.object_list.4.0|date:"d.m.y" }} - {{ page_obj.object_list.0.0|date:"d.m.y" }} (страница {{ page_obj.number }}  из {{ page_obj.paginator.num_pages }})
+           {{ page_obj.object_list.6.0|date:"d.m.y" }} - {{ page_obj.object_list.0.0|date:"d.m.y" }} (страница {{ page_obj.number }}  из {{ page_obj.paginator.num_pages }})
         </span>
 
         {% if page_obj.has_next %}
@@ -276,8 +259,10 @@
     </span>
 </div>
 
-<script src="{% static 'razvozki/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script>
-<script> new tempusDominus.TempusDominus(document.getElementById('datetimepicker4'), {
+<script async src="{% static 'razvozki/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script>
+{% if page_number == '1' or page_number == None or page_number == '2' %}
+
+<script async> new tempusDominus.TempusDominus(document.getElementById('datetimepicker4'), {
    display: {
      icons:
      {
@@ -297,8 +282,8 @@
 
    }
  });</script>
+{% endif %}
 
-
-<script src="{% static 'razvozki/rzv.js' %}"></script>
+<script async src="{% static 'razvozki/rzv.js' %}"></script>
 </body>
 </html>
