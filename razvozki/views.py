@@ -111,7 +111,7 @@ def updaterecord_rzv(request, id):
     page_num = request.POST['page_number_upd']
     razvozka = Razvozka.objects.get(id=id)
     date = request.POST['date']
-    date = datetime.datetime.strptime(date, '%d.%m.%Y').strftime('%Y-%m-%d')
+    date = datetime.datetime.strptime(date,'%Y-%m-%d').strftime('%Y-%m-%d')
     date_id = request.POST['date_id']
     address = request.POST['address']
     contact = request.POST['contact']
@@ -139,7 +139,7 @@ def main_rzv(request):
 
 def newdate_rzv(request):
     datenew = request.POST['date']
-    datenew = datetime.datetime.strptime(datenew, '%d.%m.%Y').strftime('%Y-%m-%d')
+    datenew = datetime.datetime.strptime(datenew, '%Y-%m-%d').strftime('%Y-%m-%d')
     razvozka = Razvozka(date=datenew, date_id=1, customer_name='', customer=None, address='', contact='',
                         to_do_take='', to_do_deliver='', clr='text-secondary')
     razvozka.save()
@@ -588,3 +588,8 @@ def export_rzv(request):
 #    Razvozka.objects.bulk_create(Razvozka_import.objects.All)
     return HttpResponseRedirect(reverse('razvozki:admin'))
 
+def updrzv_txt(request):
+    f = open('razvozki/static/razvozki/upd_rzv.txt', 'r')
+    file_content = f.read()
+    f.close()
+    return HttpResponse(file_content, content_type="text/plain")
