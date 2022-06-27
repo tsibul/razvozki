@@ -54,9 +54,9 @@ function slc_cst(cst_name, rzv_id, cst_id, cst_address, cst_contact){
     var cust_address = cst_address;
     var cust_contact = cst_contact;
     document.getElementById(updcust_name).value = cust_name;
-    document.getElementById(updcust_id).value = cust_id;
     document.getElementById(updcust_address).value = cust_address;
     document.getElementById(updcust_contact).value = cust_contact;
+    document.getElementById(updcust_id).value = cust_id;
 
 }
 
