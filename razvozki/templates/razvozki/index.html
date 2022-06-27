@@ -6,10 +6,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Popper js -->
-<script async src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js"
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js"
       crossorigin="anonymous"></script>
     <!-- Tempus Dominus JavaScript -->
-<script async src="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/tempus-dominus.js"
+<script src="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/tempus-dominus.js"
       crossorigin="anonymous"></script>
     <!-- Tempus Dominus Styles -->
     <link href="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/css/tempus-dominus.css"
@@ -143,15 +143,22 @@
     {% for rzv in razv %}
         <tbody>
         {% if page_number == '1' or page_number == None or page_number == '2' %}
+        <form action="updaterecord_rzv/{{ rzv.id }}" method="post">
+        {% csrf_token %}
             <tr id="cst_id_{{rzv.id}}">
                 <th scope="row"></th>
-                <td  style="width:70px"><input type="number" class="text-dark form-control" disabled value="{{ rzv.date_id }}"></a></td>
-                <td style="width:180px"><a href="javascript:upd_ln2({{rzv.id}});" class="text-dark">{{ rzv.customer_name }}</a></td>
+                <td  style="width:70px">{{ rzv.date_id }}</td>
+                <td style="width:180px">
+                    <a href="javascript:upd_ln2({{rzv.id}});"
+                       class="text-dark">{{ rzv.customer_name }}</a>
+                </td>
                 <td class="text-dark">{{ rzv.address }}</td>
                 <td class="text-dark">{{ rzv.contact }}</td>
                 <td class="text-dark">{{ rzv.get_all_todo }}</td>
                 <td ><a href="delete_rzv/{{ rzv.id }}"><button class="btn btn-sm btn-outline-danger fw-bold" data-toggle="tooltip" data-placement="top" title="удалить развозку">Удалить</button></a></td>
             </tr>
+            <tr id='cst_id0_{{rzv.id}}'></tr>
+        </form>
 
         <form action="updaterecord_rzv/{{ rzv.id }}" method="post">
         <tr id="cst_id2_{{rzv.id}}" style="display:none">
@@ -259,10 +266,10 @@
     </span>
 </div>
 
-<script async src="{% static 'razvozki/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script>
+<script src="{% static 'razvozki/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script>
 {% if page_number == '1' or page_number == None or page_number == '2' %}
 
-<script async> new tempusDominus.TempusDominus(document.getElementById('datetimepicker4'), {
+<script> new tempusDominus.TempusDominus(document.getElementById('datetimepicker4'), {
    display: {
      icons:
      {
@@ -284,6 +291,6 @@
  });</script>
 {% endif %}
 
-<script async src="{% static 'razvozki/rzv.js' %}"></script>
+<script src="{% static 'razvozki/rzv.js' %}"></script>
 </body>
 </html>
