@@ -96,17 +96,12 @@
     </tr>
 
     <tr id="cst_id5_{{date_r|date:'Y-m-d'}}" style="display:none" data-placement="middle">
+    <form action="addrecord_razv/" method="post" id="cst_id8_{{date_r|date:'Y-m-d'}}">
+    {% csrf_token %}
         <td class="dropdown p-1">
-        <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" id="ChooseClientAdd{{date_r}}"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
-            Выбрать клиента
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="ChooseClientAdd{{date_r}}">
-              {% for cst in cust %}
-              <li id="Cust{{date_r}}_{{cst.id}}"><a class="dropdown-item" href="javascript:slc_cst('{{cst.name}}', '{{date_r|date:'Y-m-d'}}', '{{cst.id}}', '{{cst.address}}', '{{cst.contact}}')">{{cst.name}}</a></li>
-              {% endfor %}
-          </ul>
-        <form action="addrecord_razv/" method="post" id="cst_id8_{{date_r|date:'Y-m-d'}}">
-        {% csrf_token %}
+        <div id="dropdown_id_{{date_r|date:'Y-m-d'}}">
+        </div>
+
         <input type="hidden" id="page_number_add" name="page_number_add" value="{{ page_obj.number }}">
             <p><input type="hidden" id="updcust_id_{{date_r|date:'Y-m-d'}}" name="customer" value=None></p>
             <a href="javascript:add_ln2_reverse('{{date_r|date:'Y-m-d'}}');">

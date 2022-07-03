@@ -2,6 +2,8 @@
 
 import datetime
 from datetime import date, timedelta
+
+from django.core.serializers import xml_serializer
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator
 from .models import Razvozka, Customer, Customer_clr, Razvozka_import
@@ -48,7 +50,7 @@ def index(request):
     datenew = datenew.strftime('%Y-%m-%d')
     #    date = datetime.date.today()
     rzv = Razvozka.objects.order_by('-date', 'date_id')
-    cust = Customer.objects.order_by('name')
+    cust = list(Customer.objects.order_by('name'))
 
     f_rzv0 = {}
     for r in rzv:
@@ -593,3 +595,19 @@ def updrzv_txt(request):
     file_content = f.read()
     f.close()
     return HttpResponse(file_content, content_type="text/plain")
+
+def cust_xml(request):
+    from django.core import serializers
+
+#    with open("customers.xml", "w") as out:
+#        data = serializers.serialize("xml", Customer_clr.objects.all().order_by('name'))
+    cust = Customer.objects.all().order_by('name')
+    data = '<?xml version="1.0" encoding="UTF-8"?><CUSTOMERS>'
+    for cst in cust:
+        data = data + ('<Customer><cst_id>' + str(cst.id) + '</cst_id>' +
+        '<name>' + cst.name + '</name>' + '<address>' + cst.address + ' ' + '</address>' +
+        '<contact>' + cst.contact + ' ' + '</contact></Customer>')
+    data = data + '</CUSTOMERS>'
+
+#    pprint.pprint(data)
+    return HttpResponse(data,  content_type="text/xml")

@@ -8,6 +8,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('addrecord_razv/', views.addrecord_razv, name='addrecord_razv'),
     path('delete_rzv/<int:id>', views.delete_rzv, name='delete_rzv'),
+    path('upd_rzv_txt', views.updrzv_txt),
     path('updaterecord_rzv/<int:id>', views.updaterecord_rzv, name='updaterecord_rzv'),
     path('main', views.main_rzv, name='main_rzv'),
     path('newdate_rzv', views.newdate_rzv, name='newdate_rzv'),
@@ -27,6 +28,7 @@ urlpatterns = [
     path('clean_rzv', views.clean_rzv, name='clean_rzv'),
     path('clean_cst', views.clean_cst, name='clean_cst'),
     path('export_rzv', views.export_rzv, name='export_rzv'),
+    path('customers.xml', views.cust_xml, name='customers.xml'),
 
 ]
 

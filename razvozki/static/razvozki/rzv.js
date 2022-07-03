@@ -35,6 +35,38 @@ function add_ln_reverse(new_ln){
 function add_ln2(cst_){
     var cst4 = 'cst_id4_' + cst_;
     var cst5 = 'cst_id5_' + cst_;
+    var date_r = cst_;
+
+    var line_id = 'dropdown_id_' + date_r;
+
+    var x,xmlhttp,xmlDoc;
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", "customers.xml", false);
+    xmlhttp.send();
+    xmlDoc = xmlhttp.responseXML;
+    x = xmlDoc.getElementsByTagName("Customer");
+
+    var code_html = ('' +
+        '<button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" id="ChooseClientAdd' +
+        date_r + '"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">' +
+        'Выбрать клиента</button>' +
+        '<ul class="dropdown-menu" aria-labelledby="ChooseClientAdd' + date_r + '">')
+
+
+    for (i = 0; i <x.length; i++) {
+        var cst_id = x[i].getElementsByTagName("cst_id")[0].childNodes[0].nodeValue;
+        var cst_name =  x[i].getElementsByTagName("name")[0].childNodes[0].nodeValue;
+        var cst_address =  x[i].getElementsByTagName("address")[0].childNodes[0].nodeValue;
+        var cst_contact =  x[i].getElementsByTagName("contact")[0].childNodes[0].nodeValue;
+        code_html += ('<li id="Cust' + date_r + '_'+ cst_id + '">' +
+        '<a class="dropdown-item" href="javascript:slc_cst(' +
+        "'" + cst_name + "', '" + date_r + "', '" + cst_id +"', '" +
+        cst_address + "', '" + cst_contact + "')" + '">' + cst_name + '</a></li>')
+        }
+        code_html += '</ul>'
+
+    document.getElementById(line_id).innerHTML = code_html;
+
     document.getElementById(cst4).style.display='table-row';
     document.getElementById(cst5).style.display='table-row';}
 
@@ -244,3 +276,105 @@ function upd_rzv_reverse(cst_, date, date_id, customer_name, address, contact, p
    document.getElementById(cst).innerHTML = code_html1;
 
     }
+
+function add_rzv(date_r, page_number) {
+   var cst6 = 'cst_id6_' + date_r;
+   var cst7 = 'cst_id7_' + date_r;
+   var cst8 = 'cst_id8_' + date_r;
+
+
+   var code_html6 = ('<tr>'+
+
+        '<input type="hidden" id="' + page_number +'" name="' + page_number + '" value="' + page_number + '">' +
+        '<input type="hidden" name="date" value="' + date_r + '">' +
+        '<th scope="rowgroup"><a href="javascript:add_rzv_reverse(' +
+        "'" + date_r + "'" + ');">' +
+            '<button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></th>' +
+        '<input id="updcust_id_{{rzv.id}}"  type="hidden" name="customer" value=None>' +
+        '<td> <input type="number" style="min-width:30px" class="form-control" placeholder="#" name="date_id" value="0"> </td>' +
+        '<td ><input type="text" id="updcust_name_{{date_r}}" class="form-control" placeholder="Клиент"  name="customer_name"></td>' +
+        '<td> <textarea id="updcust_address_{{date_r}}" class="form-control" placeholder="Адрес" name="address"></textarea> </td>' +
+        '<td> <textarea id="updcust_contact_{{date_r}}" class="form-control" placeholder="Контакт" name="contact"></textarea> </td>' +
+        '<td> <input type="text" class="form-control" placeholder="Забрать" name="to_do_take"> </td></tr>');
+
+   var code_html7 = (''+
+   '<tr class="dropdown" id="cst_id7_' + date_r + '">' +
+        '<td></td>' +
+        '<td></td>' +
+        '<td>' +
+        '<button class="btn btn-success dropdown-toggle" type="button" id="ChooseClientAdd{{date_r}}"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">' +
+            'Выбрать клиента' +
+        '</button>' +
+        '<ul class="dropdown-menu" aria-labelledby="ChooseClientAdd' + date_r + '">' +
+
+              '{% for cst in cust %}' +
+              "<li id='Cust{{date_r}}_{{cst.id}}'><a class='dropdown-item' href='javascript:slc_cst('{{cst.name}}', '{{date_r}}', '{{cst.id}}', '{{cst.address}}', '{{cst.contact}}')'>{{cst.name}}</a></li>" +
+              '{% endfor %}' +
+          '</ul>' +
+        '</td>' +
+        '<td></td>' +
+        '<td></td>' +
+        '<td> <input type="text" class="form-control" placeholder="Сдать" name="to_do_deliver"></td>' +
+        '<td> <input type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="middle" value="Записать"></td>' +
+   '</tr>');
+
+   var code_html8 = ('' +
+        '<input type="text" id="updcust0_name_{{date_r}}" class="form-control" placeholder="Клиент"  name="customer_name">' +
+        '<button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button>' +
+        '<input type="number" style="min-width:30px" class="form-control" placeholder="#" name="date_id" value="0">' +
+        '<textarea id="updcust0_address_{{date_r}}" class="form-control" placeholder="Адрес" name="address"></textarea>' +
+        '<textarea id="updcust0_contact_{{date_r}}" class="form-control" placeholder="Контакт" name="contact"></textarea>' +
+        '<input type="text" class="form-control" placeholder="Забрать" name="to_do_take">' +
+        '<input type="text" class="form-control" placeholder="Сдать" name="to_do_deliver">'+
+        '<input type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="middle" value="Записать">');
+
+        document.getElementById(cst8).innerHTML = code_html8;
+}
+
+function add_rzv_reverse(date_r) {
+   var cst6 = 'cst_id6_' + date_r;
+   var cst7 = 'cst_id7_' + date_r;
+   var cst8 = 'cst_id8_' + date_r;
+
+
+   var code_html6 = '';
+   var code_html7 = '';
+   var code_html8 = '';
+
+
+   document.getElementById(cst6).innerHTML = code_html6;
+   document.getElementById(cst7).innerHTML = code_html7;
+   document.getElementById(cst8).innerHTML = code_html8;
+}
+
+function cst_list(date_r) {
+    var line_id = 'dropdown_id_' + date_r;
+
+    var x,xmlhttp,xmlDoc
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", "customers.xml", false);
+    xmlhttp.send();
+    xmlDoc = xmlhttp.responseXML;
+    x = xmlDoc.getElementsByTagName("object");
+
+    var code_html = ('<a href="javascript:cst_list(' + '{{' + date_r + "|date:'Y-m-d'}'" +');">' +
+        '<button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" id="ChooseClientAdd{{' +
+        date_r + '}}"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">' +
+        'Выбрать клиента</button> </a>' +
+        '<ul class="dropdown-menu" aria-labelledby="ChooseClientAdd{{' + date_r + '}}">')
+
+
+    for (i = 0; i <x.length; i++) {
+        var cst_id = x[i].getElementsByTagName("pk")[0].childNodes[0].nodeValue;
+        var cst_name =  x[i].getElementsByTagName("name")[0].childNodes[0].nodeValue;
+        var cst_address =  x[i].getElementsByTagName("address")[0].childNodes[0].nodeValue;
+        var cst_contact =  x[i].getElementsByTagName("contact")[0].childNodes[0].nodeValue;
+        code_html += ('<li id="Cust{{' + date_r + '}}_{{'+ cst.id + '}}">' +
+        '<a class="dropdown-item" href="javascript:slc_cst(' +
+        "'{{" + cst_name + "}}', '{{" + date_r + "|date:'Y-m-d'}}', '{{" + cst_id +"}}', '{{" +
+        cst_address + "}}', '{{" + cst_contact + "}}')" + '">{{' + cst_name + '}}</a></li>')
+        }
+        code_html += '</ul>'
+
+    document.getElementById(line_id).innerHTML = code_html;
+}
