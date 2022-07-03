@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <link href="{% static 'razvozki/bootstrap.min.css' %}" rel="stylesheet" crossorigin="anonymous">
+
+    <title>Поиск</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+</head>
+
+<body>
+<p><a href="{% url 'razvozki:index' %}" class="btn btn-outline-danger d-print-none">Назад</a></p>
+<table class="table table-hover">
+    {% if navi == "razvozka" %}
+    <thead>
+    <tr class="table-success">
+    <th></th>
+    <th> Дата </th>
+    <th> Клиент </th>
+    <th> Адрес </th>
+    <th> Контакт </th>
+    <th> Развозка </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for rzv in page_obj %}
+    <tr>
+    <td></td>
+    <td>{{rzv.date|date:'d.m.Y'}}</td>
+    <td>{{rzv.customer_name}}</td>
+    <td>{{rzv.address}}</td>
+    <td>{{rzv.contact}}</td>
+    <td>Сдать/Забрать {{rzv.to_do_take}}/{{rzv.to_do_deliver}} </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    {% elif navi == 'customers' %}
+    <thead>
+    <tr class="table-success">
+    <th></th>
+    <th> Клиент </th>
+    <th> Адрес </th>
+    <th> Контакт </th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for cst in page_obj %}
+    <tr>
+    <td></td>
+    <td>{{cst.name}}</td>
+    <td>{{cst.address}}</td>
+    <td>{{cst.customer}}</td>
+    </tr>
+    {% endfor %}
+    {% endif %}
+    </tbody>
+</table>
+
+</body>
+</html>

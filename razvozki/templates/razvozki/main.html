@@ -100,8 +100,9 @@
 
       {% endif %}
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Поиск (нету)" aria-label="Search">
+      <form action="search_/{{navi}}" method="post" class="d-flex" id="search_">
+        {% csrf_token %}
+        <input class="form-control me-2" type="text" placeholder="Поиск (есть)" aria-label="Search_" name="search_">
         <button class="btn btn-outline-success" type="submit">Поиск</button>
       <p style="color: white"> v1.2 </p>
       </form>

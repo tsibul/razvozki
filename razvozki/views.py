@@ -611,3 +611,18 @@ def cust_xml(request):
 
 #    pprint.pprint(data)
     return HttpResponse(data,  content_type="text/xml")
+
+
+def search_(request, navi):
+    srch = request.POST['search_']
+
+    if navi == 'razvozka':
+        razv1 = list(Razvozka.objects.filter(customer_name__icontains=srch).order_by('-date'))
+        razv2 = list(Razvozka.objects.filter(address__icontains=srch).order_by('-date'))
+    if navi == 'customers':
+        razv1 = list(Customer_clr.objects.filter(name__icontains=srch).order_by('name'))
+        razv2 = list(Customer_clr.objects.filter(address__icontains=srch).order_by('name'))
+    razv = razv1 +razv2
+
+    context = {'navi': navi, 'page_obj': razv, 'srch':srch}
+    return render(request, 'razvozki/search_.html', context)
