@@ -72,7 +72,7 @@
     <tr class="table-success">
         <th scope="col">
         {% if page_number == '1' or page_number == None or page_number == '2' %}
-        <a href="javascript:add_ln2('{{date_r|date:'Y_m_d'}}');"><button class="btn btn-sm btn-outline-success fw-bold" data-toggle="tooltip" data-placement="top" title="добавить развозку">Добавить</button></a>
+        <a href="javascript:add_ln2('{{date_r|date:'Y-m-d'}}');"><button class="btn btn-sm btn-outline-success fw-bold" data-toggle="tooltip" data-placement="top" title="добавить развозку">Добавить</button></a>
         {% endif %}
         </th>
         <th colspan="2" style="text-align:right"> Развозка на </th>
@@ -85,45 +85,55 @@
     </tr>
 
     </thead>
+
     {% if page_number == '1' or page_number == None or page_number == '2' %}
-    <form action="addrecord_razv/" method="post">
-    {% csrf_token %}
-    <tr>
-        <tr id="cst_id4_{{date_r|date:'Y_m_d'}}" style="display:none">
-            <input type="hidden" id="page_number_add" name="page_number_add" value="{{ page_obj.number }}">
+    <tbody>
+
+    <tr class="dropdown" id="cst_id4_{{date_r|date:'Y-m-d'}}" style="display:none">
+        <td></td>
+        <td colspan="2">
+      </td>
+    </tr>
+
+    <tr id="cst_id5_{{date_r|date:'Y-m-d'}}" style="display:none" data-placement="middle">
+        <td class="dropdown p-1">
+        <button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" id="ChooseClientAdd{{date_r}}"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+            Выбрать клиента
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="ChooseClientAdd{{date_r}}">
+              {% for cst in cust %}
+              <li id="Cust{{date_r}}_{{cst.id}}"><a class="dropdown-item" href="javascript:slc_cst('{{cst.name}}', '{{date_r|date:'Y-m-d'}}', '{{cst.id}}', '{{cst.address}}', '{{cst.contact}}')">{{cst.name}}</a></li>
+              {% endfor %}
+          </ul>
+        <form action="addrecord_razv/" method="post" id="cst_id8_{{date_r|date:'Y-m-d'}}">
+        {% csrf_token %}
+        <input type="hidden" id="page_number_add" name="page_number_add" value="{{ page_obj.number }}">
+            <p><input type="hidden" id="updcust_id_{{date_r|date:'Y-m-d'}}" name="customer" value=None></p>
+            <a href="javascript:add_ln2_reverse('{{date_r|date:'Y-m-d'}}');">
+            <button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="bottom" title="отменить">Отменить</button>
+            </a>
+        </td>
+        <td>
+            <input type="number" style="min-width:30px" class="form-control" placeholder="#" name="date_id" value="0">
+        </td>
+        <td>
+            <p>
+            <input type="text" id="updcust_name_{{date_r|date:'Y-m-d'}}" class="form-control" placeholder="Клиент"  name="customer_name">
+            </p>
             <input type="hidden" name="date" value="{{date_r}}">
-            <th scope="rowgroup"><a href="javascript:add_ln2_reverse('{{date_r|date:'Y_m_d'}}');"><button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></th>
-            <input id="updcust_id_{{rzv.id}}"  type="hidden" name="customer" value=None>
-            <td> <input type="number" style="min-width:30px" class="form-control" placeholder="#" name="date_id" value="0"> </td>
-            <td ><input type="text" id="updcust_name_{{date_r}}" class="form-control" placeholder="Клиент"  name="customer_name"></td>
-            <td> <textarea id="updcust_address_{{date_r}}" class="form-control" placeholder="Адрес" name="address"></textarea> </td>
-            <td> <textarea id="updcust_contact_{{date_r}}" class="form-control" placeholder="Контакт" name="contact"></textarea> </td>
-            <td> <input type="text" class="form-control" placeholder="Забрать" name="to_do_take"> </td>
-        </tr>
-        <tr class="dropdown" id="cst_id5_{{date_r|date:'Y_m_d'}}" style="display:none">
-            <td></td>
-            <td></td>
-            <td>
-            <button class="btn btn-success dropdown-toggle" type="button" id="ChooseClientAdd{{date_r}}"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
-                Выбрать клиента
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="ChooseClientAdd{{date_r}}">
+        </td>
+        <td> <textarea id="updcust_address_{{date_r|date:'Y-m-d'}}" class="form-control" placeholder="Адрес" name="address"></textarea> </td>
+        <td> <textarea id="updcust_contact_{{date_r|date:'Y-m-d'}}" class="form-control" placeholder="Контакт" name="contact"></textarea> </td>
+        <td>
+            <p><input type="text" class="form-control" placeholder="Сдать" name="to_do_deliver"></p>
+            <input type="text" class="form-control" placeholder="Забрать" name="to_do_take"> </td>
+        <td class="align-middle p-1"> <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="bottom" title="записать">Записать</button></td>
+    </form>
+    </tr>
 
-                  {% for cst in cust %}
-                  <li id="Cust{{date_r}}_{{cst.id}}"><a class="dropdown-item" href="javascript:slc_cst('{{cst.name}}', '{{date_r}}', '{{cst.id}}', '{{cst.address}}', '{{cst.contact}}')">{{cst.name}}</a></li>
-                  {% endfor %}
-              </ul>
-            </td>
-            <td></td>
-            <td></td>
-            <td> <input type="text" class="form-control" placeholder="Сдать" name="to_do_deliver"></td>
-            <td> <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="записать">Записать</button></td>
-        </tr>
-        </form>
+
     {% endif %}
-
     {% for rzv in razv %}
-        <tbody>
         {% if page_number == '1' or page_number == None or page_number == '2' %}
 
             <tr id="cst_id_{{rzv.id}}">
@@ -135,47 +145,45 @@
                 </td>
                 <td class="text-dark">{{ rzv.address }}</td>
                 <td class="text-dark">{{ rzv.contact }}</td>
-                <td class="text-dark">{{ rzv.get_all_todo }}</td>
+                <td class="text-dark" style="width:360px">{{ rzv.get_all_todo }}</td>
                 <td ><a href="delete_rzv/{{ rzv.id }}"><button class="btn btn-sm btn-outline-danger fw-bold" data-toggle="tooltip" data-placement="top" title="удалить развозку">Удалить</button></a></td>
             </tr>
             <tr id='cst_id0_{{rzv.id}}'></tr>
 
-        <form action="updaterecord_rzv/{{ rzv.id }}" method="post">
         <tr id="cst_id2_{{rzv.id}}" style="display:none">
+        </tr>
+        <form action="updaterecord_rzv/{{ rzv.id }}" method="post">
         {% csrf_token %}
+        <tr id="cst_id3_{{rzv.id}}" style="display:none">
             <input type="hidden" id="page_number_upd" name="page_number_upd" value="{{ page_obj.number }}">
-            <input type="hidden" name="date" value="{{date_r}}">
             <input id="updcust_id_{{rzv.id}}_"  type="hidden" name="customer" value=None>
-
-            <th scope="rowgroup"><a href="javascript:upd_ln2_reverse({{rzv.id}});"><button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></th>
-                <th colspan="2">
-                <div class="col align-middle p-1">
-                <input type="date"  name="date" value="{{ rzv.date|date:'Y-m-d' }}">
-                </div>
-
-            </th>
-           <td>
-
+            <td>
+                <a href="javascript:upd_ln2_reverse({{rzv.id}});"><button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button>
+                </a>
             </td>
-            <td></td>
-            <td> <input type="text" class="form-control  {{rzv.clr}}" id="to_do_take" placeholder="Забрать" name="to_do_take" value="{{ rzv.to_do_take }}"> </td>
-            </tr>
-            <tr id="cst_id3_{{rzv.id}}" style="display:none">
-            <td></td>
             <td> <input type="number" style="min-width:30px" class="form-control" id="date_id" placeholder="#" name="date_id" value="{{ rzv.date_id }}"> </td>
+            <td>
             {% if rzv.customer is None %}
-                <td> <input type="text" class="form-control " id="customer_name" placeholder="Клиент" name="customer_name" value="{{ rzv.customer_name }}"> </td>
+                <input type="text" class="form-control " id="customer_name" placeholder="Клиент" name="customer_name" value="{{ rzv.customer_name }}">
             {% else %}
-                <td> <li type="text" class="form-control  bg-light">{{ rzv.customer_name }}</li> </td>
+                <li type="text" class="form-control  bg-light">{{ rzv.customer_name }}</li>
             {% endif %}
+            <br>
+                <input type="date"  name="date" value="{{ rzv.date|date:'Y-m-d' }}">
+            </td>
             <td><textarea class="form-control  " id="address" placeholder="Адрес" name="address"> {{ rzv.address }} </textarea></td>
             <td><textarea class="form-control  " id="contact" placeholder="Контакт" name="contact"> {{ rzv.contact }}</textarea></td>
-            <td> <input type="text" class="form-control " id="to_do_deliver" placeholder="Сдать" name="to_do_deliver" value="{{ rzv.to_do_deliver }}"></td>
-            <td> <button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="записать">Записать</button></td>
-            </tr>
+            <td>
+            <p>
+                <input type="text" class="form-control  {{rzv.clr}}" id="to_do_take" placeholder="Забрать" name="to_do_take" value="{{ rzv.to_do_take }}">
+            </p>
+                <input type="text" class="form-control " id="to_do_deliver" placeholder="Сдать" name="to_do_deliver" value="{{ rzv.to_do_deliver }}">
+            </td>
+            <td> <input type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="bottom" value="Записать"></td>
+        </tr>
         </form>
         {% else %}
-            <tr>
+        <tr>
                 <th scope="row"></th>
                 <td  style="width:30px" class="text-dark"><input type="number" class="form-control" disabled value="{{ rzv.date_id }}"></a></td>
                 <td class="text-dark">{{ rzv.customer_name }}</td>
