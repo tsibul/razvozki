@@ -50,7 +50,8 @@ function add_ln2(cst_){
         '<button class="btn btn-sm btn-outline-success dropdown-toggle" type="button" id="ChooseClientAdd' +
         date_r + '"  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">' +
         'Выбрать клиента</button>' +
-        '<ul class="dropdown-menu" aria-labelledby="ChooseClientAdd' + date_r + '">')
+        '<ul class="dropdown-menu" aria-labelledby="ChooseClientAdd' + date_r + '" id="ChooseCust" >' +
+        '<input type="text" class="dropdown-item" placeholder="Поиск.." id="CustInput" onkeyup="filterCust()">')
 
 
     for (i = 0; i <x.length; i++) {
@@ -69,6 +70,23 @@ function add_ln2(cst_){
 
     document.getElementById(cst4).style.display='table-row';
     document.getElementById(cst5).style.display='table-row';}
+
+
+function filterCust() {
+  var input, filter, ul, li, a, i;
+  input = document.getElementById("CustInput");
+  filter = input.value.toUpperCase();
+  div = document.getElementById("ChooseCust");
+  a = div.getElementsByTagName("a");
+  for (i = 0; i < a.length; i++) {
+    txtValue = a[i].textContent || a[i].innerText;
+    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+      a[i].style.display = "";
+    } else {
+      a[i].style.display = "none";
+    }
+  }
+}
 
 function add_ln2_reverse(cst_){
     var cst4 = 'cst_id4_' + cst_;
