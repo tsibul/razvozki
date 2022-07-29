@@ -81,7 +81,13 @@ def index(request):
 def addrecord_razv(request):
     page_num = request.POST['page_number_add']
     date = request.POST['date']
-    date = datetime.datetime.strptime(date, '%B %d, %Y').strftime('%Y-%m-%d')
+    try:
+        date = datetime.datetime.strptime(date, '%B %d, %Y').strftime('%Y-%m-%d')
+    except:
+        try:
+            date = datetime.datetime.strptime(date, '%b. %d, %Y').strftime('%Y-%m-%d')
+        except:
+                date = datetime.datetime.strptime(date, '%bt. %d, %Y').strftime('%Y-%m-%d')
     date_id = request.POST['date_id']
     customer = request.POST['customer']
     if customer == 'None':
