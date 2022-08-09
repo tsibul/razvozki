@@ -172,6 +172,11 @@ def customers(request, order):
 
 @transaction.atomic()
 def cst_double_search(request):
+    """
+    looking for doubles
+    :param request:
+    :return: change color to danger
+    """
     order = request.POST['order_doub']
     cust = Customer_clr.objects.all()
     for cst1 in cust:
@@ -224,6 +229,11 @@ def customers_clr(request):
 
 
 def cust_trim_replace(cst1, cst2):
+    """
+    :param cst1: first customer to compare
+    :param cst2: second customer to compare
+    :return:
+    """
     cst1_name = cst1.name.replace('ИП ', '')
     cst1_name = cst1_name.replace(' ', '')
     cst1_name = cst1_name.replace('-', '')
@@ -258,6 +268,12 @@ def cust_trim_replace(cst1, cst2):
 
 
 def find_dubl_cst(cst1, cust):
+    """
+    looking doubles in db
+    :param cst1: element if have double
+    :param cust: db in which searching element
+    :return: True if cst1 in cust db
+    """
     result = False
     cst_id = ''
     for cst2 in cust:
@@ -322,6 +338,10 @@ def addrecord_cst(request):
 
 
 def print_rzv(request, date_r):
+    """
+    :param date_r: date for print report
+    :return:
+    """
     razvozka = []
     for rzv in Razvozka.objects.filter(date=date_r).order_by('date_id'):
         razvozka.append(rzv)
@@ -331,9 +351,14 @@ def print_rzv(request, date_r):
 
 
 def double(request, order):
+    """
+    looking for double customers and show them (color=danger)
+    :param request:
+    :param order: order of db
+    :return:
+    """
     navi = 'double'
     cust = []
-    #    sust = Customer_clr.objects.filter(clr='text-danger')
     for cst in Customer_clr.objects.filter(clr='text-danger').order_by(order, 'id'):
         cust.append(cst)
     context = {'navi': navi, 'cust': cust, 'order': order}
@@ -341,6 +366,11 @@ def double(request, order):
 
 
 def unite_cst(request):
+    """
+    unite two customers checked
+    :param request: receive what was checked
+    :return:
+    """
     order = request.POST['order_un']
     cst_lv = request.POST['cst_lv']
     cst_dt = request.POST['cst_dt']
@@ -607,10 +637,9 @@ def updrzv_txt(request):
     return HttpResponse(file_content, content_type="text/plain")
 
 def cust_xml(request):
-    from django.core import serializers
-
-#    with open("customers.xml", "w") as out:
-#        data = serializers.serialize("xml", Customer_clr.objects.all().order_by('name'))
+    """
+    :return: Customer db in xml format
+    """
     cust = Customer.objects.all().order_by('name')
     data = '<?xml version="1.0" encoding="UTF-8"?><CUSTOMERS>'
     for cst in cust:
