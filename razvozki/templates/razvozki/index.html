@@ -5,18 +5,12 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Popper js
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js"
-      crossorigin="anonymous"></script> -->
-    <!-- Tempus Dominus JavaScript
-<script src="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/tempus-dominus.js"
-      crossorigin="anonymous"></script> -->
-    <!-- Tempus Dominus Styles
-    <link href="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/css/tempus-dominus.css"
-      rel="stylesheet" crossorigin="anonymous"> -->
 
-    <!-- Bootstrap CSS -
-    <link href="{% static 'razvozki/bootstrap.min.css' %}" rel="stylesheet" crossorigin="anonymous"> -->
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+
 
     <link rel="stylesheet" href="{% static 'razvozki/style.css' %}">
     <title > Развозки </title>
@@ -81,13 +75,18 @@
         {% csrf_token %}
         <th colspan="2"> <button type="submit" class="btn btn-outline-success btn-sm fw-bold"><i class="bi bi-printer-fill" style="currentColor"></i> Печать</button></th>
     </form>
-        <td></td>
+        <td class="text-end">
+        <a href="javascript:colapse('date_{{date_r|date:'Y-m-d' }}');" id="collapse_date_{{date_r|date:'Y-m-d'}}_but">
+        <button type=button class="btn btn-sm btn-outline-secondary">
+            <i class="fas fa-minus"></i>
+        </button></a>
+        </td>
     </tr>
 
     </thead>
+    <tbody  id="collapse_date_{{date_r|date:'Y-m-d'}}" style="display:table-row-group">
 
     {% if page_number == '1' or page_number == None or page_number == '2' %}
-    <tbody>
 
     <tr class="dropdown" id="cst_id4_{{date_r|date:'Y-m-d'}}" style="display:none">
         <td></td>
@@ -193,9 +192,10 @@
     </tr>
 
 
+    {% endfor %}
     </tbody>
 
-    {% endfor %}
+
 {% endfor %}
 </table>
 
@@ -216,7 +216,7 @@
             <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-success fw-bold">последняя &raquo;</a>
         {% endif %}
     </span>
-</div>
+</div><!-- pagination -->
 
 <script src="{% static 'razvozki/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script>
 {% if page_number == '1' or page_number == None or page_number == '2' %}
