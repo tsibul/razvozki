@@ -72,9 +72,13 @@ def index(request):
             date_range.append([i + 1, 'до ' + date_tmp])
         except:
             date_range.append(['нет данных'])
+    rzv_len = []
+    for rzv in f_rzv:
+        rzv_len.append([rzv, len(f_rzv0[rzv])])
+
 
     context = {'f_rzv': f_rzv, 'datenew': datenew, 'navi': navi, 'cust': cust, 'page_obj': page_obj,
-               'page_number': page_number, 'date_range': date_range}
+               'page_number': page_number, 'date_range': date_range, 'rzv_len': rzv_len}
     return render(request, 'razvozki/index.html', context)
 
 

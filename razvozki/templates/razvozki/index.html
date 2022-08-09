@@ -73,8 +73,16 @@
         <th colspan="1">{{ date_r|date:"d.m.Y" }}</th>
     <form action="print_rzv/{{ date_r|date:'Y-m-d'}}" method="post">
         {% csrf_token %}
-        <th colspan="2"> <button type="submit" class="btn btn-outline-success btn-sm fw-bold"><i class="bi bi-printer-fill" style="currentColor"></i> Печать</button></th>
+        <th colspan="1"> <button type="submit" class="btn btn-outline-success btn-sm fw-bold"><i class="bi bi-printer-fill" style="currentColor"></i> Печать</button></th>
     </form>
+        <td class="text-danger">
+        {% for rzv in rzv_len %}
+        {% if date_r == rzv.0 %}
+        развозок: {{rzv.1}}
+        {% endif %}
+        {% endfor %}
+
+        </td>
         <td class="text-end">
         <a href="javascript:colapse('date_{{date_r|date:'Y-m-d' }}');" id="collapse_date_{{date_r|date:'Y-m-d'}}_but">
         <button type=button class="btn btn-sm btn-outline-secondary">
