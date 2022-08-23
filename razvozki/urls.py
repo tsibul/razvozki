@@ -18,6 +18,9 @@ urlpatterns = [
     path('customers/delete_cst/<int:id>', views.delete_cst, name='delete_cst'),
     path('updaterecord_cst/<from_where>', views.updaterecord_cst, name='updaterecord_cst'),
     path('print_rzv/<str:date_r>', views.print_rzv, name='print_rzv'),
+    path('fulfilled_chg/<int:id>', views.fulfilled_chg, name='fulfilled_chg'),
+    path('deliver_to/<int:id>', views.deliver_to, name='deliver_to'),
+    path('return_all/<int:id>', views.return_all, name='return_all'),
     path('double/<order>', views.double, name='double'),
     path('double/unite_cst/', views.unite_cst, name='unite_cst'),
     path('admin', views.admin, name='admin'),
@@ -31,6 +34,7 @@ urlpatterns = [
     path('customers.xml', views.cust_xml, name='customers.xml'),
     path('search_/<navi>', views.search_, name='search_'),
     path('customers/search_/<navi>', views.search_, name='search_'),
+    path('rzv_return.xml/<int:id>', views.rzv_return_xml, name='rzv_return.xml'),
 
 ]
 
