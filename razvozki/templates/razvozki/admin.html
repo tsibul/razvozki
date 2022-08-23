@@ -1,30 +1,7 @@
-<!doctype html>
+{% extends 'razvozki/main.html' %}
+{% block title %}Администрирование{% endblock %}
+{% block content %}
 {% load static %}
-<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Popper js -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.2/dist/umd/popper.min.js"
-      crossorigin="anonymous"></script>
-    <!-- Tempus Dominus JavaScript -->
-    <script src="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/js/tempus-dominus.js"
-      crossorigin="anonymous"></script>
-    <!-- Tempus Dominus Styles -->
-    <link href="https://cdn.jsdelivr.net/gh/Eonasdan/tempus-dominus@master/dist/css/tempus-dominus.css"
-      rel="stylesheet" crossorigin="anonymous">
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="{% static 'razvozki/style.css' %}">
-
-    <title>Админ</title>
-    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
-
-</head>
-{% include 'razvozki/main.html' %}
-<body>
 
 <div class="row-auto p-2">
     <div class="col-auto text-success">
@@ -105,11 +82,4 @@
 </form>
 
 
-<script> new tempusDominus.TempusDominus(document.getElementById('datetimepicker4'), {
-    display: {icons: {date:'bi bi-calendar-date-fill', next:'bi bi-chevron-compact-right', previous:'bi bi-chevron-compact-left',     },
-    components: {decades: true, year: true, month: true, date: true, hours: false, minutes: false, seconds: false,}}});
-</script>
-<script src="{% static 'razvozki/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script>
-<script src="{% static 'razvozki/rzv.js' %}"></script>
-</body>
-</html>
+{% endblock %}

@@ -1,19 +1,9 @@
-<!doctype html>
+{% extends 'razvozki/main.html' %}
+{% block title %}Клиенты{% endblock %}
+{% block content %}
+
 {% load static %}
-<html lang="en" xmlns="http://www.w3.org/1999/html">
-<head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bootstrap CSS -->
-    <link href="{% static 'razvozki/bootstrap.min.css' %}" rel="stylesheet" crossorigin="anonymous">
-    <title>Клиенты</title>
-    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
 
-</head>
-{% include 'razvozki/main.html' %}
-
-<body>
 <div class="d-flex flex-row justify-content-between p-2">
 <div class="pagination">
     <span class="step-links">
@@ -147,5 +137,4 @@
 
 <script src="{% static 'razvozki/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script>
 <script src="{% static 'razvozki/rzv.js' %}"></script>
-</body>
-</html>
+{% endblock %}

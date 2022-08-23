@@ -5,17 +5,25 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-    <meta name="generator" content="Hugo 0.84.0">
-    <title>Fixed top navbar example · Bootstrap v5.0</title>
+<!--    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.84.0"><--->
+    <title>Развозки</title>
 
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/navbar-fixed/">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+<link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/navbar-fixed/">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+<!-- Font Awesome -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+<!-- Bootstrap core CSS -->
+<link href="{% static 'razvozki/bootstrap.min.css' %}" rel="stylesheet" crossorigin="anonymous">
 
-    <!-- Bootstrap core CSS -->
-    <link href="{% static 'razvozki/bootstrap.min.css' %}" rel="stylesheet" crossorigin="anonymous">
+<!-- CSS only -->
+<!--
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+<--->
 
-    <style>
+<style>
       .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
@@ -31,9 +39,11 @@
       }
     </style>
 
+<!-- Custom styles for this template -->
+<link href="{% static 'razvozki/navbar-top-fixed.css' %}" rel="stylesheet">
 
-    <!-- Custom styles for this template -->
-    <link href="{% static 'razvozki/navbar-top-fixed.css' %}" rel="stylesheet">
+<link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+
   </head>
   <body>
 
@@ -45,70 +55,39 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
       <ul class="navbar-nav me-auto mb-2 mb-md-0">
-      {% if navi == 'razvozka' %}
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page"  href="{% url 'razvozki:index' %}">Развозки</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page"  href="{% url 'razvozki:customers' 'name' %}">Клиенты</a>
+            <a class="nav-link {{active1}}" aria-current="page"  id="1" href="{% url 'razvozki:index' %}">Развозки</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'razvozki:double' 'name' %}"  aria-current="page">Дубликаты</a>
+            <a class="nav-link {{active2}}" aria-current="page"  id="2" href="{% url 'razvozki:customers' 'name' %}">Клиенты</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'razvozki:admin' %}"  aria-current="page">Администрирование</a>
-          </li>
-      {% elif navi == 'customers' %}
-           <li class="nav-item">
-            <a class="nav-link" aria-current="page"  href="{% url 'razvozki:index' %}">Развозки</a>
+            <a class="nav-link {{active3}}" id="3" href="{% url 'razvozki:double' 'name' %}"  aria-current="page">Дубликаты</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page"  href="{% url 'razvozki:customers' order='name' %}">Клиенты</a>
+            <a class="nav-link {{active4}}" id="4" href="{% url 'razvozki:admin' %}"  aria-current="page">Администрирование</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'razvozki:double' 'name' %}"  aria-current="page">Дубликаты</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'razvozki:admin' %}"  aria-current="page">Администрирование</a>
-          </li>
-      {% elif navi == 'double' %}
-           <li class="nav-item">
-            <a class="nav-link" aria-current="page"  href="{% url 'razvozki:index' %}">Развозки</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page"  href="{% url 'razvozki:customers' 'name' %}">Клиенты</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="{% url 'razvozki:double' 'name' %}"  aria-current="page">Дубликаты</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'razvozki:admin' %}"  aria-current="page">Администрирование</a>
-          </li>
-      {% elif navi == 'admin' %}
-           <li class="nav-item">
-            <a class="nav-link" aria-current="page"  href="{% url 'razvozki:index' %}">Развозки</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" aria-current="page"  href="{% url 'razvozki:customers' 'name' %}">Клиенты</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'razvozki:double' 'name' %}"  aria-current="page">Дубликаты</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="{% url 'razvozki:admin' %}"  aria-current="page">Администрирование</a>
-          </li>
-
-      {% endif %}
       </ul>
       <form action="search_/{{navi}}" method="post" class="d-flex" id="search_">
         {% csrf_token %}
         <input class="form-control me-2" type="text" placeholder="Поиск (есть)" aria-label="Search_" name="search_">
-        <button class="btn btn-outline-success" type="submit">Поиск</button>
-      <p style="color: white"> v1.2 </p>
+        <button class="btn btn-success" type="submit">Поиск</button>
+      <p style="color: white">Ver.</p>
+          &nbsp
+      <p style="color: white"> 2.0 </p>
       </form>
     </div>
   </div>
 </nav>
+
+
+<script src="{% static 'razvozki/jquery.min.js' %}"></script>
+<script src="{% static 'razvozki/rzv.js' %}"></script>
+<script src="{% static 'razvozki/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script>
+<!-- JavaScript Bundle with Popper -->
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+<--->
+ {% block content %}{% endblock %}
 
   </body>
 </html>
