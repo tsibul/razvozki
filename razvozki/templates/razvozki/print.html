@@ -17,7 +17,7 @@
         &nbsp;
 <!--        <button onclick="printDiv('print-content')" class="btn btn-outline-success"><i class="bi bi-printer-fill" style="currentColor"></i> Печать</button> -->
         <button onclick="window.print()" class="btn btn-outline-success d-print-none"><i class="bi bi-printer-fill" style="currentColor"></i> Печать</button>
-        <a href="{% url 'razvozki:index' %}" class="btn btn-outline-danger d-print-none">Назад</a>
+        <button onclick="window.close();return false;" class="btn btn-outline-danger d-print-none">Назад</button>
 <!--        <input type="button" value="Print this page" onClick="window.print()"> -->
     </span>
 
