@@ -16,6 +16,9 @@ from django.urls import reverse
 from django.db import transaction
 from django.core.files import File
 from django.views.generic import ListView
+from django.views.decorators.csrf import csrf_exempt
+
+
 
 import csv
 
@@ -59,7 +62,7 @@ def index(request):
         f_rzv0[r.date].append(r)
 
     f_rzv2 = list(f_rzv0.items())
-    paginator = Paginator(f_rzv2, 5)
+    paginator = Paginator(f_rzv2, 6)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     f_rzv = dict(page_obj.object_list)
@@ -78,11 +81,12 @@ def index(request):
 
 
     context = {'f_rzv': f_rzv, 'datenew': datenew, 'navi': navi, 'cust': cust, 'page_obj': page_obj,
-               'page_number': page_number, 'date_range': date_range, 'rzv_len': rzv_len}
+               'page_number': page_number, 'date_range': date_range, 'rzv_len': rzv_len, 'active1': 'active'}
     return render(request, 'razvozki/index.html', context)
 
 
 def addrecord_razv(request):
+    date_create = datetime.date.today()
     page_num = request.POST['page_number_add']
     date = request.POST['date']
     try:
@@ -105,8 +109,28 @@ def addrecord_razv(request):
     to_do_deliver = request.POST['to_do_deliver']
     clr = 'text-secondary'
     razvozka = Razvozka(date=date, date_id=date_id, customer_name=customer_name, customer=customer, address=address,
-                        contact=contact,
+                        contact=contact, date_create=date_create, fulfilled=False,
                         to_do_take=to_do_take, to_do_deliver=to_do_deliver, clr=clr)
+    try:
+        date_until = request.POST['date_until']
+        try:
+            date_until = datetime.datetime.strptime(date_until, '%B %d, %Y').strftime('%Y-%m-%d')
+        except:
+            try:
+                date_until = datetime.datetime.strptime(date_until, '%b. %d, %Y').strftime('%Y-%m-%d')
+            except:
+                    date_until = datetime.datetime.strptime(date_until, '%bt. %d, %Y').strftime('%Y-%m-%d')
+        razvozka.date_until = date_until
+    except:
+        pass
+    try:
+        r_id = request.POST['r_id']
+        child_razv = Razvozka.objects.get(id=r_id)
+        if child_razv.customer == customer:
+            razvozka.return_from = True
+            razvozka.return_goods = child_razv
+    except:
+        pass
     razvozka.save()
     if page_num != '':
         page_num = '?page=' + page_num
@@ -118,19 +142,31 @@ def delete_rzv(request, id):
     razvozka.delete()
     return HttpResponseRedirect(reverse('razvozki:index'))
 
-
+@csrf_exempt
 def updaterecord_rzv(request, id):
     page_num = request.POST['page_number_upd']
     razvozka = Razvozka.objects.get(id=id)
     date = request.POST['date']
-    date = datetime.datetime.strptime(date,'%Y-%m-%d').strftime('%Y-%m-%d')
-    date_id = request.POST['date_id']
+    date = datetime.datetime.strptime(date, '%Y-%m-%d').strftime('%Y-%m-%d')
+    date_id = request.POST['rzv_id']
     address = request.POST['address']
     contact = request.POST['contact']
     to_do_take = request.POST['to_do_take']
     to_do_deliver = request.POST['to_do_deliver']
+    try:
+        return_goods_id = request.POST['return_goods_id']
+        razvozka_return = Razvozka.objects.get(id=return_goods_id)
+        razvozka.return_goods = razvozka_return
+        razvozka.return_from = True
+    except:
+        pass
     razvozka.date = date
     razvozka.date_id = date_id
+    try:
+        date_until = request.POST['date_until']
+        razvozka.date_until = date_until
+    except:
+        pass
     if razvozka.customer is None:
         customer_name = request.POST['customer_name']
         razvozka.customer_name = customer_name
@@ -166,7 +202,7 @@ def customers(request, order):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    context = {'navi': navi, 'page_obj': page_obj, 'order': order}
+    context = {'navi': navi, 'page_obj': page_obj, 'order': order, 'active2': 'active'}
     return render(request, 'razvozki/customers.html', context)
 
 
@@ -361,7 +397,7 @@ def double(request, order):
     cust = []
     for cst in Customer_clr.objects.filter(clr='text-danger').order_by(order, 'id'):
         cust.append(cst)
-    context = {'navi': navi, 'cust': cust, 'order': order}
+    context = {'navi': navi, 'cust': cust, 'order': order, 'active3': 'active'}
     return render(request, 'razvozki/double.html', context)
 
 
@@ -392,7 +428,7 @@ def admin(request):
     customer_count = Customer_clr.objects.all().count()
     razv_count = Razvozka.objects.all().count()
     context = {'cust': cust, 'razv': razv, 'navi': navi, 'razv_count_imp': razv_count_imp,
-               'customer_count': customer_count, 'razv_count': razv_count}
+               'customer_count': customer_count, 'razv_count': razv_count, 'active4': 'active'}
     return render(request, 'razvozki/admin.html', context)
 
 
@@ -665,3 +701,69 @@ def search_(request, navi):
 
     context = {'navi': navi, 'page_obj': razv, 'srch':srch}
     return render(request, 'razvozki/search_.html', context)
+
+@csrf_exempt
+def fulfilled_chg(request, id):
+    razv = Razvozka.objects.get(id=id)
+    if razv.fulfilled:
+        razv.fulfilled = False
+    else:
+        razv.fulfilled = True
+    razv.save()
+    return HttpResponse()
+
+@csrf_exempt
+def return_all(request, id):
+    razv = Razvozka.objects.get(id=id)
+    if razv.return_all:
+        razv.return_all = False
+    else:
+        razv.return_all = True
+    razv.save()
+    return HttpResponse
+
+
+@csrf_exempt
+def deliver_to(request, id):
+    razv = Razvozka.objects.get(id=id)
+    if razv.deliver_to and not razv.return_all:
+        razv.deliver_to = False
+        razv.save()
+    elif not razv.deliver_to:
+        razv.deliver_to = True
+        razv.save()
+        date = '2100-01-01'
+        date_create = razv.date
+        date_until = date_create + datetime.timedelta(days=8)
+        customer = razv.customer
+        customer_name = razv.customer_name
+        map_point = razv.map_point
+        address = razv.address
+        contact = razv.contact
+        return_from = True
+        return_goods = razv
+        to_do_take = 'Поменять это поле!!!'
+        new_razv = Razvozka(fulfilled=False, date=date, date_create=date_create, date_until=date_until, customer=customer,
+                            customer_name=customer_name, address=address, contact=contact, map_point=map_point,
+                            return_from=return_from, return_goods=return_goods, to_do_take=to_do_take)
+        new_razv.save()
+    return HttpResponse()
+
+
+def rzv_return_xml(request, id):
+    """
+    :return: razvozki, not returned db in xml format filter by customer
+    """
+    cust = Customer.objects.get(id=id)
+    razv = Razvozka.objects.all().filter(Q(deliver_to=True) & Q(return_all=False) & Q(customer=cust))
+    data = '<?xml version="1.0" encoding="UTF-8"?><RAZVOZKI>'
+    for rzv in razv:
+        data = data + ('<Razvozka><id>' + str(rzv.id) + '</id>' +
+                       '<date>' + str(rzv.date) + '</date>' + '<date_id>' + str(rzv.date_id) + '</date_id>' +
+        '<customer_name>' + rzv.customer_name + '</customer_name>' + '<address>' + rzv.address + ' ' +
+                       '</address><contact>' + rzv.contact + ' ' + '</contact>' + '<to_do_deliver>' +
+                       rzv.to_do_deliver + '</to_do_deliver></Razvozka>')
+    data = data + '</RAZVOZKI>'
+
+#    pprint.pprint(data)
+    return HttpResponse(data,  content_type="text/xml")
