@@ -50,7 +50,9 @@ class Razvozka_clr:
 def index(request):
     navi = 'razvozka'
     datenew = datetime.date.today() + datetime.timedelta(days=1)
+    dateold = datetime.date.today() - datetime.timedelta(days=3)
     datenew = datenew.strftime('%Y-%m-%d')
+    dateold = dateold.strftime('%Y-%m-%d')
     #    date = datetime.date.today()
     rzv = Razvozka.objects.order_by('-date', 'date_id')
     cust = list(Customer.objects.order_by('name'))
@@ -81,7 +83,8 @@ def index(request):
 
 
     context = {'f_rzv': f_rzv, 'datenew': datenew, 'navi': navi, 'cust': cust, 'page_obj': page_obj,
-               'page_number': page_number, 'date_range': date_range, 'rzv_len': rzv_len, 'active1': 'active'}
+               'page_number': page_number, 'date_range': date_range, 'rzv_len': rzv_len, 'active1': 'active',
+               'dateold': dateold}
     return render(request, 'razvozki/index.html', context)
 
 
@@ -131,7 +134,13 @@ def addrecord_razv(request):
             razvozka.return_goods = child_razv
     except:
         pass
-    razvozka.save()
+    try:
+        if razvozka.return_from and to_do_take == '':
+            HttpResponse('Не введено, что забрать')
+        else:
+            razvozka.save()
+    except:
+        razvozka.save()
     if page_num != '':
         page_num = '?page=' + page_num
     return HttpResponseRedirect(reverse('razvozki:index') + page_num)
@@ -174,7 +183,13 @@ def updaterecord_rzv(request, id):
     razvozka.contact = contact
     razvozka.to_do_take = to_do_take
     razvozka.to_do_deliver = to_do_deliver
-    razvozka.save()
+    try:
+        if razvozka.return_from and to_do_take == '':
+            HttpResponse('Не введено, что забрать')
+        else:
+            razvozka.save()
+    except:
+        razvozka.save()
     if page_num != '':
         page_num = '?page=' + page_num
     return HttpResponseRedirect(reverse('razvozki:index') + page_num)
