@@ -65,7 +65,7 @@
             <a class="nav-link {{active3}}" id="3" href="{% url 'razvozki:double' 'name' %}"  aria-current="page">Дубликаты</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link {{active4}}" id="4" href="{% url 'razvozki:admin' %}"  aria-current="page">Администрирование</a>
+            <a class="nav-link {{active4}}" id="4" href="{% url 'razvozki:admin' %}"  aria-current="page" hidden>Администрирование</a>
           </li>
       </ul>
       <form action="search_/{{navi}}" method="post" class="d-flex" id="search_">
