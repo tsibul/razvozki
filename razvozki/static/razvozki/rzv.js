@@ -346,17 +346,17 @@ function upd_rzv(id){
     '<div class="col form-floating" style="min-width:480px;">' +
     '<textarea  name="to_do_deliver"  class="form-control" form="updaterecord_rzv_' + id +
     '" id="to_do_deliver_' + id + '" placeholder="Сдать">' + to_do_deliver +
-    '</textarea>' + '<label for="to_do_deliver_' + id + '">сдать</label></div><div class="col align-center text-end" >');
+    '</textarea>' + '<label for="to_do_deliver_' + id + '">сдать</label></div><div class="col align-center text-end" hidden >');
   if (deliver_to == 'True'){
   code_html += ('<input type="checkbox" class="btn-check" id="btn_checked_' + id + '" autocomplete="off" checked ' +
     'name="deliver_to" value="1" form="updaterecord_rzv_' + id + '" onclick="javascript:f_deliver_to(' + id + ');">' +
     '<label class="btn btn-sm btn-outline-danger" for="btn_checked_' + id + '" >' +
-    '<i class="bi bi-arrow-repeat"></i>&nbsp;вернуть</label>');}
+    '<i class="bi bi-arrow-repeat"></i>&nbsp;на переработку</label>');}
   else {
   code_html += ('<input type="checkbox" class="btn-check" id="btn_checked_' + id + '" autocomplete="off"' +
     'name="deliver_to" value="0" form="updaterecord_rzv_' + id + '" onclick="javascript:f_deliver_to(' + id + ');">' +
     '<label class="btn btn-sm btn-outline-danger" for="btn_checked_' + id + '">' +
-    '<i class="bi bi-arrow-repeat"></i>&nbsp;вернуть</label>');
+    '<i class="bi bi-arrow-repeat"></i>&nbsp;на переработку</label>');
   }
   code_html += '</div></div></td><td class="text-end align-middle"><div class="col">';
   code_html += ('<a href=' + onclick + '><button class="btn btn-sm btn-outline-danger fw-bold" data-toggle="tooltip"' +
@@ -365,6 +365,8 @@ function upd_rzv(id){
     '" data-toggle="tooltip" data-placement="top" title="записать"><i class="bi bi-check-lg"></i>' +
     '</button></div> </td>');
   document.getElementById(cst).innerHTML = code_html;
+  if (customer != ''){var cust_id = 'customer_name_' + id;
+  document.getElementById(cust_id).readOnly = true;;};
 };}
 
 function upd_rzv_reverse(id){
@@ -455,7 +457,7 @@ function upd_rzv_reverse(id){
                  '<div class="modal-dialog"><div class="modal-content"> <div class="modal-header">' +
                  '<h5 class="modal-title" id="rzv_return' + id + 'Label">Что отвозили</h5>' +
                  '<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>' +
-                 '</div><div class="modal-body"><div> Дата '  + return_goods + ' ' +
+                 '</div><div class="modal-body"><div> дата: '  + return_goods + ', кому: ' +
                  return_goods_customer_name + '</div><br> <h6>' + return_goods_to_do_take +
                  '</h6></div></div></div></div>');
     code_html += ('<input type="text" hidden id="return_goods_id_' + id + '" value="' + return_goods_id + '">' +
@@ -469,27 +471,24 @@ function upd_rzv_reverse(id){
   code_html += ('<div class="col" ' + 'id="to_do_deliver_' +
                 id + '"><strong>СДАТЬ: </strong>' + to_do_deliver + '</div>');
     if (deliver_to == 'True'){
-    code_html += ('<div class="col p-1 text-end align-center"><input type="checkbox" class="btn-check" id="btn_checked_'+
+    code_html += ('<div class="col p-1 text-end align-center" ><input type="checkbox" class="btn-check" id="btn_checked_'+
                   id + '" autocomplete="off" checked onclick="javascript:f_deliver_to(' + id + ');"' +
                   '><label class="btn btn-sm btn-outline-danger" for="btn_checked_' +
-                  id + '" ><i class="bi bi-arrow-repeat"></i>&nbsp;вернуть</label></div>');}
+                  id + '" ><i class="bi bi-arrow-repeat"></i>&nbsp;на переработку</label></div>');}
     else {
     code_html += ('<div class="col p-1 text-end align-center"><input type="checkbox" class="btn-check" id="btn_checked_' +
                  id + '" autocomplete="off" onclick="javascript:f_deliver_to(' + id + ');">' +
                  '<label class="btn btn-sm btn-outline-danger" for="btn_checked_' + id +
-                 '"><i class="bi bi-arrow-repeat"></i>&nbsp;вернуть</label></div>');};
+                 '"><i class="bi bi-arrow-repeat"></i>&nbsp;на переработку</label></div>');};
     };
   code_html += '</div></td>'
-  if (fulfilled == 'False'){
   code_html += ('<td class="text-end"id="rzv_delete_' + id + '"><a href="delete_rzv/' + id + '">' +
                 '<button class="btn btn-sm btn-outline-danger fw-bold" data-toggle="tooltip" data-placement="top"' +
-                'title="удалить развозку"><i class="bi bi-x-lg"></i></button></a></td>');}
-  else{
-  code_html += ('<td class="text-end" id="rzv_delete_' + id + '">' +
-                '<button class="btn btn-sm btn-outline-danger fw-bold" data-toggle="tooltip" data-placement="top"' +
-                'title="удалить развозку" disabled><i class="bi bi-x-lg"></i></button></td>');};
+                'title="удалить развозку"><i class="bi bi-x-lg"></i></button></a></td>');
 
   document.getElementById(cst).innerHTML = code_html;
+  if (fulfilled == 'True'){document.getElementById('rzv_delete_' + id).disabled = true};
+
 }
 
 function add_rzv(date_r, page_number) {
@@ -722,11 +721,11 @@ function updaterecord_rzv(id){
     if (deliver_to == 'True'){
     code_html += ('<div class="col p-1 text-end align-center"><input type="checkbox" class="btn-check" id="btn-checked_'+
                   id + '" autocomplete="off" checked><label class="btn btn-sm btn-outline-danger" for="btn-checked_' +
-                  id + '" ><i class="bi bi-arrow-repeat"></i>&nbsp;вернуть</label></div>');}
+                  id + '" ><i class="bi bi-arrow-repeat"></i>&nbsp;на переработку</label></div>');}
     else {
     code_html += ('<div class="col p-1 text-end align-center"><input type="checkbox" class="btn-check" id="btn-check_' +
                  id + '" autocomplete="off"><label class="btn btn-sm btn-outline-danger" for="btn-check_' + id +
-                 '"><i class="bi bi-arrow-repeat"></i>&nbsp;вернуть</label></div>');};
+                 '"><i class="bi bi-arrow-repeat"></i>&nbsp;на переработку</label></div>');};
     };
   if (fulfilled == 'False'){
   code_html += ('</div></div></td><td class="text-end"id="rzv_delete_' + id + '"><a href="delete_rzv/' + id + '">' +
@@ -771,8 +770,10 @@ function slc_rzv(date, r_date, rzv_id, id){
 
     var r_date = r_date;
     var r_id = rzv_id;
+
     document.getElementById(upd_date).value = r_date;
     document.getElementById(upd_id).value = r_id;
+    document.getElementById('to_do_take_'+id).required = true
 }
 
 function slc_rzv_(date, r_date, rzv_id){
@@ -783,4 +784,6 @@ function slc_rzv_(date, r_date, rzv_id){
     var r_id = rzv_id;
     document.getElementById(upd_date).value = r_date;
     document.getElementById(upd_id).value = r_id;
+    document.getElementById('to_do_take_'+date).required = true
+
 }
