@@ -53,30 +53,35 @@
 {% for date_r, razv in f_rzv.items %}
     <thead>
     <tr class="table-success">
-        <th scope="col">
+        <th scope="col" colspan="2" class="">
+        {% if date_r|date:'Y-m-d' >= dateold %}
         <a href="javascript:add_ln2('{{date_r|date:'Y-m-d'}}');">
             <button class="btn btn-sm btn-outline-success fw-bold" data-toggle="tooltip"
                     data-placement="top" title="добавить развозку">
-                <i class="fas fa-plus"></i>
+            <div class="fw-normal">добавить развозку</div>
             </button></a>
+        {% endif %}
         </th>
         {% if date_r|date:'Y-m-d' != '2100-01-01' %}
-            <th scope="col" colspan="1" class="text-nowrap text-end"> развозка на </th>
-            <th scope="col" colspan="1" class="text-nowrap text-start">{{ date_r|date:"d.m.Y" }}</th>
+<!--            <th scope="col" colspan="1" class="text-nowrap text-end"> развозка на </th> <--->
+            <th scope="col" colspan="1" class="text-nowrap text-start"
+                onclick="javascript:colapse('date_{{date_r|date:'Y-m-d' }}');">Развозка на {{ date_r|date:"d.m.Y" }}</th>
             <form action="print_rzv/{{ date_r|date:'Y-m-d'}}" method="post">
             {% csrf_token %}
-            <th scope="col" class="text-center"> <button type="submit" class="btn btn-outline-success btn-sm fw-bold" formtarget="_blank">
+            <th scope="col" class="text-start"> <button type="submit" class="btn btn-outline-success btn-sm fw-bold" formtarget="_blank">
                 <i class="bi bi-printer-fill" style="currentColor"></i> Печать</button>
             </th>
             </form>
         {% else %}
-            <th scope="col" colspan="3" class="text-nowrap text-center"> развозки плановые </th>
+            <th scope="col" colspan="1" class="text-nowrap text-start"
+                onclick="javascript:colapse('date_{{date_r|date:'Y-m-d' }}');"> Развозки планируемые </th>
+            <th></th>
         {% endif %}
 
         <th scope="col" class="text-danger">
         {% for rzv in rzv_len %}
         {% if date_r == rzv.0 %}
-        развозок: {{rzv.1}}
+            <div class="fw-normal"> развозок: {{rzv.1}}</div>
         {% endif %}
         {% endfor %}
 
@@ -97,7 +102,6 @@
     {% endif %}
 <!--            onmouseover="this.style.backgroundColor='#eee';" onmouseout="this.style.backgroundColor='#ffffff';"><--->
 
-    {% if page_number == '1' or page_number == None or page_number == '2' %}
 
     <tr class="dropdown" id="cst_id4_{{date_r|date:'Y-m-d'}}" style="display:none">
         <td></td>
@@ -141,11 +145,11 @@
         </div>
         <div class="row p-1">
             <div class="col" style="min-width:480px">
-            <textarea class="form-control" placeholder="Забрать" name="to_do_take"></textarea>
+            <textarea class="form-control" placeholder="Забрать" name="to_do_take" id="to_do_take_{{date_r|date:'Y-m-d'}}"></textarea>
             </div>
             <div class="col">
                 <button type="button" class="btn btn-sm btn-outline-danger dropdown-toggle" data-bs-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false" id=Choosereturn{{date_r|date:'Y-m-d'}}"><i class="bi bi-arrow-return-left">
+                aria-haspopup="true" aria-expanded="false" id="Choosereturn{{date_r|date:'Y-m-d'}}"><i class="bi bi-arrow-return-left">
                 </i>возврат</button>
                 <ul class="dropdown-menu" aria-labelledby="Choosereturn{{date_r|date:'Y-m-d'}}" id="ul_{{date_r|date:'Y-m-d'}}">
                 </ul>
@@ -157,11 +161,11 @@
             <div class="col" style="min-width:480px">
             <textarea class="form-control" placeholder="Сдать" name="to_do_deliver"></textarea>
             </div>
-            <div class="col p-1 text-end align-center" >
+            <div class="col p-1 text-end align-center" hidden>
             <input type="checkbox" class="btn-check" id="btn_checked_{{rzv.id}}" autocomplete="off"
                    value="0" onclick="javascript:f_deliver_to({{rzv.id}});">
             <label class="btn btn-sm btn-outline-danger" for="btn_checked_{{rzv.id}}" >
-                <i class="bi bi-arrow-repeat"></i>&nbsp;вернуть</label>
+                <i class="bi bi-arrow-repeat"></i>&nbsp;на переработку</label>
             </div>
         </div></td>
         <td class="align-middle">
@@ -181,7 +185,7 @@
     </tr>
 
 
-    {% endif %}
+
     {% for rzv in razv %}
 
     <form action="updaterecord_rzv/{{ rzv.id }}" method="post" id="updaterecord_rzv_{{rzv.id}}">
@@ -266,8 +270,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
-                      <div> Дата {{rzv.return_goods.date|date:'d.m.Y'}}
-                            {{rzv.return_goods.customer_name}}</div>
+                      <div> дата: {{rzv.return_goods.date|date:'d.m.Y'}},
+                            кому: {{rzv.return_goods.customer_name}}</div>
                       <br>
                       <h6>{{rzv.return_goods.to_do_deliver}}</h6>
                   </div>
@@ -277,7 +281,7 @@
             <input type="text" hidden id="return_goods_id_{{rzv.id}}" value="{{rzv.return_goods.id}}">
             <input type="text" hidden id="return_goods_{{rzv.id}}" value="{{rzv.return_goods.date|date:'d.m.Y'}}">
             <input type="text" hidden id="return_goods_customer_name_{{rzv.id}}" value="{{rzv.return_goods.customer_name}}">
-            <input type="text" hidden id="return_goods_to_do_take_{{rzv.id}}" value="{{rzv.return_goods.to_do_take}}">
+            <input type="text" hidden id="return_goods_to_do_take_{{rzv.id}}" value="{{rzv.return_goods.to_do_deliver}}">
 
             {% endif %}
             {% endif %}
@@ -292,14 +296,14 @@
                     <input type="checkbox" class="btn-check" id="btn_checked_{{rzv.id}}" autocomplete="off" disabled
                            value="1" checked onclick="javascript:f_deliver_to({{rzv.id}});">
                     <label class="btn btn-sm btn-outline-danger" for="btn_checked_{{rzv.id}}" >
-                        <i class="bi bi-arrow-repeat"></i>&nbsp;вернуть</label>
+                        <i class="bi bi-arrow-repeat"></i>&nbsp;на переработку</label>
                     </div>
                     {% else %}
                     <div class="col p-1 text-end align-center" >
                     <input type="checkbox" class="btn-check" id="btn_checked_{{rzv.id}}" autocomplete="off"
                            value="1" checked onclick="javascript:f_deliver_to({{rzv.id}});">
                     <label class="btn btn-sm btn-outline-danger" for="btn_checked_{{rzv.id}}" >
-                        <i class="bi bi-arrow-repeat"></i>&nbsp;вернуть</label>
+                        <i class="bi bi-arrow-repeat"></i>&nbsp;на переработку</label>
                     </div>
                     {% endif %}
                 {% else %}
@@ -307,7 +311,7 @@
                 <input type="checkbox" class="btn-check" id="btn_checked_{{rzv.id}}" autocomplete="off"
                        value="0" onclick="javascript:f_deliver_to({{rzv.id}});">
                 <label class="btn btn-sm btn-outline-danger" for="btn_checked_{{rzv.id}}">
-                    <i class="bi bi-arrow-repeat"></i>&nbsp;вернуть</label>
+                    <i class="bi bi-arrow-repeat"></i>&nbsp;на переработку</label>
                 </div>
                 {% endif %}
             {% endif %}
