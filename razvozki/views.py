@@ -183,13 +183,7 @@ def updaterecord_rzv(request, id):
     razvozka.contact = contact
     razvozka.to_do_take = to_do_take
     razvozka.to_do_deliver = to_do_deliver
-    try:
-        if razvozka.return_from and to_do_take == '':
-            HttpResponse('Не введено, что забрать')
-        else:
-            razvozka.save()
-    except:
-        razvozka.save()
+    razvozka.save()
     if page_num != '':
         page_num = '?page=' + page_num
     return HttpResponseRedirect(reverse('razvozki:index') + page_num)
