@@ -64,7 +64,7 @@
         </th>
         {% if date_r|date:'Y-m-d' != '2100-01-01' %}
 <!--            <th scope="col" colspan="1" class="text-nowrap text-end"> развозка на </th> <--->
-            <th scope="col" colspan="1" class="text-nowrap text-start"
+            <th scope="col" colspan="1" class="text-nowrap text-start" style="font-size:120%;"
                 onclick="javascript:colapse('date_{{date_r|date:'Y-m-d' }}');">Развозка на {{ date_r|date:"d.m.Y" }}</th>
             <form action="print_rzv/{{ date_r|date:'Y-m-d'}}" method="post">
             {% csrf_token %}
@@ -73,7 +73,7 @@
             </th>
             </form>
         {% else %}
-            <th scope="col" colspan="1" class="text-nowrap text-start"
+            <th scope="col" colspan="1" class="text-nowrap text-start" style="font-size:120%;"
                 onclick="javascript:colapse('date_{{date_r|date:'Y-m-d' }}');"> Развозки планируемые </th>
             <th></th>
         {% endif %}
@@ -197,7 +197,7 @@
 
         <tr id="cst_id_{{rzv.id}}" class="lh-1 align-top" >
         {% if date_r|date:'Y-m-d' != '2100-01-01' %}
-            <td id="rzv_id_{{rzv.id}}">{{ rzv.date_id }}</td>
+            <td id="rzv_id_{{rzv.id}}" style="font-size:120%;">{{ rzv.date_id }}</td>
         {% else %}
             <td></td>
             <td id="rzv_id_{{rzv.id}}" hidden>{{ rzv.date_id }}</td>
