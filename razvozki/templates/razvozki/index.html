@@ -103,11 +103,8 @@
     </tr>
 
     </thead>
-    {% if date_r|date:'Y-m-d' != '2100-01-01' %}
-    <tbody id="collapse_date_{{date_r|date:'Y-m-d'}}" style="display:table-row-group;">
-    {% else %}
-    <tbody id="collapse_date_{{date_r|date:'Y-m-d'}}" style="display:none;">
-    {% endif %}
+    <tbody id="collapse_date_{{date_r|date:'Y-m-d'}}"
+           style="display:{% if date_r|date:'Y-m-d' != '2100-01-01' %}table-row-group{% else %}none{% endif %};">
 <!--            onmouseover="this.style.backgroundColor='#eee';" onmouseout="this.style.backgroundColor='#ffffff';"><--->
 
 
@@ -202,28 +199,20 @@
         <td id="map_point_{{rzv.id}}" hidden>{{rzv.map_point}}</td>
         <td id="customer_{{rzv.id}}" hidden>{{rzv.customer.id}}</td>
         <input type="text" id="return_from_{{rzv.id}}" hidden value="{{rzv.return_from}}">
-
         <tr id="cst_id_{{rzv.id}}" class="lh-1 align-top" >
-        {% if date_r|date:'Y-m-d' != '2100-01-01' %}
-            <td id="rzv_id_{{rzv.id}}" style="font-size:120%;">{{ rzv.date_id }}</td>
-        {% else %}
-            <td></td>
-            <td id="rzv_id_{{rzv.id}}" hidden>{{ rzv.date_id }}</td>
-        {% endif %}
+            {% if date_r|date:'Y-m-d' == '2100-01-01' %}<td></td>{% endif %}
+            <td id="rzv_id_{{rzv.id}}" {% if date_r|date:'Y-m-d' == '2100-01-01' %}hidden{% endif %}
+                style="font-size:120%;" class="fw-bold">{{ rzv.date_id }}</td>
+
             <td class="text-unwrap" style="min-width:140px;">
             {% if rzv.date|date:'Y-m-d' != '2100-01-01' %}
             <div class="col p-1" id="rzv_fulfilled_{{rzv.id}}" >
-            {% if rzv.fulfilled %}
-            <button class="btn btn-sm btn-outline-success" type="button" id="rzv_fulfilled_but_{{rzv.id}}"
-                    onclick="javascript:rzv_status({{rzv.id}});" name="1">
-                <i class="bi bi-check2"></i>выполнено
+
+            <button class="btn btn-sm btn-outline-{% if rzv.fulfilled %}success{% else %}danger{% endif %}"
+                    type="button" id="rzv_fulfilled_but_{{rzv.id}}"
+                    onclick="javascript:rzv_status({{rzv.id}});" name="{% if rzv.fulfilled %}1{% else %}0{% endif %}">
+                <i class="bi bi-check2"></i>{% if rzv.fulfilled %}выполнено{% else %}в процессе{% endif %}
             </button>
-            {% else %}
-            <button class="btn btn-sm btn-outline-danger" type="button" id="rzv_fulfilled_but_{{rzv.id}}"
-                    onclick="javascript:rzv_status({{rzv.id}});" name="0">
-                <i class="bi bi-hourglass"></i>в процессе
-            </button >
-            {% endif %}
             </div>
                        <div class="col p-1" id="razv_return_all_{{rzv.id}}">
             {% if rzv.return_from %}
