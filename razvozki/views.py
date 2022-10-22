@@ -210,8 +210,15 @@ def customers(request, order):
     paginator = Paginator(cust, 30)  # Show 30.
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    page_name = list(page_obj.object_list)[0].name + ' - ' + list(page_obj.object_list)[-1].name
 
-    context = {'navi': navi, 'page_obj': page_obj, 'order': order, 'active2': 'active'}
+    customer_range = []
+    for i in range(page_obj.paginator.num_pages):
+        page_obj2 = paginator.get_page(i + 1)
+        customer_range.append([i + 1, list(page_obj2.object_list)[0].name + ' - ' + list(page_obj2.object_list)[-1].name])
+
+    context = {'navi': navi, 'page_obj': page_obj, 'order': order, 'active2': 'active', 'page_name': page_name,
+               'customer_range': customer_range}
     return render(request, 'razvozki/customers.html', context)
 
 

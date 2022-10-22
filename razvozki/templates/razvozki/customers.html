@@ -4,7 +4,7 @@
 
 {% load static %}
 
-<div class="d-flex flex-row justify-content-between p-2">
+<div class="row justify-content-between ms-2 me-3 p-1 fixed-bottom bg-light">
 <div class="pagination">
     <span class="step-links">
         {% if page_obj.has_previous %}
@@ -13,30 +13,62 @@
         {% endif %}
 
         <span class="current btn btn-outline-secondary">
-            страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
+            <strong>{{ page_name }}</strong> страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
         </span>
 
         {% if page_obj.has_next %}
             <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-success">следующая</a>
             <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-success">последняя &raquo;</a>
         {% endif %}
+        &nbsp
+       <button class="btn btn-outline-success dropdown-toggle" type="button" id="_ChooseCustomerAdd{{rzv.id}}"
+               data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+               Выбрать клиентов
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="ChooseCustomerAdd{{rzv.id}}">
+        {% for cst_range in customer_range %}
+          <li><a class="dropdown-item" href="?page={{ cst_range.0 }}"> {{ cst_range.1 }}</a></li>
+        {% endfor %}
+        </ul>
+
     </span>
-</div>
-<div class="d-flex justify-content-end">
+<div class="col text-end">
     <form action="{% url 'razvozki:cst_double_search' %}" method="post">
      {% csrf_token %}
      <input type="hidden" id="order_doub" name="order_doub" value="{{order}}">
+        <button onclick="javascript:add_ln('new_ln')" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="добавить клиента">
+        Новый Клиент
+        </button>
      <button type="submit" class="btn btn-outline-danger">Найти дубли</button>
     </form>
 </div>
 </div>
-
-<div class="col-auto text-success p-2">
-        <button onclick="javascript:add_ln('new_ln')" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="добавить клиента">
-        Новый Клиент
-        </button>
 </div>
 
+
+<table class="table table-sm table-hover ms-2 me-3 lh-1">
+    <thead class="table-success">
+        <tr class="">
+            <th>Клиент</th>
+            <th>Адрес</th>
+            <th>Контакт</th>
+            <th class="text-nowrap">Координата</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for cst in page_obj %}
+        <tr onclick="">
+            <td class="fw-bolder">{{cst.name}}</td>
+            <td>{{cst.address}}</td>
+            <td>{{cst.contact}}</td>
+            <td>{{cst.mappoint}}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
+<!--
 <div class="container-fluid">
   <div class="row bg-success" style="--bs-bg-opacity: .3;" >
     <div class="col-sm-1 text-center text-success hidden">
@@ -117,24 +149,8 @@
 </form>
 {% endfor %}
 <br>
-<div class="pagination">
-    <span class="step-links">
-        {% if page_obj.has_previous %}
-            <a href="?page=1" class="btn btn-outline-success">&laquo; первая</a>
-            <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-success">предыдущая</a>
-        {% endif %}
+<--->
 
-        <span class="current btn btn-outline-secondary">
-            страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}
-        </span>
 
-        {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-success">следующая</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}" class="btn btn-outline-success">последняя &raquo;</a>
-        {% endif %}
-    </span>
-</div>
 
-<script src="{% static 'razvozki/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script>
-<script src="{% static 'razvozki/rzv.js' %}"></script>
 {% endblock %}
