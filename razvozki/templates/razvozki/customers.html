@@ -36,13 +36,47 @@
     <form action="{% url 'razvozki:cst_double_search' %}" method="post">
      {% csrf_token %}
      <input type="hidden" id="order_doub" name="order_doub" value="{{order}}">
-        <button onclick="javascript:add_ln('new_ln')" class="btn btn-success" data-toggle="tooltip" data-placement="top" title="добавить клиента">
+        <button data-bs-toggle="modal" data-bs-target="#customerModal" class="btn btn-success" data-toggle="tooltip"
+                data-placement="top" title="добавить клиента" type="button">
         Новый Клиент
         </button>
      <button type="submit" class="btn btn-outline-danger">Найти дубли</button>
     </form>
 </div>
 </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="customerModal" tabindex="-1" aria-labelledby="customerModalLabel"
+     data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="customerModalLabel">Редактировать Клиента</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="clear_customer_modal();"></button>
+      </div>
+      <div class="modal-body">
+      <form action="{% url 'razvozki:updaterecord_cst' %}" method="post" id="upd_customer">
+      {% csrf_token %}
+          <input hidden class="form-control" name="cst_id" id="cst_id" >
+          <input type="hidden" name="page_number_upd" value="{{ page_obj.number }}">
+          <h6>название</h6>
+          <textarea class="form-control text-bold" name="customer" id="customer"></textarea>
+          <h6>адрес</h6>
+          <textarea class="form-control" name="address" id="address"></textarea>
+          <h6>контакт</h6>
+          <textarea class="form-control" name="contact" id="contact"></textarea>
+          <h6>координата</h6>
+          <textarea class="form-control" name="mappoint" id="mappoint"></textarea>
+      </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="clear_customer_modal();"
+                data-bs-dismiss="modal">Закрыть</button>
+        <button type="submit" form="upd_customer" class="btn btn-success">Сохранить</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 
@@ -57,99 +91,19 @@
     </thead>
     <tbody>
     {% for cst in page_obj %}
-        <tr onclick="">
-            <td class="fw-bolder">{{cst.name}}</td>
-            <td>{{cst.address}}</td>
-            <td>{{cst.contact}}</td>
-            <td>{{cst.mappoint}}</td>
+        <tr onclick="update_modal_customer(this);" data-bs-toggle="modal" data-bs-target="#customerModal"
+            data-id="{{cst.id}}" data-customer="{{cst.name}}" data-address="{{cst.address}}" data-contact="{{cst.contact}}"
+            data-mappoint="{{cst.mappoint}}">
+            <td class="fw-bolder" >{{cst.name}}</td>
+            <td >{{cst.address}}</td>
+            <td >{{cst.contact}}</td>
+            <td >{{cst.mappoint}}</td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
 
 
-<!--
-<div class="container-fluid">
-  <div class="row bg-success" style="--bs-bg-opacity: .3;" >
-    <div class="col-sm-1 text-center text-success hidden">
-    </div>
-    <div class="col-2 right fw-bold fw-bold">
-        <a href="{% url 'razvozki:customers' 'name' %}" class="link-success"><i class="bi bi-caret-down-fill bi-success"></i> Клиент </a>
-        </a>
-    </div>
-    <div class="col text-center text-success fw-bold">
-        <a href="{% url 'razvozki:customers' 'address' %}" class="link-success"><i class="bi bi-caret-down-fill bi-success"></i> Адрес </a>
-    </div>
-    <div class="col text-center text-success fw-bold">
-        <a href="{% url 'razvozki:customers' 'contact' %}" class="link-success"><i class="bi bi-caret-down-fill bi-success"></i> Контакт </a>
-    </div>
-    <div class="col-2 text-center text-success fw-bold">
-         Yandex-Координата
-    </div>
-    <div class="col-auto text-center text-success"></div>
-  </div>
-</div>
-    <div class="w-100"></div>
-
-<form action="addrecord_cst/" method="post">
-{% csrf_token %}
-<input type="hidden" id="page_number_add" name="page_number_add" value="{{ page_obj.number }}">
-<input type="hidden" id="order_add" name="order_add" value="{{order}}">
-<div class="container-fluid" id="new_ln" style="display:none">
-  <div class="row ">
-    <div class="col-auto text-center"><a href="javascript:add_ln_reverse('new_ln')"><button type="button" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></div>
-    <div class="col-2 text-center"><input type="text" class="form-control" id="customer_name" placeholder="Клиент" name="name"></div>
-    <div class="col text-center"><textarea class="form-control" id="address" placeholder="Адрес" name="address"></textarea></div>
-    <div class="col text-center"><textarea class="form-control" id="contact" placeholder="Контакт" name="contact"></textarea></div>
-    <div class="col-2 text-center"><input type="text" class="form-control" id="mappoint" placeholder="Координата" name="mappoint"></div>
-    <div class="col-auto text-center"><button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="записать">Записать</button></div>
-  </div>
-</div>
-
-</form>
-{% for cst in page_obj %}
-<div class="container-fluid" id="cst_id_{{cst.id}}">
-  <div class="row ">
-    <div class="col-auto text-center"><button type="button" class="btn btn-sm" style="color:white">Отменить</button></div>
-    <div class="col-2 border border-1"><a class=" {{cst.clr}}" href="javascript:upd_ln({{cst.id}});">{{cst.name}}</a> </div>
-    <div class="col border border-1"><a class=" {{cst.clr}}" href="javascript:upd_ln({{cst.id}});">{{cst.address}}</a></div>
-    <div class="col border border-1"><a class=" {{cst.clr}}" href="javascript:upd_ln({{cst.id}});">{{cst.contact}}</a></div>
-    <div class="col-2 border border-1 text-center"><a class=" {{cst.clr}}" href="javascript:upd_ln({{cst.id}});">{{cst.mappoint}}</a></div>
-
-    <div class="col-auto border border-1 text-center">
-        <form action="delete_cst/{{ cst.id }}" method="post">
-        {% csrf_token %}
-        <input type="hidden" id="page_number_del" name="page_number_del" value="{{ page_obj.number }}">
-        <input type="hidden" id="order_del" name="order_del" value="{{order}}">
-        <button type="submit" class="btn btn-sm btn-outline-danger"  data-toggle="tooltip" data-placement="top" title="удалить клиента">Удалить</button>
-        </form>
-    </div>
-  </div>
-</div>
-    <div class="w-100"></div>
-
-<form action="{% url 'razvozki:updaterecord_cst' 'customers' %}" method="post">
-{% csrf_token %}
-<input type="hidden" id="order_up" name="order_up" value="{{order}}">
-<input type="hidden" id="page_number_upd" name="page_number_upd" value="{{ page_obj.number }}">
-
-<div class="container-fluid"  id="cst_id2_{{cst.id}}" style="display:none">
-  <div class="row">
-    <div class="col-md-auto text-center"><a href="javascript:upd_ln_reverse({{cst.id}}, {{order}});"><button class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="отменить">Отменить</button></a></div>
-    <div class="col-2 border border-1" >
-        <input type="text" class="form-control {{cst.clr}}" placeholder="Клиент" name="cst_name" value="{{ cst.name }}">
-        <input type="hidden" class="form-control {{cst.clr}}" placeholder="id" name="cst_id" value="{{ cst.id }}">
-    </div>
-    <div class="col border border-1"><textarea class="form-control {{cst.clr}}"  placeholder="Адрес" name="address">{{cst.address}}</textarea></div>
-    <div class="col border border-1"><textarea class="form-control {{cst.clr}}"  placeholder="Контакт" name="contact">{{cst.contact}}</textarea></div>
-    <div class="col-2 border border-1"><input type="text" class="form-control {{cst.clr}}"  placeholder="Координата" name="mappoint" value="{{cst.mappoint}}"></div>
-    <div class="col-auto border border-1 text-center"><button type="submit" class="btn btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="записать">Записать</button></a></div>
-  </div>
-</div>
-</form>
-{% endfor %}
-<br>
-<--->
 
 
 

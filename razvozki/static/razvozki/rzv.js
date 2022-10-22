@@ -787,3 +787,24 @@ function slc_rzv_(date, r_date, rzv_id){
     document.getElementById('to_do_take_'+date).required = true
 
 }
+
+
+function clear_customer_modal(){
+    document.getElementById('cst_id').value = null;
+    document.getElementById('customer').innerText = null;
+    document.getElementById('address').innerText = null;
+    document.getElementById('contact').innerText = null;
+    document.getElementById('mappoint').innerText = null;}
+
+function update_modal_customer(customerObj){
+    var id = customerObj.dataset.id;
+    var customer = customerObj.dataset.customer;
+    var address = customerObj.dataset.address;
+    var contact = customerObj.dataset.contact;
+    var mappoint = customerObj.dataset.mappoint;
+    document.getElementById('cst_id').value = id;
+    document.getElementById('customer').innerText = customer;
+    document.getElementById('address').innerText = address;
+    document.getElementById('contact').innerText = contact;
+    document.getElementById('mappoint').innerText = mappoint;
+}

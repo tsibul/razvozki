@@ -1,14 +1,11 @@
 # Create your views here.
 
 import datetime
-from datetime import date, timedelta
 
-from django.core.serializers import xml_serializer
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator
 from .models import Razvozka, Customer, Customer_clr, Razvozka_import
-from django.db.models import F, Q, Case, Value, When
-from django.db.models.lookups import GreaterThan, LessThan
+from django.db.models import Q
 from django.template import loader
 from django.shortcuts import render
 from django.http import Http404
@@ -80,8 +77,6 @@ def index(request):
     rzv_len = []
     for rzv in f_rzv:
         rzv_len.append([rzv, len(f_rzv0[rzv])])
-
-
     context = {'f_rzv': f_rzv, 'datenew': datenew, 'navi': navi, 'cust': cust, 'page_obj': page_obj,
                'page_number': page_number, 'date_range': date_range, 'rzv_len': rzv_len, 'active1': 'active',
                'dateold': dateold}
@@ -203,9 +198,9 @@ def newdate_rzv(request):
     return HttpResponseRedirect(reverse('razvozki:index'))
 
 
-def customers(request, order):
+def customers(request):
     navi = 'customers'
-    cust = Customer_clr.objects.order_by(order)
+    cust = Customer_clr.objects.order_by('name')
 
     paginator = Paginator(cust, 30)  # Show 30.
     page_number = request.GET.get('page')
@@ -217,7 +212,7 @@ def customers(request, order):
         page_obj2 = paginator.get_page(i + 1)
         customer_range.append([i + 1, list(page_obj2.object_list)[0].name + ' - ' + list(page_obj2.object_list)[-1].name])
 
-    context = {'navi': navi, 'page_obj': page_obj, 'order': order, 'active2': 'active', 'page_name': page_name,
+    context = {'navi': navi, 'page_obj': page_obj, 'active2': 'active', 'page_name': page_name,
                'customer_range': customer_range}
     return render(request, 'razvozki/customers.html', context)
 
@@ -353,40 +348,42 @@ def delete_cst(request, id):
     return HttpResponseRedirect(reverse('razvozki:customers', args=[order]) + page_num, context)
 
 
-def updaterecord_cst(request, from_where):
+def updaterecord_cst(request):
     page_num = request.POST['page_number_upd']
-    order = request.POST['order_up']
-    name = request.POST['cst_name']
+#    order = request.POST['order_up']
+    name = request.POST['customer']
     address = request.POST['address']
     contact = request.POST['contact']
     mappoint = request.POST['mappoint']
-    id = request.POST['cst_id']
-    customer = Customer.objects.get(id=id)
-    customer.name = name
-    customer.address = address
-    customer.contact = contact
-    customer.mappoint = mappoint
+    try:
+        cst_id = request.POST['cst_id']
+        customer = Customer.objects.get(id=cst_id)
+        customer.name = name
+        customer.address = address
+        customer.contact = contact
+        customer.mappoint = mappoint
+    except:
+        customer = Customer(name=name, address=address, contact=contact, mappoint=mappoint)
     customer.save()
-    out = 'razvozki:' + from_where
+    out = 'razvozki:customers'
     if page_num != '':
         page_num = '?page=' + page_num
-    context = {'order': order}
-    return HttpResponseRedirect((reverse(out, args=[order]) + page_num), context,)
+    return HttpResponseRedirect(reverse(out) + page_num)
 
 
-def addrecord_cst(request):
-    page_num = request.POST['page_number_add']
-    order = request.POST['order_add']
-    name = request.POST['name']
-    address = request.POST['address']
-    contact = request.POST['contact']
-    mappoint = request.POST['mappoint']
-    customer_clr = Customer_clr(name=name, address=address, contact=contact, mappoint=mappoint, clr='text-secondary')
-    customer_clr.save()
-    if page_num != '':
-        page_num = '?page=' + page_num
-    context = {'order': order}
-    return HttpResponseRedirect(reverse('razvozki:customers', args=[order]) +page_num, context)
+#def addrecord_cst(request):
+#    page_num = request.POST['page_number_add']
+#    order = request.POST['order_add']
+#    name = request.POST['name']
+#    address = request.POST['address']
+#    contact = request.POST['contact']
+#    mappoint = request.POST['mappoint']
+#    customer_clr = Customer_clr(name=name, address=address, contact=contact, mappoint=mappoint, clr='text-secondary')
+#    customer_clr.save()
+#    if page_num != '':
+#        page_num = '?page=' + page_num
+#    context = {'order': order}
+#    return HttpResponseRedirect(reverse('razvozki:customers', args=[order]) +page_num, context)
 
 
 def print_rzv(request, date_r):
@@ -496,10 +493,10 @@ def import_csv(request):
                             take_pos = row[4].rfind(t)
                             take_len = len(t)
                     if deliver_pos < take_pos and deliver_pos != -1:
-                        to_do_deliver = row[4][slice((deliver_pos + deliver_len), (take_pos))]
+                        to_do_deliver = row[4][slice((deliver_pos + deliver_len), take_pos)]
                         to_do_take = row[4][slice((take_pos + take_len), to_do_len)]
                     elif take_pos < deliver_pos and take_pos != -1:
-                        to_do_take = row[4][slice((take_pos + take_len), (deliver_pos))]
+                        to_do_take = row[4][slice((take_pos + take_len), deliver_pos)]
                         to_do_deliver = row[4][slice((deliver_pos + deliver_len), to_do_len)]
                     elif deliver_pos == -1 and take_pos != -1:
                         to_do_take = row[4][slice((take_pos + take_len), to_do_len)]
@@ -579,6 +576,7 @@ def clean_cst(request):
         Customer_clr.objects.filter(id=cst1.id).update(name=cst1_name, address=cst1_address, contact=cst1_contact)
     return HttpResponseRedirect(reverse('razvozki:admin'))
 
+
 def trim_cst(cst1):
     cst1_name = cst1.name.replace('ИП ', '')
     cst1_name = cst1_name.replace('  ', ' ')
@@ -618,6 +616,7 @@ def trim_rzv(cst1):
     cst1_to_do_deliver = cst1_to_do_deliver.replace('?', '')
     return [cst1_name, cst1_address, cst1_contact, cst1_to_do_take, cst1_to_do_deliver]
 
+
 @transaction.atomic()
 def clean_rzv(request):
     razv = Razvozka.objects.order_by('-date', 'date_id')
@@ -627,8 +626,9 @@ def clean_rzv(request):
         rzv_contact = trim_rzv(rzv)[2]
         rzv_to_do_take = trim_rzv(rzv)[3]
         rzv_to_do_deliver = trim_rzv(rzv)[4]
-        Razvozka_import.objects.filter(id=rzv.id).update(customer_name=rzv_name, address=rzv_address, contact=rzv_contact,
-                                                  to_do_take=rzv_to_do_take, to_do_deliver=rzv_to_do_deliver)
+        Razvozka_import.objects.filter(id=rzv.id).update(customer_name=rzv_name, address=rzv_address,
+                                                         contact=rzv_contact, to_do_take=rzv_to_do_take,
+                                                         to_do_deliver=rzv_to_do_deliver)
     return HttpResponseRedirect(reverse('razvozki:admin'))
 
 @transaction.atomic()
@@ -727,6 +727,7 @@ def fulfilled_chg(request, id):
         razv.fulfilled = True
     razv.save()
     return HttpResponse()
+
 
 @csrf_exempt
 def return_all(request, id):
