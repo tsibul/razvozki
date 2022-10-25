@@ -791,10 +791,10 @@ function slc_rzv_(date, r_date, rzv_id){
 
 function clear_customer_modal(){
     document.getElementById('cst_id').value = null;
-    document.getElementById('customer').innerText = null;
-    document.getElementById('address').innerText = null;
-    document.getElementById('contact').innerText = null;
-    document.getElementById('mappoint').innerText = null;}
+    document.getElementById('customer').value = null;
+    document.getElementById('address').value = null;
+    document.getElementById('contact').value = null;
+    document.getElementById('mappoint').value = null;}
 
 function update_modal_customer(customerObj){
     var id = customerObj.dataset.id;
@@ -803,8 +803,18 @@ function update_modal_customer(customerObj){
     var contact = customerObj.dataset.contact;
     var mappoint = customerObj.dataset.mappoint;
     document.getElementById('cst_id').value = id;
-    document.getElementById('customer').innerText = customer;
-    document.getElementById('address').innerText = address;
-    document.getElementById('contact').innerText = contact;
-    document.getElementById('mappoint').innerText = mappoint;
+    document.getElementById('customer').value = customer;
+    document.getElementById('address').value = address;
+    document.getElementById('contact').value = contact;
+    document.getElementById('mappoint').value = mappoint;
+}
+
+function clear_rzv_modal(){
+    document.getElementById('rzv_id').value = null;
+    document.getElementById('customer').value = null;
+    document.getElementById('address').value = null;
+    document.getElementById('contact').value = null;
+    document.getElementById('mappoint').value = null;
+    document.getElementById('to_do_take').value = null;
+    document.getElementById('to_do_deliver').value = null;
 }

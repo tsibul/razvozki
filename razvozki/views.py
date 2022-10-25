@@ -147,16 +147,24 @@ def delete_rzv(request, id):
     return HttpResponseRedirect(reverse('razvozki:index'))
 
 @csrf_exempt
-def updaterecord_rzv(request, id):
+def updaterecord_rzv(request):
     page_num = request.POST['page_number_upd']
-    razvozka = Razvozka.objects.get(id=id)
     date = request.POST['date']
     date = datetime.datetime.strptime(date, '%Y-%m-%d').strftime('%Y-%m-%d')
-    date_id = request.POST['rzv_id']
+    date_id = request.POST['date_id']
     address = request.POST['address']
+    customer_name = request.POST['customer_name']
     contact = request.POST['contact']
+    mappoint = request.POST['mappoint']
     to_do_take = request.POST['to_do_take']
     to_do_deliver = request.POST['to_do_deliver']
+    try:
+        rzv_id = request.POST['rzv_id']
+        razvozka = Razvozka.objects.get(id=rzv_id)
+    except:
+        razvozka = Razvozka(id=rzv_id, customer_name=customer_name, address=address, contact=contact,
+                            map_point=mappoint, to_do_take=to_do_take, to_do_deliver=to_do_deliver)
+
     try:
         return_goods_id = request.POST['return_goods_id']
         razvozka_return = Razvozka.objects.get(id=return_goods_id)
@@ -369,21 +377,6 @@ def updaterecord_cst(request):
     if page_num != '':
         page_num = '?page=' + page_num
     return HttpResponseRedirect(reverse(out) + page_num)
-
-
-#def addrecord_cst(request):
-#    page_num = request.POST['page_number_add']
-#    order = request.POST['order_add']
-#    name = request.POST['name']
-#    address = request.POST['address']
-#    contact = request.POST['contact']
-#    mappoint = request.POST['mappoint']
-#    customer_clr = Customer_clr(name=name, address=address, contact=contact, mappoint=mappoint, clr='text-secondary')
-#    customer_clr.save()
-#    if page_num != '':
-#        page_num = '?page=' + page_num
-#    context = {'order': order}
-#    return HttpResponseRedirect(reverse('razvozki:customers', args=[order]) +page_num, context)
 
 
 def print_rzv(request, date_r):
