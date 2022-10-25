@@ -232,7 +232,7 @@ def cst_double_search(request):
             cst1.clr = 'text-danger'
         Customer_clr.objects.filter(id=cst1.id).update(clr=cst1.clr)
     context = {'order': order}
-    return HttpResponseRedirect(reverse('razvozki:customers', args=[order]), context)
+    return HttpResponseRedirect(reverse('razvozki:customers'), context)
 
 
 def customers_clr(request):

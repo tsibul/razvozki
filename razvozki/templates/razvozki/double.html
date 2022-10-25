@@ -51,7 +51,7 @@
     <div class="col border border-1 {{cst.clr}}">{{cst.contact}}</div>
     <div class="col-2 border border-1 text-center {{cst.clr}}">{{cst.mappoint}}</div>
   </div>
-    <form id="update_cst" action="{% url 'razvozki:updaterecord_cst' 'double' %}" method="post">
+    <form id="update_cst" action="{% url 'razvozki:updaterecord_cst' %}" method="post">
     {% csrf_token %}
       <input type="hidden" id="order_up" name="order_up" value="{{order}}">
       <input type="hidden" id="page_number_upd" name="page_number_upd" value="">
