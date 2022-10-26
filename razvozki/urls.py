@@ -9,7 +9,7 @@ urlpatterns = [
     path('addrecord_razv/', views.addrecord_razv, name='addrecord_razv'),
     path('delete_rzv/<int:id>', views.delete_rzv, name='delete_rzv'),
     path('upd_rzv_txt', views.updrzv_txt),
-    path('updaterecord_rzv>', views.updaterecord_rzv, name='updaterecord_rzv'),
+    path('updaterecord_rzv', views.updaterecord_rzv, name='updaterecord_rzv'),
     path('main', views.main_rzv, name='main_rzv'),
     path('newdate_rzv', views.newdate_rzv, name='newdate_rzv'),
     path('customers', views.customers, name='customers'),

@@ -153,7 +153,7 @@ def updaterecord_rzv(request):
     date = datetime.datetime.strptime(date, '%Y-%m-%d').strftime('%Y-%m-%d')
     date_id = request.POST['date_id']
     address = request.POST['address']
-    customer_name = request.POST['customer_name']
+    customer_name = request.POST['customer']
     contact = request.POST['contact']
     mappoint = request.POST['mappoint']
     to_do_take = request.POST['to_do_take']
@@ -161,31 +161,39 @@ def updaterecord_rzv(request):
     try:
         rzv_id = request.POST['rzv_id']
         razvozka = Razvozka.objects.get(id=rzv_id)
+        razvozka.address = address
+        razvozka.contact = contact
+        razvozka.map_point = mappoint
+        razvozka.to_do_take = to_do_take
+        razvozka.to_do_deliver = to_do_deliver
+        razvozka.date = date
+        razvozka.date_id = date_id
     except:
-        razvozka = Razvozka(id=rzv_id, customer_name=customer_name, address=address, contact=contact,
-                            map_point=mappoint, to_do_take=to_do_take, to_do_deliver=to_do_deliver)
+        date_create =datetime.date.today()
+        razvozka = Razvozka(address=address, contact=contact, fulfilled=False, date=date, date_id=date_id,
+                            map_point=mappoint, to_do_take=to_do_take, to_do_deliver=to_do_deliver,
+                            date_create=date_create)
 
-    try:
-        return_goods_id = request.POST['return_goods_id']
+    customer_id = request.POST['customer_id']
+    if customer_id != '':
+        customer = Customer.objects.get(id=customer_id)
+        razvozka.customer = customer
+        razvozka.customer_name = customer.name
+    else:
+        razvozka.customer_name = customer_name
+    return_goods_id = request.POST['upd_id']
+    if return_goods_id != '':
         razvozka_return = Razvozka.objects.get(id=return_goods_id)
         razvozka.return_goods = razvozka_return
         razvozka.return_from = True
-    except:
-        pass
-    razvozka.date = date
-    razvozka.date_id = date_id
-    try:
-        date_until = request.POST['date_until']
+    else:
+        razvozka.return_from = False
+    date_until = request.POST['date_until']
+    if date_until != '':
         razvozka.date_until = date_until
-    except:
-        pass
-    if razvozka.customer is None:
-        customer_name = request.POST['customer_name']
-        razvozka.customer_name = customer_name
-    razvozka.address = address
-    razvozka.contact = contact
-    razvozka.to_do_take = to_do_take
-    razvozka.to_do_deliver = to_do_deliver
+    elif date == '2100-01-01':
+        date_until = date_create + datetime.timedelta(days=7)
+        razvozka.date_until = date_until
     razvozka.save()
     if page_num != '':
         page_num = '?page=' + page_num

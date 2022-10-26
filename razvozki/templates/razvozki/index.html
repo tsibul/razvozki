@@ -21,19 +21,21 @@
           <input class="form-control" name="rzv_id" id="rzv_id" >
           <input type="hidden" name="page_number_upd" value="{{ page_obj.number }}">
           <div class="row m-1 me-3">
-          <div class="col-1">
-          <h6 class="text-center">#</h6>
+          <div class="col align-self-center" style="max-width: 40px;">
+          <h6 class="">#</h6>
           </div>
-          <div class="col-3">
-          <input type="number" class="form-control text-bold" name="date_id" id="date_id">
+          <div class="col-3 align-self-center">
+          <input type="number" class="form-control text-bold" name="date_id" id="date_id" value="1" required>
           </div>
           <div class="col-1">
           <h6>дата</h6>
+          <h6>cрок до</h6>
           </div>
           <div class="col-4">
-          <input type="date" class="form-control" name="date" id="date">
+          <input type="date" class="form-control mb-1" name="date" id="date" required>
+          <input type="date" class="form-control" name="date_until" id="date_until">
           </div>
-          <div class="col-2 align-self-center">
+          <div class="col-1 align-self-center">
           <button class="btn btn-success dropdown-toggle" type="button" id="ChooseClientAdd"
                   data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
                   <i class="bi bi-person-plus"></i>&nbsp; Выбрать клиента
@@ -52,7 +54,7 @@
           </div>
           <h6>клиент</h6>
           <textarea class="form-control text-bold" name="customer" id="customer"></textarea>
-          <input class="form-control text-bold" name="customer_id" id="customer_id">>
+          <input class="form-control text-bold" name="customer_id" id="customer_id">
           <h6>адрес</h6>
           <textarea class="form-control" name="address" id="address"></textarea>
           <h6>контакт</h6>
