@@ -779,7 +779,7 @@ function slc_rzv(date, r_date, rzv_id, id){
 function slc_rzv_(date, r_date, r_id, r_to_do_deliver){
     document.getElementById('upd_date').value = r_date + ' / ' + r_to_do_deliver;
     document.getElementById('upd_id').value = r_id;
-    document.getElementById('to_do_take_'+date).required = true
+    document.getElementById('to_do_take').required = true
 }
 
 
