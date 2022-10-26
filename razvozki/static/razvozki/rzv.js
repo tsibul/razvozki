@@ -776,11 +776,10 @@ function slc_rzv(date, r_date, rzv_id, id){
     document.getElementById('to_do_take_'+id).required = true
 }
 
-function slc_rzv_(date, r_date, r_id){
-    document.getElementById('upd_date').value = r_date;
+function slc_rzv_(date, r_date, r_id, r_to_do_deliver){
+    document.getElementById('upd_date').value = r_date + ' / ' + r_to_do_deliver;
     document.getElementById('upd_id').value = r_id;
     document.getElementById('to_do_take_'+date).required = true
-
 }
 
 
@@ -840,7 +839,7 @@ function select_customer(choseObj){
     var r_to_do_deliver =  x[i].getElementsByTagName("to_do_deliver")[0].childNodes[0].nodeValue;
     code_html = code_html + '<li id="rzv_ret_' + r_date + '_'+ r_id + '"';
     code_html = code_html + '<class="dropdown-item" onclick="javascript:slc_rzv_(';
-    code_html = code_html + "'" + rzv_id + "', '" + r_date + "', '" + r_id +  "')" + '">';
+    code_html = code_html + "'" + rzv_id + "', '" + r_date + "', '" + r_id + "', '" + r_to_do_deliver + "');" + '">';
     code_html = code_html + r_date + ' / ' + r_to_do_deliver + '</li>';
     };
     document.getElementById('ul_ret').innerHTML = code_html;}}
