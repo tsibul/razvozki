@@ -813,6 +813,9 @@ function clear_rzv_modal(){
     document.getElementById('mappoint').value = null;
     document.getElementById('to_do_take').value = null;
     document.getElementById('to_do_deliver').value = null;
+    document.getElementById('customer_id').value = null;
+    document.getElementById('upd_date').value = null;
+    document.getElementById('upd_id').value = null;
 }
 
 
