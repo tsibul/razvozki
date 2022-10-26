@@ -9,45 +9,82 @@
 <!-- Modal -->
 <div class="modal fade" id="razvozkaModal" tabindex="-1" aria-labelledby="razvozkaModalLabel"
      data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="razvozkaModalLabel">Редактировать Клиента</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="clear_customer_modal();"></button>
+        <h1 class="modal-title fs-5" id="razvozkaModalLabel">Редактировать Развозку</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="clear_rzv_modal();"></button>
       </div>
       <div class="modal-body">
       <form action="{% url 'razvozki:updaterecord_rzv' %}" method="post" id="upd_customer">
       {% csrf_token %}
           <input class="form-control" name="rzv_id" id="rzv_id" >
           <input type="hidden" name="page_number_upd" value="{{ page_obj.number }}">
-          <div class="row">
+          <div class="row m-1 me-3">
           <div class="col-1">
-          <h6>#</h6>
-          </div>
-          <div class="col-2">
-          <input type="number" class="form-control text-bold" name="date_id" id="date_id">
+          <h6 class="text-center">#</h6>
           </div>
           <div class="col-3">
+          <input type="number" class="form-control text-bold" name="date_id" id="date_id">
+          </div>
+          <div class="col-1">
+          <h6>дата</h6>
+          </div>
+          <div class="col-4">
+          <input type="date" class="form-control" name="date" id="date">
+          </div>
+          <div class="col-2 align-self-center">
           <button class="btn btn-success dropdown-toggle" type="button" id="ChooseClientAdd"
-                  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">Выбрать клиента
+                  data-bs-toggle="dropdown"  aria-haspopup="true" aria-expanded="false">
+                  <i class="bi bi-person-plus"></i>&nbsp; Выбрать клиента
           </button>
-          <ul class="dropdown-menu" aria-labelledby="ChooseClientAdd">
+          <ul class="dropdown-menu" aria-labelledby="ChooseClientAdd" id="ChooseCust">
+              <input type="text" class="dropdown-item" placeholder="Поиск.." id="CustInput" onkeyup="filterCust()">
               {% for cst in cust %}
-              <li id="Cust{{date_r}}_{{cst.id}}"><a class='dropdown-item' href='javascript:slc_cst('{{cst.name}}', '{{date_r}}', '{{cst.id}}', '{{cst.address}}', '{{cst.contact}}')'>{{cst.name}}</a></li>
+              <li id="Cust{{date_r}}_{{cst.id}}" class='dropdown-item' onclick='javascript:select_customer(this);' data-address="{{cst.address}}"
+                    data-id="{{cst.id}}" data-contact="{{cst.contact}}" data-mappoint="{{cst.mappoint}}">{{cst.name}}
+<!--                  <a class='dropdown-item' href='javascript:select_customer(this);' data-address="{{cst.address}}"
+                    data-id="{{cst.id}}" data-contact="{{cst.contact}}" data-mappoint="{{cst.mappoint}}">{{cst.name}}</a><--->
+              </li>
               {% endfor %}
           </ul>
           </div>
           </div>
           <h6>клиент</h6>
           <textarea class="form-control text-bold" name="customer" id="customer"></textarea>
+          <input class="form-control text-bold" name="customer_id" id="customer_id">>
           <h6>адрес</h6>
           <textarea class="form-control" name="address" id="address"></textarea>
           <h6>контакт</h6>
           <textarea class="form-control" name="contact" id="contact"></textarea>
           <h6>забрать</h6>
-          <textarea class="form-control" name="to_do_take" id="to_do_take"></textarea>
+          <div class="row">
+              <div class="col-9">
+                <textarea class="form-control" name="to_do_take" id="to_do_take"></textarea>
+              </div>
+              <div class="col-3">
+                <button type="button" class="btn btn-sm btn-outline-danger dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false" id=Choosereturn"><i class="bi bi-arrow-return-left">
+                </i>&nbsp;c переработки
+                </button>
+                <input type="text" hidden id="return_goods_customer_name" value="return_goods_customer_name">
+                <input type="text" hidden id="return_goods_to_do_take" value="return_goods_to_do_take">
+                <ul class="dropdown-menu" aria-labelledby="Choosereturn" id="ul_ret">
+                <li id="rzv_ret_">
+                    <a class="dropdown-item">
+                    </a>
+                </li>
+                </ul>
+              <input class="form-control text-bold" name="upd_date" id="upd_date">>
+              </div>
+          </div>
+          <input class="form-control text-bold" name="upd_id" id="upd_id">>
           <h6>сдать</h6>
+          <div class="row">
+          <div class="col-9">
           <textarea class="form-control" name="to_do_deliver" id="to_do_deliver"></textarea>
+          </div>
+          </div>
           <h6 hidden>координата</h6>
           <textarea hidden class="form-control" name="mappoint" id="mappoint"></textarea>
       </form>
@@ -70,7 +107,7 @@
 {% if page_number == '1' or page_number == None or page_number == '2' %}
 <div class="row">
   <div class="col">
-        <button data-bs-toggle="modal" data-bs-target="#razvozkaModal" class="btn btn-success" data-toggle="tooltip"
+        <button data-bs-toggle="modal" data-bs-target="#razvozkaModal" class="btn btn-success  ms-2" data-toggle="tooltip"
                 data-placement="top" title="новая развозка" type="button">
         Новая развозка
         </button>
@@ -79,9 +116,9 @@
 {% endif %}
 </div>
 <div class="col">
- <div class="row justify-content-end">
+ <div class="row ">
 <div id="page_number" hidden>{{page_number}}</div>
-<div class="pagination" xmlns="http://www.w3.org/1999/html">
+<div class="pagination justify-content-end" xmlns="http://www.w3.org/1999/html">
     <span class="step-links dropup-center dropup">
         {% if page_obj.has_previous %}
             <a href="?page=1" class="btn btn-outline-success">&laquo; первая</a>

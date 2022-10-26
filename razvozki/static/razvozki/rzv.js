@@ -77,7 +77,7 @@ function filterCust() {
   input = document.getElementById("CustInput");
   filter = input.value.toUpperCase();
   div = document.getElementById("ChooseCust");
-  a = div.getElementsByTagName("a");
+  a = div.getElementsByTagName("li");
   for (i = 0; i < a.length; i++) {
     txtValue = a[i].textContent || a[i].innerText;
     if (txtValue.toUpperCase().indexOf(filter) > -1) {
@@ -776,14 +776,9 @@ function slc_rzv(date, r_date, rzv_id, id){
     document.getElementById('to_do_take_'+id).required = true
 }
 
-function slc_rzv_(date, r_date, rzv_id){
-    var upd_date = 'r_date_' + date;
-    var upd_id = 'r_id_' + date;
-
-    var r_date = r_date;
-    var r_id = rzv_id;
-    document.getElementById(upd_date).value = r_date;
-    document.getElementById(upd_id).value = r_id;
+function slc_rzv_(date, r_date, r_id){
+    document.getElementById('upd_date').value = r_date;
+    document.getElementById('upd_id').value = r_id;
     document.getElementById('to_do_take_'+date).required = true
 
 }
@@ -811,10 +806,50 @@ function update_modal_customer(customerObj){
 
 function clear_rzv_modal(){
     document.getElementById('rzv_id').value = null;
+    document.getElementById('date_id').value = null;
+    document.getElementById('date').value = null;
     document.getElementById('customer').value = null;
     document.getElementById('address').value = null;
     document.getElementById('contact').value = null;
     document.getElementById('mappoint').value = null;
     document.getElementById('to_do_take').value = null;
     document.getElementById('to_do_deliver').value = null;
+}
+
+
+function select_customer(choseObj){
+    var cst_id = choseObj.dataset.id;
+    var name = choseObj.outerText;
+    var address = choseObj.dataset.address;
+    var contact = choseObj.dataset.contact;
+    var mappoint= choseObj.dataset.mappoint;
+
+    var x,xmlhttp,xmlDoc,tmp_xml,code_html;
+    tmp_xml = 'rzv_return.xml/' + cst_id;
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", tmp_xml, false);
+    xmlhttp.send();
+    xmlDoc = xmlhttp.responseXML;
+    code_html = '';
+    try{x = xmlDoc.getElementsByTagName("Razvozka");
+    if(x.length!=0){
+    for (var i = 0; i <x.length; i++) {
+    var r_id = x[i].getElementsByTagName("id")[0].childNodes[0].nodeValue;
+    var r_date =  x[i].getElementsByTagName("date")[0].childNodes[0].nodeValue;
+    var r_customer_name =  x[i].getElementsByTagName("customer_name")[0].childNodes[0].nodeValue;
+    var r_to_do_deliver =  x[i].getElementsByTagName("to_do_deliver")[0].childNodes[0].nodeValue;
+    code_html = code_html + '<li id="rzv_ret_' + r_date + '_'+ r_id + '"';
+    code_html = code_html + '<class="dropdown-item" onclick="javascript:slc_rzv_(';
+    code_html = code_html + "'" + rzv_id + "', '" + r_date + "', '" + r_id +  "')" + '">';
+    code_html = code_html + r_date + ' / ' + r_to_do_deliver + '</li>';
+    };
+    document.getElementById('ul_ret').innerHTML = code_html;}}
+    catch{};
+
+    document.getElementById('customer').value = name;
+    document.getElementById('address').value = address;
+    document.getElementById('contact').value = contact;
+    document.getElementById('mappoint').value = mappoint;
+    document.getElementById('customer_id').value = cst_id;
+
 }
