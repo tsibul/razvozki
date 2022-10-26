@@ -156,18 +156,19 @@
     <thead>
     <tr class="table-success">
         <th scope="col" colspan="2" class="">
-        {% if date_r|date:'Y-m-d' >= dateold %}
-        <a href="javascript:add_ln2('{{date_r|date:'Y-m-d'}}');">
-            <button class="btn btn-sm btn-outline-success fw-bold" data-toggle="tooltip"
-                    data-placement="top" title="добавить развозку">
-            <div class="fw-normal">добавить развозку</div>
-            </button></a>
-        {% endif %}
+    {% if date_r|date:'Y-m-d' >= dateold %}
+    <button class="btn btn-sm btn-outline-success" data-toggle="tooltip"
+            data-bs-toggle="modal" data-bs-target="#razvozkaModal" type="button"
+            data-placement="top" title="добавить развозку" onclick="add_razvozka(this);">
+        добавить развозку
+    </button>
+    {% endif %}
         </th>
         {% if date_r|date:'Y-m-d' != '2100-01-01' %}
-<!--            <th scope="col" colspan="1" class="text-nowrap text-end"> развозка на </th> <--->
             <th scope="col" colspan="1" class="text-nowrap text-start" style="font-size:120%;"
-                onclick="javascript:colapse('date_{{date_r|date:'Y-m-d' }}');">Развозка на {{ date_r|date:"d.m.Y" }}</th>
+                onclick="javascript:colapse('date_{{date_r|date:'Y-m-d' }}');" data-date="{{date_r|date:'Y-m-d'}}">
+                Развозка на {{ date_r|date:"d.m.Y" }}
+            </th>
             <form action="print_rzv/{{ date_r|date:'Y-m-d'}}" method="post">
             {% csrf_token %}
             <th scope="col" class="text-start"> <button type="submit" class="btn btn-outline-success btn-sm fw-bold" formtarget="_blank">
@@ -199,101 +200,16 @@
     </thead>
     <tbody id="collapse_date_{{date_r|date:'Y-m-d'}}"
            style="display:{% if date_r|date:'Y-m-d' != '2100-01-01' %}table-row-group{% else %}none{% endif %};">
-<!--            onmouseover="this.style.backgroundColor='#eee';" onmouseout="this.style.backgroundColor='#ffffff';"><--->
-
-
-    <tr class="dropdown" id="cst_id4_{{date_r|date:'Y-m-d'}}" style="display:none">
-        <td></td>
-<!--        <td colspan="2">
-      </td><--->
-    </tr>
-
-    <tr id="cst_id5_{{date_r|date:'Y-m-d'}}" style="display:none" data-placement="middle">
-    <form action="addrecord_razv/" method="post" id="cst_id8_{{date_r|date:'Y-m-d'}}">
-    {% csrf_token %}
-     <input type="hidden" id="page_number_add" name="page_number_add" value="{{ page_obj.number }}"
-            form="cst_id8_{{date_r|date:'Y-m-d'}}">
-        <td>
-        <input type="text" style="max-width:40px;" class="form-control" placeholder="#"
-           name="date_id" value="0" form="cst_id8_{{date_r|date:'Y-m-d'}}">
-        </td>
-        <td class="dropdown p-1">
-        <div id="dropdown_id_{{date_r|date:'Y-m-d'}}">
-        </div>
-        {%  if date_r|date:'Y-m-d' == '2100-01-01' %}
-        <br><br>
-        <div style="font-size:80%;">
-         <label for="date_until{{date_r}}">срок до</label>
-         <input type="date" name="date_until" class="form-control"  value="{{datenew}}"
-                id="date_until{{date_r}}" form="cst_id8_{{date_r|date:'Y-m-d'}}">
-        </div>
-        {% endif %}
-        </td>
-        <td colspan="3"><div class="row p-1">
-            <input type="hidden" name="date" value="{{date_r}}">
-            <div class="col">
-            <input type="hidden" id="updcust_id_{{date_r|date:'Y-m-d'}}" name="customer" value=None>
-            <textarea id="updcust_name_{{date_r|date:'Y-m-d'}}" class="form-control" placeholder="Клиент"  name="customer_name"></textarea>
-            </div>
-            <div class="col">
-            <textarea id="updcust_address_{{date_r|date:'Y-m-d'}}" class="form-control" placeholder="Адрес" name="address"></textarea>
-            </div>
-            <div class="col">
-            <textarea id="updcust_contact_{{date_r|date:'Y-m-d'}}" class="form-control" placeholder="Контакт" name="contact"></textarea>
-            </div>
-        </div>
-        <div class="row p-1">
-            <div class="col" style="min-width:480px">
-            <textarea class="form-control" placeholder="Забрать" name="to_do_take" id="to_do_take_{{date_r|date:'Y-m-d'}}"></textarea>
-            </div>
-            <div class="col">
-                <button type="button" class="btn btn-sm btn-outline-danger dropdown-toggle" data-bs-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false" id="Choosereturn{{date_r|date:'Y-m-d'}}"><i class="bi bi-arrow-return-left">
-                </i>возврат</button>
-                <ul class="dropdown-menu" aria-labelledby="Choosereturn{{date_r|date:'Y-m-d'}}" id="ul_{{date_r|date:'Y-m-d'}}">
-                </ul>
-                <input style="font-size:80%;" type="text" name="return_goods" class="form-control" value=""
-                       readonly form="cst_id8_{{date_r|date:'Y-m-d'}}" id="r_date_{{date_r|date:'Y-m-d'}}" >
-                <input type="text" hidden id="r_id_{{date_r|date:'Y-m-d'}}" name="r_id"
-                        form="cst_id8_{{date_r|date:'Y-m-d'}}">
-            </div>
-            <div class="col" style="min-width:480px">
-            <textarea class="form-control" placeholder="Сдать" name="to_do_deliver"></textarea>
-            </div>
-            <div class="col p-1 text-end align-center" hidden>
-            <input type="checkbox" class="btn-check" id="btn_checked_{{rzv.id}}" autocomplete="off"
-                   value="0" onclick="javascript:f_deliver_to({{rzv.id}});">
-            <label class="btn btn-sm btn-outline-danger" for="btn_checked_{{rzv.id}}" >
-                <i class="bi bi-arrow-repeat"></i>&nbsp;на переработку</label>
-            </div>
-        </div></td>
-        <td class="align-middle">
-            <a href="javascript:add_ln2_reverse('{{date_r|date:'Y-m-d'}}');">
-            <button type="button" class="btn btn-sm btn-outline-danger" data-toggle="tooltip"
-                    data-placement="top" title="отменить">
-                <i class="bi bi-arrow-counterclockwise"></i>
-            </button>
-            </a>
-            <br><br>
-            <button type="submit" class="btn btn-sm btn-outline-success" data-toggle="tooltip"
-                    data-placement="bottom" title="записать">
-                <i class="bi bi-check-lg"></i>
-            </button>
-        </td>
-    </form>
-    </tr>
-
-
 
     {% for rzv in razv %}
 
-    <form action="updaterecord_rzv/{{ rzv.id }}" method="post" id="updaterecord_rzv_{{rzv.id}}">
+<!--    <form action="updaterecord_rzv/{{ rzv.id }}" method="post" id="updaterecord_rzv_{{rzv.id}}">
         {% csrf_token %}
         <td id="date_{{rzv.id}}" hidden>{{rzv.date|date:'Y-m-d'}}</td>
         <td id="map_point_{{rzv.id}}" hidden>{{rzv.map_point}}</td>
-        <td id="customer_{{rzv.id}}" hidden>{{rzv.customer.id}}</td>
+        <td id="customer_{{rzv.id}}" hidden>{{rzv.customer.id}}</td> <--->
         <input type="text" id="return_from_{{rzv.id}}" hidden value="{{rzv.return_from}}">
-        <tr id="cst_id_{{rzv.id}}" class="lh-1 align-top" >
+        <tr id="cst_id_{{rzv.id}}" class="lh-1 align-top" data-date_id="{{rzv.date_id}}">
             {% if date_r|date:'Y-m-d' == '2100-01-01' %}<td></td>{% endif %}
             <td id="rzv_id_{{rzv.id}}" {% if date_r|date:'Y-m-d' == '2100-01-01' %}hidden{% endif %}
                 style="font-size:120%;" class="fw-bold">{{ rzv.date_id }}</td>
@@ -421,8 +337,7 @@
                 {% endif %}
             </td>
         </tr>
-        <!-- First row show -->
-    </form>
+<!--    </form><--->
     {% endfor %}
     </tbody>
 {% endfor %}

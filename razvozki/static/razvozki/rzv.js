@@ -805,7 +805,7 @@ function update_modal_customer(customerObj){
 
 function clear_rzv_modal(){
     document.getElementById('rzv_id').value = null;
-    document.getElementById('date_id').value = null;
+    document.getElementById('date_id').value = 1;
     document.getElementById('date').value = null;
     document.getElementById('customer').value = null;
     document.getElementById('address').value = null;
@@ -854,4 +854,20 @@ function select_customer(choseObj){
     document.getElementById('mappoint').value = mappoint;
     document.getElementById('customer_id').value = cst_id;
 
+}
+
+function add_razvozka(buttonObj){
+    document.getElementById('date').value = buttonObj.parentElement
+                                                              .nextElementSibling
+                                                              .dataset.date;
+    var razvozkiBody = buttonObj.parentElement
+                                .parentElement
+                                .parentElement
+                                .nextElementSibling
+                                .children;
+    var maxDateId = 0;
+    for(var i=0; i<razvozkiBody.length; i++){
+        if(maxDateId < razvozkiBody[i].dataset.date_id) maxDateId = razvozkiBody[i].dataset.date_id;
+    }
+    document.getElementById('date_id').value = parseInt(maxDateId) + 1;
 }
