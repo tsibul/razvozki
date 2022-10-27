@@ -74,7 +74,7 @@
         <button class="btn btn-success" type="submit" formtarget="_blank">Поиск</button>
       <p style="color: white">Ver.</p>
           &nbsp
-      <p style="color: white"> 2.2.1 </p>
+      <p style="color: white"> 3.0.1 </p>
       </form>
     </div>
   </div>
@@ -83,11 +83,11 @@
 
 <script src="{% static 'razvozki/jquery.min.js' %}"></script>
 <script src="{% static 'razvozki/rzv.js' %}"></script>
-<script src="{% static 'razvozki/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script>
+<!--<script src="{% static 'razvozki/bootstrap.bundle.min.js' %}" crossorigin="anonymous"></script><--->
 <!-- JavaScript Bundle with Popper -->
-<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
-<--->
- {% block content %}{% endblock %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
 
-  </body>
+{% block content %}{% endblock %}
+
+ </body>
 </html>

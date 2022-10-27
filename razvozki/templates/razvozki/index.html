@@ -100,10 +100,6 @@
   </div>
 </div>
 
-
-
-
-
 <div class="row fixed-bottom bg-light pt-2 pb-2">
 <div class="col-4 text-nowrap">
 {% if page_number == '1' or page_number == None or page_number == '2' %}
@@ -181,7 +177,7 @@
             <th></th>
         {% endif %}
 
-        <th scope="col" class="text-danger">
+        <th scope="col" colspan="5" class="text-danger">
         {% for rzv in rzv_len %}
         {% if date_r == rzv.0 %}
             <div class="fw-normal"> развозок: {{rzv.1}}</div>
@@ -197,12 +193,12 @@
 
     {% for rzv in razv %}
     <tr class="lh-1 align-top" data-date_id="{{rzv.date_id}}">
-        <td>{{rzv.date_id}}</td>
+        <td class="fw-bolder" style="font-size: 120%;">{{rzv.date_id}}</td>
         <td>
-            <button class="btn btn-sm btn-outline-{% if rzv.fulfilled %}success{% else %}danger{% endif %} text-nowrap m-1"
-                    type="button" id="rzv_fulfilled_but_{{rzv.id}}"
-                    onclick="javascript:rzv_status({{rzv.id}});" name="{% if rzv.fulfilled %}1{% else %}0{% endif %}">
-                <i class="bi bi-check2"></i>
+            <button class="btn btn-sm btn-outline-{% if rzv.fulfilled %}success{% else %}danger{% endif %} m-1"
+                    type="button" id="rzv_fulfilled_but_{{rzv.id}}" data-id="{{rzv.id}}" data-fulfilled="{{rzv.fulfilled}}"
+                    onclick="rzv_status(this);" name="{% if rzv.fulfilled %}1{% else %}0{% endif %}">
+                {% if rzv.fulfilled %}<i class="bi bi-check2">{% else %}<i class="bi bi-hourglass">{% endif %}</i>
             </button>
         </td>
         <td>
@@ -220,152 +216,60 @@
         {% endif %}
         {% endif %}
         </td>
-        <td>{{rzv.customer_name}}</td>
-        <td>{{rzv.get_all_todo}}</td>
+        <td class="fw-bold">{{rzv.customer_name}}</td>
         <td>{{rzv.address}}</td>
         <td>{{rzv.contact}}</td>
+        <td {% if not rzv.return_from %} colspan="2"{% endif %} style="min-width: 240px;">
+            <div class="mb-2">
+                {% if rzv.to_do_take != '' %}
+                <strong>ЗАБРАТЬ:&nbsp;</strong>{{rzv.to_do_take}}
+            </div>
+            <div>
+                {% endif %}
+                {% if rzv.to_do_deliver != '' %}
+                <strong>СДАТЬ:&nbsp;</strong>{{rzv.to_do_deliver}}
+                {% endif %}
+            </div>
+        </td>
+        {% if rzv.return_from %}
+        <td style="width: 60px;">
+           <button type="button" class="btn btn-sm btn-outline-success text-nowrap" data-bs-container="body"
+                   data-bs-toggle="popover" data-bs-placement="left" data-bs-content="{{rzv.return_goods.to_do_deliver}}">
+                  <!-- data-bs-title="{{rzv.customer.name}}"><-->
+            <i class="fas fa-person-digging"></i>&nbsp;от {{rzv.return_goods.date|date:'d.m'}}
+            </button>
+         </td>
+        {% endif %}
+        <td>
+            <input type="checkbox" class="btn-check" id="btn_checked_{{rzv.id}}" autocomplete="off"
+                   {% if rzv.return_all  or rzv.to_do_deliver == '' %}disabled {% endif %}
+                   {% if rzv.deliver_to %} value="1" checked  {% else %} value="0"  {% endif %}
+                   onclick="javascript:f_deliver_to(this);" data-id="{{rzv.id}}">
+            <label class="btn btn-sm btn-outline-danger" for="btn_checked_{{rzv.id}}" >
+                <i class="bi bi-arrow-repeat"></i>
+            </label>
+        </td>
+        <td class="text-end" id="rzv_delete_{{rzv.id}}">
+            <form action="delete_rzv/{{ rzv.id }}">
+            {% csrf_token %}
+                <button class="btn btn-sm btn-outline-danger fw-bold" data-toggle="tooltip" data-placement="top"
+                        title="удалить развозку" {% if rzv.fulfilled or rzv.deliver_to %}disabled{% endif %} type="submit"
+                        id="delete_{{rzv.id}}">
+                    <i class="bi bi-x-lg"></i>
+                </button>
+            </form>
+        </td>
     </tr>
 
-<!--    <form action="updaterecord_rzv/{{ rzv.id }}" method="post" id="updaterecord_rzv_{{rzv.id}}">
-        {% csrf_token %}
-        <td id="date_{{rzv.id}}" hidden>{{rzv.date|date:'Y-m-d'}}</td>
-        <td id="map_point_{{rzv.id}}" hidden>{{rzv.map_point}}</td>
-        <td id="customer_{{rzv.id}}" hidden>{{rzv.customer.id}}</td> <--->
-<!--        <input type="text" id="return_from_{{rzv.id}}" hidden value="{{rzv.return_from}}">
-        <tr id="cst_id_{{rzv.id}}" class="lh-1 align-top" data-date_id="{{rzv.date_id}}">
-            {% if date_r|date:'Y-m-d' == '2100-01-01' %}<td></td>{% endif %}
-            <td id="rzv_id_{{rzv.id}}" {% if date_r|date:'Y-m-d' == '2100-01-01' %}hidden{% endif %}
-                style="font-size:120%;" class="fw-bold">{{ rzv.date_id }}</td>
-
-            <td class="text-unwrap" style="min-width:140px;">
-            {% if rzv.date|date:'Y-m-d' != '2100-01-01' %}
-            <div class="col p-1" id="rzv_fulfilled_{{rzv.id}}" >
-
-            <button class="btn btn-sm btn-outline-{% if rzv.fulfilled %}success{% else %}danger{% endif %}"
-                    type="button" id="rzv_fulfilled_but_{{rzv.id}}"
-                    onclick="javascript:rzv_status({{rzv.id}});" name="{% if rzv.fulfilled %}1{% else %}0{% endif %}">
-                <i class="bi bi-check2"></i>{% if rzv.fulfilled %}выполнено{% else %}в процессе{% endif %}
-            </button>
-            </div>
-                       <div class="col p-1" id="razv_return_all_{{rzv.id}}">
-            {% if rzv.return_from %}
-            {% if rzv.return_goods.return_all %}
-            <button class="btn btn-sm btn-outline-success" type="button" id="rzv_return_all_{{rzv.id}}"
-                    onclick="javascript:rzv_return_all({{rzv.id}}, {{rzv.return_goods.id}});" name="1">
-                <i class="fa-regular fa-handshake"></i>полностью
-            </button>
-            {% else %}
-            <button class="btn btn-sm btn-outline-danger" type="button" id="rzv_return_all_{{rzv.id}}"
-                    onclick="javascript:rzv_return_all({{rzv.id}}, {{rzv.return_goods.id}});" name="0">
-                <i class="fas fa-person-digging"></i>&nbsp;&nbsp;  частично
-            </button >
-            {% endif %}
-            {% endif %}
-            </div>
-            {% else %}
-            <div class="col p-1" id="date_create_{{rzv.id}}" >от {{rzv.date_create|date:'d.m.Y'}}</div>
-            <br>
-            <div class="col p-1" id="date_until_{{rzv.id}}" >до {{rzv.date_until|date:'d.m.Y'}}</div>
-            <input name="0" hidden type="text" id="rzv_fulfilled_but_{{rzv.id}}" value="{{rzv.fulfilled}}">
-            <input type="text" hidden id="date_create2_{{rzv.id}}" value="{{rzv.date_create|date:'Y-m-d'}}">
-            <input type="text" hidden id="date_until2_{{rzv.id}}" value="{{rzv.date_until|date:'Y-m-d'}}">
-
-            {% endif %}
-
-            </td>
-            <td colspan="3">
-
-            <div class="row" onclick="javascript:upd_rzv({{rzv.id}});" >
-            <div class="col p-1" id="customer_name_{{rzv.id}}"
-                 >{{ rzv.customer_name }}</div>
-            <div class="col p-1" id="address_{{rzv.id}}"
-                 >{{ rzv.address }}</div>
-            <div class="col p-1" id="contact_{{rzv.id}}"
-                 >{{ rzv.contact }}</div>
-            </div>
-            <div class="row text-success border border-success mt-2 pt-2 pb-1 bg-light align-self-bottom" style="font-size:100%" >
-            {% if rzv.to_do_take != '' %}
-            <div class="col" id="to_do_take_{{rzv.id}}"><strong>ЗАБРАТЬ:</strong> {{rzv.to_do_take}}</div>
-            {% if rzv.return_from %}
-            <div class="col p-1" >
-                <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#rzv_return{{rzv.id}}">
-                    c переработки {{rzv.return_goods.date|date:'d.m.Y'}}</button>
-            </div>
-            Modal
-            <div class="modal fade" id="rzv_return{{rzv.id}}" tabindex="-1" aria-labelledby="rzv_return{{rzv.id}}Label" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="rzv_return{{rzv.id}}Label">Что отвозили</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                  </div>
-                  <div class="modal-body">
-                      <div> дата: {{rzv.return_goods.date|date:'d.m.Y'}},
-                            кому: {{rzv.return_goods.customer_name}}</div>
-                      <br>
-                      <h6>{{rzv.return_goods.to_do_deliver}}</h6>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <input type="text" hidden id="return_goods_id_{{rzv.id}}" value="{{rzv.return_goods.id}}">
-            <input type="text" hidden id="return_goods_{{rzv.id}}" value="{{rzv.return_goods.date|date:'d.m.Y'}}">
-            <input type="text" hidden id="return_goods_customer_name_{{rzv.id}}" value="{{rzv.return_goods.customer_name}}">
-            <input type="text" hidden id="return_goods_to_do_take_{{rzv.id}}" value="{{rzv.return_goods.to_do_deliver}}">
-
-            {% endif %}
-            {% endif %}
-
-            {% if rzv.to_do_deliver != '' %}
-                <div class="col" id="to_do_deliver_{{rzv.id}}"
-                 onclick="javascript:upd_rzv({{rzv.id}});"
-                     style="min-width:420px;"> <strong> СДАТЬ:</strong> {{rzv.to_do_deliver}} </div>
-                {% if rzv.deliver_to %}
-                    {% if rzv.return_all %}
-                    <div class="col p-1 text-end align-center" >
-                    <input type="checkbox" class="btn-check" id="btn_checked_{{rzv.id}}" autocomplete="off" disabled
-                           value="1" checked onclick="javascript:f_deliver_to({{rzv.id}});">
-                    <label class="btn btn-sm btn-outline-danger" for="btn_checked_{{rzv.id}}" >
-                        <i class="bi bi-arrow-repeat"></i>&nbsp;на переработку</label>
-                    </div>
-                    {% else %}
-                    <div class="col p-1 text-end align-center" >
-                    <input type="checkbox" class="btn-check" id="btn_checked_{{rzv.id}}" autocomplete="off"
-                           value="1" checked onclick="javascript:f_deliver_to({{rzv.id}});">
-                    <label class="btn btn-sm btn-outline-danger" for="btn_checked_{{rzv.id}}" >
-                        <i class="bi bi-arrow-repeat"></i>&nbsp;на переработку</label>
-                    </div>
-                    {% endif %}
-                {% else %}
-                <div class="col p-1 text-end align-center" >
-                <input type="checkbox" class="btn-check" id="btn_checked_{{rzv.id}}" autocomplete="off"
-                       value="0" onclick="javascript:f_deliver_to({{rzv.id}});">
-                <label class="btn btn-sm btn-outline-danger" for="btn_checked_{{rzv.id}}">
-                    <i class="bi bi-arrow-repeat"></i>&nbsp;на переработку</label>
-                </div>
-                {% endif %}
-            {% endif %}
-
-            </div>
-            </td>
-            <td class="text-end" id="rzv_delete_{{rzv.id}}">
-                {% if rzv.fulfilled %}
-                <button class="btn btn-sm btn-outline-danger fw-bold" data-toggle="tooltip" data-placement="top"
-                    title="удалить развозку" disabled><i class="bi bi-x-lg"></i></button>
-                {% else %}
-                <a href="delete_rzv/{{ rzv.id }}">
-                <button type="button" class="btn btn-sm btn-outline-danger fw-bold" data-toggle="tooltip" data-placement="top"
-                    title="удалить развозку"><i class="bi bi-x-lg"></i></button>
-                </a>
-                {% endif %}
-            </td>
-        </tr><--->
-<!--    </form><--->
     {% endfor %}
     </tbody>
 {% endfor %}
 </table>
 <br><br>
-
+<script>
+    $(function () {
+      $('[data-bs-toggle="popover"]').popover()
+    })
+</script>
 
 {% endblock %}
