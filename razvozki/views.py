@@ -61,7 +61,7 @@ def index(request):
         f_rzv0[r.date].append(r)
 
     f_rzv2 = list(f_rzv0.items())
-    paginator = Paginator(f_rzv2, 6)
+    paginator = Paginator(f_rzv2, 7)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     f_rzv = dict(page_obj.object_list)
