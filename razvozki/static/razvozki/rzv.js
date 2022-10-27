@@ -596,14 +596,9 @@ function cst_list(date_r) {
 
 function colapse(id){
     var area = 'collapse_' + id;
-    var button = area + '_but';
-    var button_minus = '<button type=button class="btn btn-sm btn-outline-secondary" ><i class="fas fa-bars"></i></button>';
-    var button_plus = '<button type=button class="btn btn-sm btn-outline-success" ><i class="fas fa-bars"></i></button>';
     if (document.getElementById(area).style.display =='none'){
-    document.getElementById(button).innerHTML = button_minus;
     document.getElementById(area).style.display = 'table-row-group';}
-    else {document.getElementById(button).innerHTML = button_plus;
-    document.getElementById(area).style.display = 'none';};
+    else {document.getElementById(area).style.display = 'none';};
 }
 
 function rzv_status(id){

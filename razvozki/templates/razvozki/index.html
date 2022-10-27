@@ -151,11 +151,11 @@
 </div>
 </div>
 
-<table class="table table-hover table-border border-success">
+<table class="table table-sm table-hover table-border border-success">
 {% for date_r, razv in f_rzv.items %}
     <thead>
     <tr class="table-success">
-        <th scope="col" colspan="2" class="">
+        <th scope="col" colspan="4" class="">
     {% if date_r|date:'Y-m-d' >= dateold %}
     <button class="btn btn-sm btn-outline-success" data-toggle="tooltip"
             data-bs-toggle="modal" data-bs-target="#razvozkaModal" type="button"
@@ -189,12 +189,6 @@
         {% endfor %}
 
         </th>
-        <th scope="col" class="text-end">
-        <a href="javascript:colapse('date_{{date_r|date:'Y-m-d' }}');" id="collapse_date_{{date_r|date:'Y-m-d'}}_but">
-        <button type=button class="btn btn-sm btn-outline-secondary">
-            <i class="fas fa-bars"></i>
-        </button></a>
-        </th>
     </tr>
 
     </thead>
@@ -202,13 +196,42 @@
            style="display:{% if date_r|date:'Y-m-d' != '2100-01-01' %}table-row-group{% else %}none{% endif %};">
 
     {% for rzv in razv %}
+    <tr class="lh-1 align-top" data-date_id="{{rzv.date_id}}">
+        <td>{{rzv.date_id}}</td>
+        <td>
+            <button class="btn btn-sm btn-outline-{% if rzv.fulfilled %}success{% else %}danger{% endif %} text-nowrap m-1"
+                    type="button" id="rzv_fulfilled_but_{{rzv.id}}"
+                    onclick="javascript:rzv_status({{rzv.id}});" name="{% if rzv.fulfilled %}1{% else %}0{% endif %}">
+                <i class="bi bi-check2"></i>
+            </button>
+        </td>
+        <td>
+        {% if rzv.return_from %}
+        {% if rzv.return_goods.return_all %}
+            <button class="btn btn-sm btn-outline-success text-nowrap m-1" type="button" id="rzv_return_all_{{rzv.id}}"
+                    onclick="javascript:rzv_return_all({{rzv.id}}, {{rzv.return_goods.id}});" name="1">
+                <i class="fa-regular fa-handshake"></i>
+            </button>
+        {% else %}
+            <button class="btn btn-sm btn-outline-danger text-nowrap m-1" type="button" id="rzv_return_all_{{rzv.id}}"
+                    onclick="javascript:rzv_return_all({{rzv.id}}, {{rzv.return_goods.id}});" name="0">
+                <i class="fas fa-person-digging"></i>
+            </button >
+        {% endif %}
+        {% endif %}
+        </td>
+        <td>{{rzv.customer_name}}</td>
+        <td>{{rzv.get_all_todo}}</td>
+        <td>{{rzv.address}}</td>
+        <td>{{rzv.contact}}</td>
+    </tr>
 
 <!--    <form action="updaterecord_rzv/{{ rzv.id }}" method="post" id="updaterecord_rzv_{{rzv.id}}">
         {% csrf_token %}
         <td id="date_{{rzv.id}}" hidden>{{rzv.date|date:'Y-m-d'}}</td>
         <td id="map_point_{{rzv.id}}" hidden>{{rzv.map_point}}</td>
         <td id="customer_{{rzv.id}}" hidden>{{rzv.customer.id}}</td> <--->
-        <input type="text" id="return_from_{{rzv.id}}" hidden value="{{rzv.return_from}}">
+<!--        <input type="text" id="return_from_{{rzv.id}}" hidden value="{{rzv.return_from}}">
         <tr id="cst_id_{{rzv.id}}" class="lh-1 align-top" data-date_id="{{rzv.date_id}}">
             {% if date_r|date:'Y-m-d' == '2100-01-01' %}<td></td>{% endif %}
             <td id="rzv_id_{{rzv.id}}" {% if date_r|date:'Y-m-d' == '2100-01-01' %}hidden{% endif %}
@@ -268,7 +291,7 @@
                 <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#rzv_return{{rzv.id}}">
                     c переработки {{rzv.return_goods.date|date:'d.m.Y'}}</button>
             </div>
-            <!-- Modal -->
+            Modal
             <div class="modal fade" id="rzv_return{{rzv.id}}" tabindex="-1" aria-labelledby="rzv_return{{rzv.id}}Label" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
@@ -336,7 +359,7 @@
                 </a>
                 {% endif %}
             </td>
-        </tr>
+        </tr><--->
 <!--    </form><--->
     {% endfor %}
     </tbody>
