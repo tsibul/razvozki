@@ -194,12 +194,18 @@ function colapse(id){
 function rzv_status(butFulfilled){
     var id = butFulfilled.dataset.id;
     var str_delete = 'delete_' + id;
+    var parentRow = Array.from(butFulfilled.parentElement
+                                           .parentElement
+                                           .children);
     if (butFulfilled.dataset.fulfilled == "False"){
         document.getElementById(str_delete).disabled = true;
         butFulfilled.childNodes[1].className = 'bi bi-check2';
         butFulfilled.classList.add('btn-outline-success');
         butFulfilled.classList.remove('btn-outline-danger');
         butFulfilled.dataset.fulfilled = "True";
+        for (var i=3; i<=6; i++){
+        parentRow[i].setAttribute('data-bs-toggle', null);
+        parentRow[i].setAttribute( 'data-bs-target', null);}
     }
     else{
         document.getElementById(str_delete).disabled = false;
@@ -207,6 +213,9 @@ function rzv_status(butFulfilled){
         butFulfilled.classList.add('btn-outline-danger');
         butFulfilled.classList.remove('btn-outline-success');
         butFulfilled.dataset.fulfilled = "False";
+        for (var i=3; i<=6; i++){
+        parentRow[i].setAttribute('data-bs-toggle', 'modal');
+        parentRow[i].setAttribute( 'data-bs-target', '#razvozkaModal');}
     };
     butFulfilled.childNodes
     var xhr = new XMLHttpRequest();
@@ -405,7 +414,6 @@ function clear_rzv_modal(){
   }
 }
 
-
 function select_customer(choseObj){
     var cst_id = choseObj.dataset.id;
     var name = choseObj.outerText;
@@ -440,7 +448,6 @@ function select_customer(choseObj){
     document.getElementById('contact').value = contact;
     document.getElementById('mappoint').value = mappoint;
     document.getElementById('customer_id').value = cst_id;
-
 }
 
 function add_razvozka(buttonObj){
@@ -496,8 +503,6 @@ function updaterecord_rzv(updObj){
 
     document.getElementById('upd_date').value = parentObj.dataset.return_goods;
     document.getElementById('upd_id').value = parentObj.dataset.return_id;
-
-
 }
 
 function clear_return(){

@@ -215,15 +215,18 @@
             </button>
         {% endif %}
         </td>
-        <td class="fw-bold" data-bs-toggle="modal" data-bs-target="#razvozkaModal" onclick="updaterecord_rzv(this);">
-            {{rzv.customer_name}}
+        <td class="fw-bold" {% if not rzv.fulfilled %}data-bs-toggle="modal" data-bs-target="#razvozkaModal"
+            onclick="updaterecord_rzv(this);"{% endif%}>{{rzv.customer_name}}
         </td>
-        <td data-bs-toggle="modal" data-bs-target="#razvozkaModal"  onclick="updaterecord_rzv(this);">{{rzv.address}}
+        <td {% if not rzv.fulfilled %}data-bs-toggle="modal" data-bs-target="#razvozkaModal"
+            onclick="updaterecord_rzv(this);"{% endif%}>{{rzv.address}}
         </td>
-        <td data-bs-toggle="modal" data-bs-target="#razvozkaModal"  onclick="updaterecord_rzv(this);">{{rzv.contact}}
+        <td {% if not rzv.fulfilled %}data-bs-toggle="modal" data-bs-target="#razvozkaModal"
+            onclick="updaterecord_rzv(this);"{% endif%}>{{rzv.contact}}
         </td>
-        <td {% if not rzv.return_from %} colspan="2"{% endif %}  onclick="updaterecord_rzv(this);"
-            style="min-width: 240px;" data-bs-toggle="modal" data-bs-target="#razvozkaModal" >
+        <td {% if not rzv.return_from %} colspan="2"{% endif %} style="min-width: 240px;"
+            {% if not rzv.fulfilled %}data-bs-toggle="modal" data-bs-target="#razvozkaModal"
+            onclick="updaterecord_rzv(this);" {% endif%} >
             <div class="mb-2">
                 {% if rzv.to_do_take != '' %}
                 <strong>ЗАБРАТЬ:&nbsp;</strong>{{rzv.to_do_take}}
