@@ -83,64 +83,6 @@ def index(request):
     return render(request, 'razvozki/index.html', context)
 
 
-def addrecord_razv(request):
-    date_create = datetime.date.today()
-    page_num = request.POST['page_number_add']
-    date = request.POST['date']
-    try:
-        date = datetime.datetime.strptime(date, '%B %d, %Y').strftime('%Y-%m-%d')
-    except:
-        try:
-            date = datetime.datetime.strptime(date, '%b. %d, %Y').strftime('%Y-%m-%d')
-        except:
-                date = datetime.datetime.strptime(date, '%bt. %d, %Y').strftime('%Y-%m-%d')
-    date_id = request.POST['date_id']
-    customer = request.POST['customer']
-    if customer == 'None':
-        customer = None
-    else:
-        customer = Customer.objects.get(id=customer)
-    customer_name = request.POST['customer_name']
-    address = request.POST['address']
-    contact = request.POST['contact']
-    to_do_take = request.POST['to_do_take']
-    to_do_deliver = request.POST['to_do_deliver']
-    clr = 'text-secondary'
-    razvozka = Razvozka(date=date, date_id=date_id, customer_name=customer_name, customer=customer, address=address,
-                        contact=contact, date_create=date_create, fulfilled=False,
-                        to_do_take=to_do_take, to_do_deliver=to_do_deliver, clr=clr)
-    try:
-        date_until = request.POST['date_until']
-        try:
-            date_until = datetime.datetime.strptime(date_until, '%B %d, %Y').strftime('%Y-%m-%d')
-        except:
-            try:
-                date_until = datetime.datetime.strptime(date_until, '%b. %d, %Y').strftime('%Y-%m-%d')
-            except:
-                    date_until = datetime.datetime.strptime(date_until, '%bt. %d, %Y').strftime('%Y-%m-%d')
-        razvozka.date_until = date_until
-    except:
-        pass
-    try:
-        r_id = request.POST['r_id']
-        child_razv = Razvozka.objects.get(id=r_id)
-        if child_razv.customer == customer:
-            razvozka.return_from = True
-            razvozka.return_goods = child_razv
-    except:
-        pass
-    try:
-        if razvozka.return_from and to_do_take == '':
-            HttpResponse('Не введено, что забрать')
-        else:
-            razvozka.save()
-    except:
-        razvozka.save()
-    if page_num != '':
-        page_num = '?page=' + page_num
-    return HttpResponseRedirect(reverse('razvozki:index') + page_num)
-
-
 def delete_rzv(request, id):
     razvozka = Razvozka.objects.get(id=id)
     razvozka.delete()
@@ -203,15 +145,6 @@ def updaterecord_rzv(request):
 def main_rzv(request):
     template = loader.get_template('razvozki/main.html')
     return HttpResponse(template.render({}, request))
-
-
-def newdate_rzv(request):
-    datenew = request.POST['date']
-    datenew = datetime.datetime.strptime(datenew, '%Y-%m-%d').strftime('%Y-%m-%d')
-    razvozka = Razvozka(date=datenew, date_id=1, customer_name='', customer=None, address='', contact='',
-                        to_do_take='', to_do_deliver='', clr='text-secondary')
-    razvozka.save()
-    return HttpResponseRedirect(reverse('razvozki:index'))
 
 
 def customers(request):
