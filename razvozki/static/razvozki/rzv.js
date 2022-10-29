@@ -215,25 +215,27 @@ function rzv_status(butFulfilled){
     xhr.send();
 }
 
-function rzv_return_all(id, rzv_id){
-    var str_id = 'razv_return_all_' + id;
-    var str_content = document.getElementById(str_id).textContent
-    var fulfilled = ('<button class="btn btn-sm btn-outline-success" type="button"' +
-                    'onclick="javascript:rzv_return_all(' + id + ', ' + rzv_id + ');" value="1">' +
-                    '<i class="fa-regular fa-handshake"></i>полностью');
-    var waiting = ('<button class="btn btn-sm btn-outline-danger" type="button"' +
-                    'onclick="javascript:rzv_return_all(' + id + ', ' + rzv_id +');" value="0">' +
-                    '<i class="fas fa-person-digging"></i>&nbsp;&nbsp;  частично');
-    if (str_content.includes('частично')){
-    document.getElementById(str_id).innerHTML = fulfilled;}
-    else {document.getElementById(str_id).innerHTML = waiting;};
+function rzv_return_all(returnObj){
+    var id = returnObj.dataset.id;
+    var returnGoodsId = returnObj.dataset.return_goods;
+    var returnAll = returnObj.children[0].className == "fas fa-person-digging";
+    if (returnAll){
+        returnObj.children[0].className = "fa-regular fa-handshake";
+        returnObj.classList.remove("btn-outline-danger");
+        returnObj.classList.add("btn-outline-success");
+    }
+    else{
+        returnObj.children[0].className = "fas fa-person-digging";
+        returnObj.classList.remove("btn-outline-success");
+        returnObj.classList.add("btn-outline-danger");
+    }
     var xhr = new XMLHttpRequest();
-    var url = 'return_all/' + rzv_id;
+    var url = 'return_all/' + returnGoodsId;
     xhr.open("GET", url, true);
     xhr.send(id);
 }
 
-function updaterecord_rzv(id){
+function updaterecord_rzv_(id){
   var fulfilled  = 'False';
   var date = document.getElementById('date_' + id).txtValue;
   var date_id = document.getElementById('rzv_id_'+id).value;
@@ -397,6 +399,10 @@ function clear_rzv_modal(){
     document.getElementById('customer_id').value = null;
     document.getElementById('upd_date').value = null;
     document.getElementById('upd_id').value = null;
+    var ulElement = document.getElementById('ul_ret');
+    while (ulElement.firstChild) {
+    ulElement.removeChild(ulElement.lastChild);
+  }
 }
 
 
@@ -451,4 +457,54 @@ function add_razvozka(buttonObj){
         if(maxDateId < razvozkiBody[i].dataset.date_id) maxDateId = razvozkiBody[i].dataset.date_id;
     }
     document.getElementById('date_id').value = parseInt(maxDateId) + 1;
+}
+
+function updaterecord_rzv(updObj){
+    var parentObj = updObj.parentElement;
+    document.getElementById('rzv_id').value = parentObj.dataset.id;
+    document.getElementById('date_id').value = parentObj.dataset.date_id;
+    document.getElementById('date').value = parentObj.dataset.date;
+    document.getElementById('customer').value = parentObj.dataset.customer_name;
+    document.getElementById('address').value = parentObj.dataset.address;
+    document.getElementById('contact').value = parentObj.dataset.contact;
+    document.getElementById('mappoint').value = parentObj.dataset.mappoint;
+    document.getElementById('to_do_take').value = parentObj.dataset.to_do_take;
+    document.getElementById('to_do_deliver').value = parentObj.dataset.to_do_deliver;
+    document.getElementById('customer_id').value = parentObj.dataset.customer_id;
+
+    var x,xmlhttp,xmlDoc,tmp_xml,code_html;
+    tmp_xml = 'rzv_return.xml/' + parentObj.dataset.customer_id;
+    xmlhttp = new XMLHttpRequest();
+    xmlhttp.open("GET", tmp_xml, false);
+    xmlhttp.send();
+    xmlDoc = xmlhttp.responseXML;
+    code_html = '';
+    try{x = xmlDoc.getElementsByTagName("Razvozka");
+    if(x.length!=0){
+    for (var i = 0; i <x.length; i++) {
+    var r_id = x[i].getElementsByTagName("id")[0].childNodes[0].nodeValue;
+    var r_date =  x[i].getElementsByTagName("date")[0].childNodes[0].nodeValue;
+    var r_customer_name =  x[i].getElementsByTagName("customer_name")[0].childNodes[0].nodeValue;
+    var r_to_do_deliver =  x[i].getElementsByTagName("to_do_deliver")[0].childNodes[0].nodeValue;
+    code_html = code_html + '<li id="rzv_ret_' + r_date + '_'+ r_id + '"';
+    code_html = code_html + '<class="dropdown-item" onclick="javascript:slc_rzv_(';
+    code_html = code_html + "'" + rzv_id + "', '" + r_date + "', '" + r_id + "', '" + r_to_do_deliver + "');" + '">';
+    code_html = code_html + r_date + ' / ' + r_to_do_deliver + '</li>';
+    };
+    document.getElementById('ul_ret').innerHTML = code_html;}}
+    catch{};
+
+    document.getElementById('upd_date').value = parentObj.dataset.return_goods;
+    document.getElementById('upd_id').value = parentObj.dataset.return_id;
+
+
+}
+
+function clear_return(){
+    document.getElementById('upd_date').value = null;
+    document.getElementById('upd_id').value = null;
+    var ulElement = document.getElementById('ul_ret');
+    while (ulElement.firstChild) {
+    ulElement.removeChild(ulElement.lastChild);
+  }
 }

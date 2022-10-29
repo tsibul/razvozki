@@ -738,7 +738,7 @@ def return_all(request, id):
     else:
         razv.return_all = True
     razv.save()
-    return HttpResponse
+    return HttpResponse()
 
 
 @csrf_exempt
