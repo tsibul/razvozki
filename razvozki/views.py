@@ -110,6 +110,7 @@ def updaterecord_rzv(request):
         razvozka.to_do_deliver = to_do_deliver
         razvozka.date = date
         razvozka.date_id = date_id
+        date_create = razvozka.date_create
     except:
         date_create =datetime.date.today()
         razvozka = Razvozka(address=address, contact=contact, fulfilled=False, date=date, date_id=date_id,
