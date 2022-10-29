@@ -18,7 +18,7 @@
       <div class="modal-body">
       <form action="{% url 'razvozki:updaterecord_rzv' %}" method="post" id="upd_customer">
       {% csrf_token %}
-          <input class="form-control" name="rzv_id" id="rzv_id" >
+          <input class="form-control" name="rzv_id" id="rzv_id" hidden >
           <input type="hidden" name="page_number_upd" value="{{ page_obj.number }}">
           <div class="row m-1 me-3">
           <div class="col align-self-center" style="max-width: 40px;">
@@ -52,7 +52,7 @@
           </div>
           <h6>клиент</h6>
           <textarea class="form-control text-bold" name="customer" id="customer"></textarea>
-          <input class="form-control text-bold" name="customer_id" id="customer_id">
+          <input class="form-control text-bold" name="customer_id" id="customer_id" hidden>
           <h6>адрес</h6>
           <textarea class="form-control" name="address" id="address"></textarea>
           <h6>контакт</h6>
@@ -76,7 +76,7 @@
               <input class="form-control me-3" style="max-width: 150px; font-size: 70%;" name="upd_date" id="upd_date">
               </div>
           </div>
-          <input class="form-control text-bold" name="upd_id" id="upd_id">
+          <input class="form-control text-bold" name="upd_id" id="upd_id" hidden>
           <h6>сдать</h6>
           <div class="row">
           <div class="col-9">
