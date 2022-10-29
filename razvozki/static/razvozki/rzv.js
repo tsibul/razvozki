@@ -361,6 +361,7 @@ function updaterecord_rzv(updObj){
     document.getElementById('rzv_id').value = parentObj.dataset.id;
     document.getElementById('date_id').value = parentObj.dataset.date_id;
     document.getElementById('date').value = parentObj.dataset.date;
+    document.getElementById('date_until').value = parentObj.dataset.date_until;
     document.getElementById('customer').value = parentObj.dataset.customer_name;
     document.getElementById('address').value = parentObj.dataset.address;
     document.getElementById('contact').value = parentObj.dataset.contact;

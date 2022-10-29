@@ -195,7 +195,7 @@
         data-contact="{{rzv.contact}}" data-mappoint="{{rzv.map_point}}" data-to_do_take="{{rzv.to_do_take}}"
         data-to_do_deliver="{{rzv.to_do_deliver}}" data-date="{{rzv.date|date:'Y-m-d'}}" data-return_id="{{rzv.return_goods.id}}"
         data-return_goods="{{rzv.return_goods.date|date:'Y-m-d'}} / {{rzv.return_goods.to_do_deliver}}"
-            >
+        data-date_until="{{rzv.date_until|date:'Y-m-d'}}">
         <td class="fw-bolder"
             style="font-size: 120%;">{% if date_r|date:'Y-m-d' != '2100-01-01' %}{{rzv.date_id}}{% endif %}</td>
         {% if date_r|date:'Y-m-d' != '2100-01-01' %}
