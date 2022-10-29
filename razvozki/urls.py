@@ -30,8 +30,11 @@ urlpatterns = [
     path('clean_cst', views.clean_cst, name='clean_cst'),
     path('export_rzv', views.export_rzv, name='export_rzv'),
     path('customers.xml', views.cust_xml, name='customers.xml'),
-    path('search_/<navi>', views.search_, name='search_'),
-    path('customers/search_/<navi>', views.search_, name='search_'),
+    path('<navi>', views.search_, name='search_'),
+#    path('search_/<navi>', views.search_, name='search_'),
+#    path('search_/search_/<navi>', views.search_, name='search_'),
+#    path('customers/search_/<navi>', views.search_, name='search_'),
+#    path('customers/search_/search_/<navi>', views.search_, name='search_'),
     path('rzv_return.xml/<int:id>', views.rzv_return_xml, name='rzv_return.xml'),
 
 ]

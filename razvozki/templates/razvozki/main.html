@@ -68,13 +68,13 @@
             <a class="nav-link {{active4}}" id="4" href="{% url 'razvozki:admin' %}"  aria-current="page" hidden>Администрирование</a>
           </li>
       </ul>
-      <form action="search_/{{navi}}" method="post" class="d-flex" id="search_">
+      <form action="{% url 'razvozki:search_' navi=navi %}" method="post" class="d-flex" id="search_">
         {% csrf_token %}
         <input class="form-control me-2" type="text" placeholder="Поиск (есть)" aria-label="Search_" name="search_" >
-        <button class="btn btn-success" type="submit" formtarget="_blank">Поиск</button>
+        <button class="btn btn-success" type="submit">Поиск</button>
       <p style="color: white">Ver.</p>
           &nbsp
-      <p style="color: white"> 3.0.1 </p>
+      <p style="color: white"> 3.1.1 </p>
       </form>
     </div>
   </div>

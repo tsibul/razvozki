@@ -3,7 +3,7 @@
 {% block content %}
 
 {% load static %}
-
+{% if not look_up %}
 <div class="row justify-content-between ms-2 me-3 p-1 fixed-bottom bg-light">
 <div class="pagination">
     <span class="step-links">
@@ -45,7 +45,7 @@
 </div>
 </div>
 </div>
-
+{% endif %}
 <!-- Modal -->
 <div class="modal fade" id="customerModal" tabindex="-1" aria-labelledby="customerModalLabel"
      data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">

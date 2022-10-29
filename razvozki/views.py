@@ -148,7 +148,7 @@ def main_rzv(request):
 
 
 def customers(request):
-    navi = 'customers'
+    navi = 'customer'
     cust = Customer_clr.objects.order_by('name')
 
     paginator = Paginator(cust, 30)  # Show 30.
@@ -642,15 +642,21 @@ def search_(request, navi):
     srch = request.POST['search_']
 
     if navi == 'razvozka':
-        razv1 = list(Razvozka.objects.filter(customer_name__icontains=srch).order_by('-date'))
-        razv2 = list(Razvozka.objects.filter(address__icontains=srch).order_by('-date'))
-    if navi == 'customers':
-        razv1 = list(Customer_clr.objects.filter(name__icontains=srch).order_by('name'))
-        razv2 = list(Customer_clr.objects.filter(address__icontains=srch).order_by('name'))
-    razv = razv1 +razv2
+        rzv = list(Razvozka.objects.filter(Q(customer_name__icontains=srch) | Q(address__icontains=srch) |
+                                           Q(date__icontains=srch)).order_by('-date'))
+        razv = {}
+        for r in rzv:
+            if r.date not in razv:
+                razv[r.date] = []
+            razv[r.date].append(r)
 
-    context = {'navi': navi, 'page_obj': razv, 'srch':srch}
-    return render(request, 'razvozki/search_.html', context)
+        context = {'navi': navi, 'f_rzv': razv, 'srch': srch , 'look_up': True, 'active1': 'active'}
+        return render(request, 'razvozki/index.html', context)
+
+    if navi == 'customer':
+        razv = list(Customer_clr.objects.filter(Q(name__icontains=srch) | Q(address__icontains=srch)).order_by('name'))
+        context = {'navi': navi, 'page_obj': razv, 'srch': srch, 'look_up': True, 'active2': 'active'}
+        return render(request, 'razvozki/customers.html', context)
 
 @csrf_exempt
 def fulfilled_chg(request, id):
