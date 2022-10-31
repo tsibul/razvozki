@@ -165,7 +165,7 @@
             <form action="print_rzv/{{ date_r|date:'Y-m-d'}}" method="post">
             {% csrf_token %}
             <th scope="col" class="text-start"> <button type="submit" class="btn btn-outline-success btn-sm fw-bold" formtarget="_blank">
-                <i class="bi bi-printer-fill" style="currentColor"></i> Печать</button>
+                <i class="bi bi-printer-fill" style="currentColor"></i>&nbsp;Печать</button>
             </th>
             </form>
         {% else %}
@@ -203,7 +203,9 @@
             <button class="btn btn-sm btn-outline-{% if rzv.fulfilled %}success{% else %}danger{% endif %} m-1"
                     type="button" id="rzv_fulfilled_but_{{rzv.id}}" data-id="{{rzv.id}}" data-fulfilled="{{rzv.fulfilled}}"
                     onclick="rzv_status(this);" name="{% if rzv.fulfilled %}1{% else %}0{% endif %}">
-                {% if rzv.fulfilled %}<i class="bi bi-check2">{% else %}<i class="bi bi-hourglass">{% endif %}</i>
+                {% if rzv.fulfilled %}<i class="bi bi-check2" data-bs-toggle="tooltip"
+                                         data-bs-title="выполнено">{% else %}<i class="bi bi-hourglass" data-bs-toggle="tooltip"
+                                         data-bs-title="в процессе">{% endif %}</i>
             </button>
         </td>
         <td>
@@ -260,7 +262,8 @@
                    {% if rzv.return_all  or rzv.to_do_deliver == '' %}disabled {% endif %}
                    {% if rzv.deliver_to %} value="1" checked  {% else %} value="0"  {% endif %}
                    onclick="javascript:f_deliver_to(this);" data-id="{{rzv.id}}">
-            <label class="btn btn-sm btn-outline-danger" for="btn_checked_{{rzv.id}}" >
+            <label class="btn btn-sm btn-outline-danger" for="btn_checked_{{rzv.id}}"
+                   data-bs-toggle="tooltip" data-bs-title="на переработку">
                 <i class="bi bi-arrow-repeat"></i>
             </label>
         {% endif %}
@@ -268,8 +271,8 @@
         <td class="text-end" id="rzv_delete_{{rzv.id}}">
             <form action="delete_rzv/{{ rzv.id }}">
             {% csrf_token %}
-                <button class="btn btn-sm btn-outline-danger fw-bold" data-toggle="tooltip" data-placement="top"
-                        title="удалить развозку" {% if rzv.fulfilled or rzv.deliver_to %}disabled{% endif %} type="submit"
+                <button class="btn btn-sm btn-outline-danger fw-bold" data-bs-toggle="tooltip" data-placement="top"
+                        data-bs-title="удалить развозку" {% if rzv.fulfilled or rzv.deliver_to %}disabled{% endif %} type="submit"
                         id="delete_{{rzv.id}}">
                     <i class="bi bi-x-lg"></i>
                 </button>
@@ -285,6 +288,7 @@
 <script>
     $(function () {
       $('[data-bs-toggle="popover"]').popover()
+      $('[data-bs-toggle="tooltip"]').tooltip()
     })
 </script>
 
