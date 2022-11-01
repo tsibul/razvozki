@@ -150,7 +150,7 @@ def main_rzv(request):
 
 def customers(request):
     navi = 'customer'
-    cust = Customer_clr.objects.order_by('name')
+    cust = Customer.objects.order_by('name')
 
     paginator = Paginator(cust, 30)  # Show 30.
     page_number = request.GET.get('page')
