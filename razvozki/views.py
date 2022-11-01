@@ -655,7 +655,7 @@ def search_(request, navi):
         return render(request, 'razvozki/index.html', context)
 
     if navi == 'customer':
-        razv = list(Customer_clr.objects.filter(Q(name__icontains=srch) | Q(address__icontains=srch)).order_by('name'))
+        razv = list(Customer.objects.filter(Q(name__icontains=srch) | Q(address__icontains=srch)).order_by('name'))
         context = {'navi': navi, 'page_obj': razv, 'srch': srch, 'look_up': True, 'active2': 'active'}
         return render(request, 'razvozki/customers.html', context)
 
