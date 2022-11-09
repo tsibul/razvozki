@@ -74,6 +74,7 @@ def index(request):
             date_range.append([i + 1, 'до ' + date_tmp])
         except:
             date_range.append(['нет данных'])
+    date_range.sort(reverse=True)
     rzv_len = []
     for rzv in f_rzv:
         rzv_len.append([rzv, len(f_rzv0[rzv])])
