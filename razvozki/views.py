@@ -663,10 +663,7 @@ def search_(request, navi):
 @csrf_exempt
 def fulfilled_chg(request, id):
     razv = Razvozka.objects.get(id=id)
-    if razv.fulfilled:
-        razv.fulfilled = False
-    else:
-        razv.fulfilled = True
+    razv.fulfilled = not razv.fulfilled
     razv.save()
     return HttpResponse()
 
@@ -674,10 +671,7 @@ def fulfilled_chg(request, id):
 @csrf_exempt
 def return_all(request, id):
     razv = Razvozka.objects.get(id=id)
-    if razv.return_all:
-        razv.return_all = False
-    else:
-        razv.return_all = True
+    razv.return_all = not razv.return_all
     razv.save()
     return HttpResponse()
 
