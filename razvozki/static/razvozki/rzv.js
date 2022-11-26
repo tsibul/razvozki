@@ -341,9 +341,12 @@ function select_customer(choseObj){
 }
 
 function add_razvozka(buttonObj){
-    document.getElementById('date').value = buttonObj.parentElement
-                                                              .nextElementSibling
-                                                              .dataset.date;
+    var current_date;
+    current_date = buttonObj.parentElement
+                            .nextElementSibling
+                            .dataset.date;
+    if (current_date == null) current_date = '2100-01-01';
+    document.getElementById('date').value = current_date;
     var razvozkiBody = buttonObj.parentElement
                                 .parentElement
                                 .parentElement
