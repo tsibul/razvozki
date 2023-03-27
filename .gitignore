@@ -1,6 +1,6 @@
 /config.cfg
 /.gitignore
-/razv/config.cfg
+/config.cfg
 /manage.py
 /polls/
 /razvozki/static/razvozki/navbar-top-fixed.css
